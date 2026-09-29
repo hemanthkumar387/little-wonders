@@ -131,45 +131,38 @@
 ========================================= */
 
 .more-feature-icon {
-  width: 60px;
-
-  height: 60px;
-
+  width: 50px;
+  height: 50px;
   margin-bottom: 8px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   border: 1px solid rgba(130, 125, 110, 0.18);
-
   border-radius: 50%;
-
   background: rgba(255, 250, 242, 0.72);
-
-  font-family: Georgia, serif;
-
-  font-size: 32px;
+  font-size: 20px;
 }
 
 .more-feature-icon.feature-leaf {
   color: #66725d;
 }
 
+
+/* Personal */
 .more-feature-icon.feature-heart {
-  color: #c96f55;
-
-  font-size: 34px;
-
-  background: rgba(255, 225, 215, 0.7);
+  color: #f178bf;
 }
 
+
+/* Thoughtful */
+.more-feature-icon.feature-lightbulb {
+  color: #f6a709;
+}
+
+
+/* Meaningful */
 .more-feature-icon.feature-gift {
   color: #bd624b;
-
-  font-size: 25px;
 }
 
 /* =========================================
@@ -254,11 +247,11 @@
   pointer-events: none;
 }
 
-  .leaf-orange-morethanproduct {
-    width: 65px;
-    left: 0;
-    bottom: 25px;
-  }
+.leaf-orange-morethanproduct {
+  width: 65px;
+  left: 0;
+  bottom: 25px;
+}
 
 /* =========================================
    TABLET
@@ -292,6 +285,12 @@
 
   .more-product-image-wrapper {
     min-height: 320px;
+  }
+
+    .leaf-orange-morethanproduct {
+    width: 35px;
+    left: 0;
+    bottom: 65px;
   }
 }
 
@@ -372,10 +371,6 @@
     font-size: 24px;
   }
 
-  .more-feature-icon.feature-heart {
-    font-size: 29px;
-  }
-
   .more-product-feature h3 {
     font-size: 9px;
   }
@@ -440,27 +435,27 @@
 
   .more-feature-icon {
     width: 40px;
-
     height: 40px;
-
     font-size: 21px;
   }
 
-  .more-feature-icon.feature-heart {
-    font-size: 26px;
-  }
-
   .more-product-feature h3 {
-    font-size: 8px;
+    font-size: 10px;
   }
 
   .more-product-feature p {
     max-width: 68px;
-    font-size: 6.5px;
+    font-size: 7.5px;
   }
 
   .more-product-image-wrapper {
     height: 240px;
     min-height: 240px;
+  }
+
+  .leaf-orange-morethanproduct {
+    width: 35px;
+    left: 0;
+    bottom: 325px;
   }
 }

@@ -1,5 +1,9 @@
 import "./HeroSection.css";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { faLeaf, faHeart, faPalette } from "@fortawesome/free-solid-svg-icons";
+
 const HeroSection = () => {
   return (
     <section className="hero-section">
@@ -69,7 +73,9 @@ const HeroSection = () => {
 
         <div className="hero-features">
           <div className="hero-feature">
-            <div className="feature-icon feature-leaf">♧</div>
+            <div className="feature-icon feature-leaf">
+              <FontAwesomeIcon icon={faLeaf} />
+            </div>
 
             <div className="feature-content">
               <strong>Unique</strong>
@@ -78,7 +84,9 @@ const HeroSection = () => {
           </div>
 
           <div className="hero-feature">
-            <div className="feature-icon feature-heart">♡</div>
+            <div className="feature-icon feature-heart">
+              <FontAwesomeIcon icon={faHeart} />
+            </div>
 
             <div className="feature-content">
               <strong>Handmade</strong>
@@ -87,7 +95,9 @@ const HeroSection = () => {
           </div>
 
           <div className="hero-feature">
-            <div className="feature-icon feature-flower">✿</div>
+            <div className="feature-icon feature-palette">
+              <FontAwesomeIcon icon={faPalette} />
+            </div>
 
             <div className="feature-content">
               <strong>Creative &</strong>
