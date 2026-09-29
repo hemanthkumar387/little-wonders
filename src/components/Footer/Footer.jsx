@@ -95,7 +95,6 @@ const Footer = () => {
           <h3>Connect</h3>
 
           <a href="#">Instagram</a>
-          <a href="#">Pinterest</a>
           <a href="#">WhatsApp</a>
           <a href="#">Email</a>
         </div>
