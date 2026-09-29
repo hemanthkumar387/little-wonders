@@ -587,7 +587,7 @@
 
 @media (max-width: 480px) {
   .hero-section {
-    min-height: 575px;
+    min-height: 580px;
   }
 
   .hero-background {
@@ -595,7 +595,7 @@
   }
 
   .hero-content {
-    min-height: 575px;
+    min-height: 580px;
     padding: 60px 18px;
   }
 
