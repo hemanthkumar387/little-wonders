@@ -32,15 +32,24 @@ const ExploreCollections = () => {
     <section className="collections-section">
 
       {/* Decorative elements */}
-      <div className="collections-decoration collections-decoration-left">
-        <span className="branch">⌁</span>
-        <span className="small-heart">♡</span>
-      </div>
 
-      <div className="collections-decoration collections-decoration-right">
-        <span className="small-heart">♡</span>
-        <span className="branch">⌁</span>
-      </div>
+      <img
+        src="/images/leaf-green.png"
+        alt=""
+        className="hero-decoration leaf-green-explore"
+      />
+
+      <img
+        src="/images/leaf-right.png"
+        alt=""
+        className="hero-decoration leaf-right-explore"
+      />
+
+      <img
+        src="/images/heart-top.png"
+        alt=""
+        className="hero-decoration heart-top-explore"
+      />
 
       {/* Heading */}
       <div className="collections-heading">

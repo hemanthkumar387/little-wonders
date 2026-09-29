@@ -305,6 +305,24 @@
   color: #d98b72;
 }
 
+.leaf-green-explore {
+  width: 55px;
+  top: 30px;
+  left: 5px;
+}
+
+.leaf-right-explore {
+  width: 60px;
+  right: -1px;
+  bottom: 40px;
+}
+
+.heart-top-explore {
+  width: 45px;
+  top: 150px;
+  right: 65px;
+}
+
 /* =========================
    TABLET
 ========================= */
@@ -329,9 +347,19 @@
   }
 }
 
-/* =========================
-   MOBILE
-========================= */
+@media (max-width: 768px) {
+  .leaf-green-explore {
+    top: 90px;
+  }
+
+  .leaf-right-explore {
+    bottom: 15px;
+  }
+
+  .heart-top-explore {
+    right: 30px;
+  }
+}
 
 @media (max-width: 480px) {
   .collections-section {
@@ -394,6 +422,23 @@
 
   .collections-decoration-right {
     right: -35px;
+  }
+
+  .leaf-green-explore {
+    width: 40px;
+    top: 20px;
+    left: 3px;
+  }
+
+  .leaf-right-explore {
+    width: 35px;
+    right: -5px;
+    bottom: 30px;
+  }
+
+  .heart-top-explore {
+    width: 30px;
+    right: 10px;
   }
 }
 
