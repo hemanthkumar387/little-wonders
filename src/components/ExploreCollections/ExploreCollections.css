@@ -1,0 +1,417 @@
+.collections-section {
+  position: relative;
+  width: 100%;
+  padding: 55px 40px;
+  background: #fbf4e9;
+  overflow: hidden;
+}
+
+/* =========================
+   HEADING
+========================= */
+
+.collections-heading {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.collections-eyebrow {
+  margin: 0 0 6px;
+
+  color: #bd624b;
+
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.collections-heading h2 {
+  margin: 0;
+
+  color: #211e1b;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.collections-subtitle {
+  margin: 9px 0 0;
+
+  color: #68615b;
+
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================
+   CARDS GRID
+========================= */
+
+.collections-grid {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.collection-card {
+  width: 285px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgba(70, 50, 35, 0.08);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.collection-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow: 0 12px 25px rgba(70, 50, 35, 0.14);
+}
+
+/* =========================
+   IMAGE
+========================= */
+
+.collection-image {
+  position: relative;
+
+  width: 100%;
+  height: 200px;
+
+  overflow: hidden;
+
+  background: #eee2d4;
+}
+
+.collection-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition: transform 0.5s ease;
+}
+
+.collection-card:hover .collection-image img {
+  transform: scale(1.05);
+}
+
+/* =========================
+   CARD INFO
+========================= */
+
+.collection-info {
+  min-height: 90px;
+
+  padding: 15px 13px 14px 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+/* Colors */
+
+.collection-info.peach {
+  background: #dc9a82;
+}
+
+.collection-info.sage {
+  background: #aeba9d;
+}
+
+.collection-info.sand {
+  background: #dfb77e;
+}
+
+.collection-info.terracotta {
+  background: #d58b72;
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.collection-text {
+  min-width: 0;
+}
+
+.collection-text h3 {
+  margin: 0 0 5px;
+
+  color: #ffffff;
+
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.collection-text p {
+  margin: 0;
+
+  max-width: 135px;
+
+  color: rgba(255, 255, 255, 0.88);
+
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+/* =========================
+   ARROW BUTTON
+========================= */
+
+.collection-arrow {
+  flex-shrink: 0;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #fffaf4;
+
+  color: #c96f55;
+
+  font-family: Arial, sans-serif;
+  font-size: 19px;
+  font-weight: 400;
+
+  text-decoration: none;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.collection-arrow:hover {
+  background: #c96f55;
+  color: #ffffff;
+
+  transform: translateX(3px);
+}
+
+/* =========================
+   DECORATIONS
+========================= */
+
+.collections-decoration {
+  position: absolute;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  color: #c97c63;
+}
+
+/* Left decoration */
+
+.collections-decoration-left {
+  left: -3px;
+  top: 55px;
+
+  width: 115px;
+  height: 150px;
+}
+
+.collections-decoration-left .branch {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  font-size: 115px;
+
+  color: #66725d;
+
+  transform: rotate(-25deg);
+}
+
+.collections-decoration-left .small-heart {
+  position: absolute;
+
+  right: 8px;
+  bottom: 10px;
+
+  font-size: 27px;
+
+  color: #d98b72;
+}
+
+/* Right decoration */
+
+.collections-decoration-right {
+  right: -5px;
+  top: 55px;
+
+  width: 115px;
+  height: 150px;
+}
+
+.collections-decoration-right .branch {
+  position: absolute;
+
+  right: 0;
+  top: 0;
+
+  font-size: 115px;
+
+  color: #66725d;
+
+  transform: rotate(25deg) scaleX(-1);
+}
+
+.collections-decoration-right .small-heart {
+  position: absolute;
+
+  left: 8px;
+  bottom: 10px;
+
+  font-size: 27px;
+
+  color: #d98b72;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1024px) {
+  .collections-section {
+    padding: 50px 25px;
+  }
+
+  .collections-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 590px;
+    gap: 20px;
+  }
+
+  .collection-image {
+    height: 230px;
+  }
+
+  .collections-decoration {
+    opacity: 0.7;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .collections-section {
+    padding: 45px 18px;
+  }
+
+  .collections-heading {
+    margin-bottom: 25px;
+  }
+
+  .collections-eyebrow {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+  }
+
+  .collections-heading h2 {
+    font-size: 30px;
+  }
+
+  .collections-subtitle {
+    max-width: 300px;
+    margin: 8px auto 0;
+
+    font-size: 12px;
+  }
+
+  .collections-grid {
+    grid-template-columns: 1fr;
+
+    width: 100%;
+    max-width: 280px;
+
+    gap: 18px;
+  }
+
+  .collection-image {
+    height: 230px;
+  }
+
+  .collection-info {
+    min-height: 88px;
+  }
+
+  .collection-text h3 {
+    font-size: 14px;
+  }
+
+  .collection-text p {
+    font-size: 10px;
+  }
+
+  .collections-decoration {
+    opacity: 0.5;
+    transform: scale(0.7);
+  }
+
+  .collections-decoration-left {
+    left: -35px;
+  }
+
+  .collections-decoration-right {
+    right: -35px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 400px) {
+  .collections-section {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .collections-heading h2 {
+    font-size: 27px;
+  }
+
+  .collection-image {
+    height: 210px;
+  }
+}
