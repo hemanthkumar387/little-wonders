@@ -58,7 +58,7 @@ const HeroSection = () => {
 
         <p className="hero-description">
           Discover unique handmade creations crafted
-          <br className="desktop-break" />
+          <br className="mobile-break" />
           with care, creativity, and a personal touch.
         </p>
 

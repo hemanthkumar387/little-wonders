@@ -422,20 +422,10 @@
   }
 }
 
-/* =========================================
-   MOBILE
-========================================= */
-
 @media (max-width: 768px) {
   .hero-section {
     min-height: 600px;
   }
-
-  /*
-    Keep the background visible,
-    but move it slightly so the bunny
-    doesn't cover the center text.
-  */
 
   .hero-background {
     background-position: center center;
@@ -458,8 +448,6 @@
     padding: 50px 20px;
   }
 
-  /* Eyebrow */
-
   .hero-eyebrow {
     margin-bottom: 15px;
 
@@ -467,8 +455,6 @@
 
     letter-spacing: 3px;
   }
-
-  /* Heading */
 
   .hero-title {
     max-width: 500px;
@@ -479,8 +465,6 @@
 
     letter-spacing: -1px;
   }
-
-  /* Description */
 
   .hero-description {
     max-width: 380px;
@@ -496,8 +480,6 @@
     display: none;
   }
 
-  /* Button */
-
   .hero-button {
     padding: 14px 22px;
 
@@ -505,8 +487,6 @@
 
     font-size: 13px;
   }
-
-  /* Features */
 
   .hero-features {
     width: 100%;
@@ -542,6 +522,7 @@
 
   .feature-content span {
     font-size: 10px;
+    color: #383533;
   }
 
   .leaf-green {
@@ -581,10 +562,6 @@
   }
 }
 
-/* =========================================
-   SMALL MOBILE
-========================================= */
-
 @media (max-width: 480px) {
   .hero-section {
     min-height: 650px;
@@ -592,6 +569,10 @@
 
   .hero-background {
     min-width: 800px;
+    background-image: url("/images/mobile_hero_image.png");
+    background-position: center center;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
   }
 
   .hero-content {
@@ -605,6 +586,7 @@
 
   .hero-description {
     font-size: 13px;
+    color: #383533;
   }
 
   .hero-features {
@@ -614,6 +596,10 @@
 
   .hero-feature {
     gap: 4px;
+  }
+
+  .mobile-break {
+    display: block;
   }
 
   .leaf-green {
