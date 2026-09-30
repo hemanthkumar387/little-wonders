@@ -265,10 +265,10 @@
   }
 
   .product-hero-background {
-    min-width: 800px;
+    width: 100%;
     background-image: url("/images/mobile_product_hero.png");
     background-position: center center;
-    background-size: auto 100%;
+    background-size: 100%;
     background-repeat: no-repeat;
   }
 

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./HandmadeLifestyle.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -146,8 +147,8 @@ const HandmadeLifestyle = () => {
 
           {/* CTA */}
 
-          <a
-            href="/products"
+          <Link
+            to="/products"
             className="handmade-lifestyle-button"
           >
             <span>Explore Home Decor</span>
@@ -156,7 +157,7 @@ const HandmadeLifestyle = () => {
               <FontAwesomeIcon icon={faArrowRight} />
             </span>
 
-          </a>
+          </Link>
 
         </div>
 

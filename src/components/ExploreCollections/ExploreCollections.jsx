@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./ExploreCollections.css";
 
 const collections = [
@@ -98,13 +99,13 @@ const ExploreCollections = () => {
                 </p>
               </div>
 
-              <a
-                href="/products"
+              <Link
+                to="/products"
                 className="collection-arrow"
                 aria-label={`Explore ${collection.title}`}
               >
                 →
-              </a>
+              </Link>
 
             </div>
 

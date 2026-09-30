@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./HandmadeCTA.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -58,8 +59,8 @@ const HandmadeCTA = () => {
           that bring warmth, beauty, and joy to your everyday life.
         </p>
 
-        <a
-          href="/products"
+        <Link
+          to="/products"
           className="handmade-cta-button"
         >
           <span>Explore All Products</span>
@@ -68,7 +69,7 @@ const HandmadeCTA = () => {
             <FontAwesomeIcon icon={faArrowRight} />
           </span>
 
-        </a>
+        </Link>
 
       </div>
 
