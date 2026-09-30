@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./HeroSection.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -66,10 +67,10 @@ const HeroSection = () => {
           with care, creativity, and a personal touch.
         </p>
 
-        <a href="/products" className="hero-button">
+        <Link to="/products" className="hero-button">
           <span>Explore Our Collection</span>
           <span className="hero-button-arrow">→</span>
-        </a>
+        </Link>
 
         <div className="hero-features">
           <div className="hero-feature">
