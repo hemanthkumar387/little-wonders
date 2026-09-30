@@ -1,0 +1,285 @@
+.our-process-section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #fbf4e9;
+}
+
+.our-process-container {
+  position: relative;
+  width: 100%;
+  min-height: 360px;
+  display: grid;
+  grid-template-columns: 40% 60%;
+}
+
+.our-process-image-wrapper {
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+  border-radius: 0% 25% 25% 0%;
+}
+
+.our-process-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.our-process-content {
+  position: relative;
+  z-index: 2;
+  padding: 48px 45px 40px 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.our-process-eyebrow {
+  margin: 0 0 7px;
+  color: #bd624b;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.our-process-title {
+  margin: 0;
+  color: #211e1b;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.our-process-subtitle {
+  margin: 9px 0 25px;
+  color: #706960;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.process-steps {
+  width: 100%;
+  max-width: 650px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.process-step-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.process-step {
+  position: relative;
+  width: 115px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.process-icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.process-yarn {
+  background: #f7e1a064;
+  color: #f9a703;
+}
+
+.process-create {
+  background: #f4e1d3;
+  color: #c8785e;
+}
+
+.process-craft {
+  background: #e5eadc;
+  color: #66725d;
+}
+
+.process-finish {
+  background: #fb9eed5d;
+  color: #ff00bf;
+}
+
+.process-number {
+  color: #8b837a;
+  font-family: Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 3px;
+}
+
+.process-step h3 {
+  margin: 0 0 4px;
+  color: #302c28;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.process-step p {
+  max-width: 105px;
+  margin: 0;
+  color: #817971;
+  font-family: Arial, sans-serif;
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+.process-arrow {
+  position: absolute;
+  top: 18px;
+  right: -4px;
+  color: #c77960;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.process-decoration {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  color: #c97960;
+  opacity: 0.75;
+}
+
+.process-decoration-heart {
+  left: 700px;
+  top: 25px;
+  font-family: Georgia, serif;
+  font-size: 45px;
+  transform: rotate(-10deg);
+}
+
+@media (max-width: 768px) {
+  .our-process-container {
+    grid-template-columns: 38% 62%;
+  }
+
+  .our-process-content {
+    padding: 40px 25px;
+  }
+
+  .our-process-title {
+    font-size: 28px;
+  }
+
+  .process-step {
+    width: 100px;
+  }
+
+  .process-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .process-arrow {
+    right: -7px;
+  }
+
+  .process-decoration-heart {
+    left: 300px;
+    top: 20px;
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .our-process-container {
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .our-process-image-wrapper {
+    width: 100%;
+    height: 220px;
+    min-height: 220px;
+    border-radius: 0 0 45% 45% / 0 0 12% 12%;
+  }
+
+  .our-process-image {
+    object-position: center;
+  }
+
+  .our-process-content {
+    padding: 35px 12px 40px;
+  }
+
+  .our-process-eyebrow {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+  }
+
+  .our-process-title {
+    font-size: 26px;
+  }
+
+  .our-process-subtitle {
+    font-size: 10px;
+    margin-bottom: 22px;
+  }
+
+  .process-steps {
+    width: 100%;
+    max-width: 420px;
+    gap: 0;
+  }
+
+  .process-step {
+    width: 72px;
+  }
+
+  .process-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 15px;
+  }
+
+  .process-number {
+    font-size: 6px;
+  }
+
+  .process-step h3 {
+    font-size: 10px;
+  }
+
+  .process-step p {
+    max-width: 65px;
+    font-size: 8px;
+  }
+
+  .process-decoration-heart {
+    left: 20px;
+    top: 230px;
+    font-size: 32px;
+  }
+
+  .process-arrow {
+    top: 13px;
+    right: -4px;
+    font-size: 13px;
+  }
+}

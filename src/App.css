@@ -1,4 +1,6 @@
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -8,11 +10,8 @@ html {
 
 body {
   margin: 0;
-
   background: #fbf4e9;
-
   font-family: Arial, sans-serif;
-
   color: #2d2925;
 }
 

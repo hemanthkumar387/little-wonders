@@ -1,28 +1,40 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-import HeroSection from "./components/HeroSection/HeroSection";
-import ExploreCollections from "./components/ExploreCollections/ExploreCollections";
-import MoreThanProduct from "./components/MoreThanProduct/MoreThanProduct";
+import HomePage from "./Pages/HomePage/HomePage";
+import ProductsPage from "./Pages/ProductsPage/ProductsPage";
 import Footer from "./components/Footer/Footer";
 
 import "./App.css";
 
 function App() {
   return (
-    <div className="app">
+    <BrowserRouter>
+      <div className="app">
 
-      <Navbar />
+        <Navbar />
 
-      <main>
-        <HeroSection />
-        <ExploreCollections />
-        <MoreThanProduct />
+        <main>
+          <Routes>
 
-        {/* Other sections will be added here */}
-      </main>
+            {/* HOME */}
+            <Route
+              path="/"
+              element={<HomePage />}
+            />
 
-      <Footer />
+            {/* PRODUCTS */}
+            <Route
+              path="/products"
+              element={<ProductsPage />}
+            />
 
-    </div>
+          </Routes>
+        </main>
+
+        <Footer />
+
+      </div>
+    </BrowserRouter>
   );
 }
 

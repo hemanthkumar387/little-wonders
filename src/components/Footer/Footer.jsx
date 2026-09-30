@@ -7,12 +7,18 @@ const Footer = () => {
         {/* Brand */}
         <div className="footer-brand">
           <div className="footer-logo">
-            <div className="footer-logo-icon">♡</div>
+            <img
+              src="/images/logo.png"
+              alt="LittleWonders"
+              className="footer-logo-image"
+            />
 
             <div>
               <div className="footer-logo-title">LittleWonders</div>
 
-              <div className="footer-logo-subtitle">CREATE WITH LOVE</div>
+              <div className="footer-logo-subtitle">
+                NURTURE. GROW. INSPIRE.
+              </div>
             </div>
           </div>
 

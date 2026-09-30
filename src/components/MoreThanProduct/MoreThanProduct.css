@@ -1,134 +1,66 @@
-/* =========================================
-   MORE THAN JUST A PRODUCT
-========================================= */
-
 .more-product-section {
   position: relative;
-
   width: 100%;
-
   overflow: hidden;
-
   background: #e9eedf;
 }
 
-/* =========================================
-   CONTAINER
-========================================= */
-
 .more-product-container {
   position: relative;
-
   width: 100%;
-
   min-height: 340px;
-
   margin: 0 auto;
-
   display: grid;
-
   grid-template-columns: 58% 42%;
-
   align-items: stretch;
 }
 
-/* =========================================
-   LEFT CONTENT
-========================================= */
-
 .more-product-content {
   position: relative;
-
   z-index: 2;
-
   padding: 50px 40px 45px 110px;
 }
 
-/* =========================================
-   EYEBROW
-========================================= */
-
 .more-product-eyebrow {
   margin: 0 0 8px;
-
   color: #9a715f;
-
   font-family: Arial, sans-serif;
-
   font-size: 13px;
-
   font-weight: 700;
-
   letter-spacing: 3px;
-
   text-transform: uppercase;
 }
 
-/* =========================================
-   TITLE
-========================================= */
-
 .more-product-title {
   margin: 0;
-
   color: #211e1b;
-
   font-family: Georgia, "Times New Roman", serif;
-
   font-size: 37px;
-
   font-weight: 600;
-
   line-height: 1.12;
 }
 
-/* =========================================
-   DESCRIPTION
-========================================= */
-
 .more-product-description {
   max-width: 520px;
-
   margin: 12px 0 20px;
-
   color: #625f58;
-
   font-family: Arial, sans-serif;
-
   font-size: 14px;
-
   line-height: 1.55;
 }
 
-/* =========================================
-   FEATURES
-========================================= */
-
 .more-product-features {
   display: grid;
-
   grid-template-columns: repeat(4, 1fr);
-
   max-width: 590px;
-
   gap: 12px;
 }
 
-/* =========================================
-   FEATURE
-========================================= */
-
 .more-product-feature {
   display: flex;
-
   flex-direction: column;
-
   align-items: flex-start;
 }
-
-/* =========================================
-   FEATURE ICON
-========================================= */
 
 .more-feature-icon {
   width: 50px;
@@ -147,103 +79,60 @@
   color: #66725d;
 }
 
-
-/* Personal */
 .more-feature-icon.feature-heart {
   color: #f178bf;
 }
 
-
-/* Thoughtful */
 .more-feature-icon.feature-lightbulb {
   color: #f6a709;
 }
 
-
-/* Meaningful */
 .more-feature-icon.feature-gift {
   color: #bd624b;
 }
 
-/* =========================================
-   FEATURE TEXT
-========================================= */
-
 .more-product-feature h3 {
   margin: 0 0 4px;
-
   color: #302c28;
-
   font-family: Arial, sans-serif;
-
   font-size: 13px;
-
   font-weight: 700;
 }
 
 .more-product-feature p {
   max-width: 105px;
-
   margin: 0;
-
   color: #7c776e;
-
   font-family: Arial, sans-serif;
-
   font-size: 10px;
-
   line-height: 1.4;
 }
 
-/* =========================================
-   IMAGE
-========================================= */
-
 .more-product-image-wrapper {
   position: relative;
-
   min-height: 340px;
-
   overflow: hidden;
-
   border-radius: 25% 0% 0% 25%;
 }
 
 .more-product-image {
   width: 100%;
-
   height: 100%;
-
   display: block;
-
   object-fit: cover;
-
   object-position: center;
 }
 
-/* =========================================
-   DECORATION
-========================================= */
-
 .more-product-decoration {
   position: absolute;
-
   z-index: 5;
-
   right: 45%;
-
   top: 30px;
-
   color: #c97960;
-
   font-family: Georgia, serif;
-
   font-size: 45px;
-
   transform: rotate(-10deg);
-
   opacity: 0.75;
-
   pointer-events: none;
 }
 
@@ -252,10 +141,6 @@
   left: 0;
   bottom: 25px;
 }
-
-/* =========================================
-   TABLET
-========================================= */
 
 @media (max-width: 1000px) {
   .more-product-container {
@@ -294,10 +179,6 @@
   }
 }
 
-/* =========================================
-   MOBILE
-========================================= */
-
 @media (max-width: 700px) {
   .more-product-section {
     background: #e9eedf;
@@ -305,69 +186,49 @@
 
   .more-product-container {
     display: flex;
-
     flex-direction: column;
-
     min-height: auto;
   }
 
-  /* CONTENT */
-
   .more-product-content {
     padding: 45px 20px 35px;
-
     text-align: center;
   }
 
   .more-product-eyebrow {
     font-size: 9px;
-
     letter-spacing: 2.5px;
   }
 
   .more-product-title {
     font-size: 30px;
-
     line-height: 1.15;
   }
 
   .more-product-description {
     max-width: 350px;
-
     margin: 12px auto 25px;
-
     font-size: 12px;
-
     line-height: 1.55;
   }
 
-  /* FEATURES */
-
   .more-product-features {
     width: 100%;
-
     max-width: 400px;
-
     margin: 0 auto;
-
     grid-template-columns: repeat(4, 1fr);
-
     gap: 7px;
   }
 
   .more-product-feature {
     align-items: center;
-
     text-align: center;
   }
 
   .more-feature-icon {
     width: 45px;
-
     height: 45px;
-
     margin-bottom: 7px;
-
     font-size: 24px;
   }
 
@@ -377,21 +238,14 @@
 
   .more-product-feature p {
     max-width: 75px;
-
     font-size: 7px;
-
     line-height: 1.35;
   }
 
-  /* IMAGE */
-
   .more-product-image-wrapper {
     width: 100%;
-
     height: 280px;
-
     min-height: 280px;
-
     border-radius: 45% 45% 0 0 / 10% 10% 0 0;
   }
 
@@ -399,20 +253,12 @@
     object-position: center;
   }
 
-  /* DECORATION */
-
   .more-product-decoration {
     right: 8%;
-
     top: 25px;
-
     font-size: 35px;
   }
 }
-
-/* =========================================
-   SMALL MOBILE
-========================================= */
 
 @media (max-width: 480px) {
   .more-product-content {
@@ -445,7 +291,7 @@
 
   .more-product-feature p {
     max-width: 68px;
-    font-size: 7.5px;
+    font-size: 8px;
   }
 
   .more-product-image-wrapper {
@@ -455,7 +301,7 @@
 
   .leaf-orange-morethanproduct {
     width: 35px;
-    left: 0;
-    bottom: 325px;
+    left: -1%;
+    bottom: 225px;
   }
 }
