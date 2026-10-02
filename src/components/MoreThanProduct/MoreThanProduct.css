@@ -434,3 +434,54 @@
     transform: translateY(0) scale(1);
   }
 }
+
+/* =========================================
+   CONTINUOUS BOUNCE FOR FEATURE ICONS
+========================================= */
+
+.more-feature-icon {
+  animation: moreProductIconBounce 2s ease-in-out infinite;
+}
+
+/* Slightly different timing so they don't all bounce at exactly the same moment */
+.more-product-feature:nth-child(1) .more-feature-icon {
+  animation-delay: 0s;
+}
+
+.more-product-feature:nth-child(2) .more-feature-icon {
+  animation-delay: 0.25s;
+}
+
+.more-product-feature:nth-child(3) .more-feature-icon {
+  animation-delay: 0.5s;
+}
+
+.more-product-feature:nth-child(4) .more-feature-icon {
+  animation-delay: 0.75s;
+}
+
+@keyframes moreProductIconBounce {
+  0% {
+    transform: translateY(0);
+  }
+
+  10% {
+    transform: translateY(-8px);
+  }
+
+  20% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(-5px);
+  }
+
+  40% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}

@@ -60,6 +60,9 @@ const OurCreations = () => {
   const galleryRef = useRef(null);
   const sectionRef = useRef(null);
 
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
   const [selectedCreation, setSelectedCreation] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -196,6 +199,27 @@ const OurCreations = () => {
     };
   }, [selectedCreation, selectedIndex]);
 
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    touchEndX.current = e.changedTouches[0].clientX;
+
+    const swipeDistance = touchStartX.current - touchEndX.current;
+
+    // Minimum distance required for a swipe
+    if (Math.abs(swipeDistance) < 50) return;
+
+    if (swipeDistance > 0) {
+      // Swipe left → next image
+      showNext();
+    } else {
+      // Swipe right → previous image
+      showPrevious();
+    }
+  };
+
   return (
     <section ref={sectionRef} className="our-creations-section">
       {/* Decorative background */}
@@ -271,7 +295,12 @@ const OurCreations = () => {
         </div>
       </div>
       {selectedCreation && (
-        <div className="creation-lightbox" onClick={closeLightbox}>
+        <div
+          className="creation-lightbox"
+          onClick={closeLightbox}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           {/* CLOSE */}
           <button
             type="button"
@@ -299,6 +328,8 @@ const OurCreations = () => {
           <div
             className="creation-lightbox-main"
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             <img
               src={selectedCreation.image}
