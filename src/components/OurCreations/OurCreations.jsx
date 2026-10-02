@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import "./OurCreations.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faArrowRight,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 const creations = [
   {
@@ -57,6 +61,7 @@ const OurCreations = () => {
   const sectionRef = useRef(null);
 
   const [selectedCreation, setSelectedCreation] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -142,6 +147,55 @@ const OurCreations = () => {
     }
   };
 
+  const openLightbox = (creation, index) => {
+    setSelectedCreation(creation);
+    setSelectedIndex(index);
+  };
+
+  const closeLightbox = () => {
+    setSelectedCreation(null);
+  };
+
+  const showPrevious = () => {
+    const previousIndex =
+      selectedIndex === 0 ? creations.length - 1 : selectedIndex - 1;
+
+    setSelectedIndex(previousIndex);
+    setSelectedCreation(creations[previousIndex]);
+  };
+
+  const showNext = () => {
+    const nextIndex =
+      selectedIndex === creations.length - 1 ? 0 : selectedIndex + 1;
+
+    setSelectedIndex(nextIndex);
+    setSelectedCreation(creations[nextIndex]);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!selectedCreation) return;
+
+      if (e.key === "Escape") {
+        closeLightbox();
+      }
+
+      if (e.key === "ArrowLeft") {
+        showPrevious();
+      }
+
+      if (e.key === "ArrowRight") {
+        showNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedCreation, selectedIndex]);
+
   return (
     <section ref={sectionRef} className="our-creations-section">
       {/* Decorative background */}
@@ -177,16 +231,16 @@ const OurCreations = () => {
           </button>
 
           <div className="creations-gallery" ref={galleryRef}>
-            {creations.map((creation) => (
+            {creations.map((creation, index) => (
               <div
                 className="creation-card creations-reveal"
                 key={creation.id}
-                onClick={() => setSelectedCreation(creation)}
+                onClick={() => openLightbox(creation, index)}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
-                    setSelectedCreation(creation);
+                    openLightbox(creation, index);
                   }
                 }}
               >
@@ -217,21 +271,33 @@ const OurCreations = () => {
         </div>
       </div>
       {selectedCreation && (
-        <div
-          className="creation-lightbox"
-          onClick={() => setSelectedCreation(null)}
-        >
+        <div className="creation-lightbox" onClick={closeLightbox}>
+          {/* CLOSE */}
           <button
             type="button"
             className="creation-lightbox-close"
-            aria-label="Close image"
-            onClick={() => setSelectedCreation(null)}
+            aria-label="Close image viewer"
+            onClick={closeLightbox}
           >
-            ×
+            <FontAwesomeIcon icon={faXmark} />
           </button>
 
+          {/* PREVIOUS */}
+          <button
+            type="button"
+            className="creation-lightbox-nav creation-lightbox-prev"
+            aria-label="Previous image"
+            onClick={(e) => {
+              e.stopPropagation();
+              showPrevious();
+            }}
+          >
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </button>
+
+          {/* MAIN IMAGE */}
           <div
-            className="creation-lightbox-content"
+            className="creation-lightbox-main"
             onClick={(e) => e.stopPropagation()}
           >
             <img
@@ -241,6 +307,42 @@ const OurCreations = () => {
             />
 
             <p className="creation-lightbox-title">{selectedCreation.title}</p>
+          </div>
+
+          {/* NEXT */}
+          <button
+            type="button"
+            className="creation-lightbox-nav creation-lightbox-next"
+            aria-label="Next image"
+            onClick={(e) => {
+              e.stopPropagation();
+              showNext();
+            }}
+          >
+            <FontAwesomeIcon icon={faArrowRight} />
+          </button>
+
+          {/* THUMBNAILS */}
+          <div
+            className="creation-lightbox-thumbnails"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {creations.map((creation, index) => (
+              <button
+                type="button"
+                key={creation.id}
+                className={`creation-lightbox-thumbnail ${
+                  selectedIndex === index ? "active" : ""
+                }`}
+                onClick={() => {
+                  setSelectedIndex(index);
+                  setSelectedCreation(creation);
+                }}
+                aria-label={`View ${creation.title}`}
+              >
+                <img src={creation.image} alt={creation.title} />
+              </button>
+            ))}
           </div>
         </div>
       )}
