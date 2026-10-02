@@ -280,3 +280,310 @@
     flex: 0 0 185px;
   }
 }
+
+
+
+/* =========================================
+   IMAGE FULLSCREEN / LIGHTBOX
+========================================= */
+
+.creation-card {
+  cursor: pointer;
+}
+
+
+/* DARK BACKGROUND */
+
+.creation-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  background: rgba(25, 20, 17, 0.88);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  animation: lightboxFadeIn 0.25s ease;
+}
+
+
+/* IMAGE CONTAINER */
+
+.creation-lightbox-content {
+  position: relative;
+
+  max-width: 90vw;
+  max-height: 90vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  animation: lightboxImageIn 0.35s
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* IMAGE */
+
+.creation-lightbox-image {
+  display: block;
+
+  max-width: 90vw;
+  max-height: 82vh;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.4);
+}
+
+
+/* TITLE */
+
+.creation-lightbox-title {
+  margin: 14px 0 0;
+
+  color: #ffffff;
+
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+
+  text-align: center;
+}
+
+
+/* CLOSE BUTTON */
+
+.creation-lightbox-close {
+  position: absolute;
+
+  top: 22px;
+  right: 25px;
+
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.1);
+
+  color: #ffffff;
+
+  font-size: 28px;
+  font-weight: 300;
+
+  line-height: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.creation-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes lightboxFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightboxImageIn {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .creation-lightbox {
+    padding: 18px;
+  }
+
+  .creation-lightbox-image {
+    max-width: 94vw;
+    max-height: 78vh;
+
+    border-radius: 10px;
+  }
+
+  .creation-lightbox-close {
+    top: 15px;
+    right: 15px;
+
+    width: 38px;
+    height: 38px;
+
+    font-size: 25px;
+  }
+
+  .creation-lightbox-title {
+    font-size: 11px;
+    margin-top: 10px;
+  }
+}
+
+
+
+/* =========================================
+   INDIVIDUAL SCROLL REVEAL ANIMATION
+========================================= */
+
+.creations-reveal {
+  opacity: 0;
+  transform: translateY(45px) scale(0.96);
+
+  transition:
+    opacity 0.75s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.creations-reveal.creations-item-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+
+/* =========================================
+   HEADER ANIMATIONS
+========================================= */
+
+.our-creations-eyebrow.creations-reveal {
+  transform: translateY(15px);
+}
+
+.our-creations-eyebrow.creations-reveal.creations-item-visible {
+  transform: translateY(0);
+}
+
+
+.our-creations-title.creations-reveal {
+  transform: translateY(20px);
+}
+
+.our-creations-title.creations-reveal.creations-item-visible {
+  transform: translateY(0);
+}
+
+
+.our-creations-subtitle.creations-reveal {
+  transform: translateY(25px);
+}
+
+.our-creations-subtitle.creations-reveal.creations-item-visible {
+  transform: translateY(0);
+}
+
+
+/* =========================================
+   CREATION CARDS - SCROLL REVEAL
+========================================= */
+
+.creation-card.creations-reveal {
+  opacity: 0;
+
+  transform:
+    translateY(35px)
+    scale(0.94);
+
+  filter: blur(3px);
+
+  transition:
+    opacity 0.7s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.7s ease;
+}
+
+.creation-card.creations-reveal.creations-item-visible {
+  opacity: 1;
+
+  transform:
+    translateY(0)
+    scale(1);
+
+  filter: blur(0);
+}
+
+
+/* =========================================
+   HOVER
+========================================= */
+
+.creation-card.creations-reveal.creations-item-visible:hover {
+  transform: translateY(-7px) scale(1.02);
+}
+
+@media (max-width: 700px) {
+
+  .creation-card.creations-reveal {
+    opacity: 0;
+
+    transform:
+      translateY(30px)
+      scale(0.95);
+
+    filter: blur(2px);
+
+    transition:
+      opacity 0.6s ease,
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.6s ease;
+  }
+
+  .creation-card.creations-reveal.creations-item-visible {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+    filter: blur(0);
+  }
+
+  .creation-card.creations-reveal.creations-item-visible:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+}

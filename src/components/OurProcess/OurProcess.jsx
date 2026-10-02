@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import "./OurProcess.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -41,14 +42,43 @@ const processSteps = [
 ];
 
 const OurProcess = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section) return;
+
+    const items = section.querySelectorAll(".process-reveal");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("process-item-visible");
+          } else {
+            entry.target.classList.remove("process-item-visible");
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: "0px 0px -30px 0px",
+      },
+    );
+
+    items.forEach((item) => observer.observe(item));
+
+    return () => observer.disconnect();
+  }, []);
   return (
-    <section className="our-process-section">
+    <section ref={sectionRef} className="our-process-section">
       {/* Decorative elements */}
       <div className="process-decoration process-decoration-heart">♡</div>
 
       <div className="our-process-container">
         {/* LEFT IMAGE */}
-        <div className="our-process-image-wrapper">
+        <div className="our-process-image-wrapper process-reveal">
           <img
             src="/images/our_process.png"
             alt="Yarn and handmade materials"
@@ -58,18 +88,18 @@ const OurProcess = () => {
 
         {/* RIGHT CONTENT */}
         <div className="our-process-content">
-          <p className="our-process-eyebrow">OUR PROCESS</p>
+          <p className="our-process-eyebrow process-reveal">OUR PROCESS</p>
 
-          <h2 className="our-process-title">From Yarn to Handmade</h2>
+          <h2 className="our-process-title process-reveal">From Yarn to Handmade</h2>
 
-          <p className="our-process-subtitle">
+          <p className="our-process-subtitle process-reveal">
             Process filled with care and creativity.
           </p>
 
           {/* PROCESS STEPS */}
           <div className="process-steps">
             {processSteps.map((step, index) => (
-              <div className="process-step-wrapper" key={step.number}>
+              <div className="process-step-wrapper process-reveal" key={step.number}>
                 <div className="process-step">
                   <div className={`process-icon ${step.className}`}>
                     <FontAwesomeIcon icon={step.icon} />

@@ -80,6 +80,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .process-step {
@@ -144,7 +145,7 @@
   margin: 0;
   color: #817971;
   font-family: Arial, sans-serif;
-  font-size: 8px;
+  font-size: 10px;
   line-height: 1.4;
 }
 
@@ -281,5 +282,199 @@
     top: 13px;
     right: -4px;
     font-size: 13px;
+  }
+}
+
+/* =========================================
+   OUR PROCESS
+   INDIVIDUAL ITEM SCROLL ANIMATION
+========================================= */
+
+.process-reveal {
+  opacity: 0;
+  transform: translateY(55px) scale(0.97);
+
+  transition:
+    opacity 0.75s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.process-reveal.process-item-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* =========================================
+   IMAGE
+========================================= */
+
+.our-process-image-wrapper.process-reveal {
+  transform: translateX(-55px);
+}
+
+.our-process-image-wrapper.process-reveal.process-item-visible {
+  transform: translateX(0);
+}
+
+/* =========================================
+   HEADING
+========================================= */
+
+.our-process-eyebrow.process-reveal {
+  transform: translateY(15px);
+}
+
+.our-process-title.process-reveal {
+  transform: translateY(20px);
+}
+
+.our-process-subtitle.process-reveal {
+  transform: translateY(25px);
+}
+
+/* =========================================
+   PROCESS STEPS
+========================================= */
+
+.process-step-wrapper.process-reveal {
+  transform: translateY(45px) scale(0.94);
+}
+
+.process-step-wrapper.process-reveal.process-item-visible {
+  transform: translateY(0) scale(1);
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  /* Image */
+  .our-process-image-wrapper.process-reveal {
+    transform: translateY(-40px);
+  }
+
+  .our-process-image-wrapper.process-reveal.process-item-visible {
+    transform: translateY(0);
+  }
+
+  /* Eyebrow */
+  .our-process-eyebrow.process-reveal {
+    transform: translateY(20px);
+  }
+
+  .our-process-eyebrow.process-reveal.process-item-visible {
+    transform: translateY(0);
+  }
+
+  /* Title */
+  .our-process-title.process-reveal {
+    transform: translateY(25px);
+  }
+
+  .our-process-title.process-reveal.process-item-visible {
+    transform: translateY(0);
+  }
+
+  /* Subtitle */
+  .our-process-subtitle.process-reveal {
+    transform: translateY(25px);
+  }
+
+  .our-process-subtitle.process-reveal.process-item-visible {
+    transform: translateY(0);
+  }
+
+  /* Individual process steps */
+  .process-step-wrapper.process-reveal {
+    transform: translateY(40px) scale(0.94);
+
+    transition:
+      opacity 0.65s ease,
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .process-step-wrapper.process-reveal.process-item-visible {
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* =========================================
+   OUR PROCESS - CONTINUOUS STEP REVEAL
+========================================= */
+
+.process-step-wrapper.process-item-visible .process-step {
+  animation: processIconReveal 4s infinite;
+  animation-fill-mode: both;
+}
+
+
+/* =========================================
+   STEP DELAYS
+========================================= */
+
+/* Step 01 */
+.process-step-wrapper.process-item-visible:nth-child(1)
+.process-step {
+  animation-delay: 0s;
+}
+
+
+/* Step 02 */
+.process-step-wrapper.process-item-visible:nth-child(2)
+.process-step {
+  animation-delay: 1s;
+}
+
+
+/* Step 03 */
+.process-step-wrapper.process-item-visible:nth-child(3)
+.process-step {
+  animation-delay: 2s;
+}
+
+
+/* Step 04 */
+.process-step-wrapper.process-item-visible:nth-child(4)
+.process-step {
+  animation-delay: 3s;
+}
+
+
+/* =========================================
+   ICON ANIMATION
+========================================= */
+
+@keyframes processIconReveal {
+
+  /* DULL */
+  0% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+
+  /* BECOME NORMAL */
+  8% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* STAY NORMAL */
+  18% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* BECOME DULL */
+  26% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+
+  /* REMAIN DULL */
+  100% {
+    opacity: 0.35;
+    transform: scale(0.9);
   }
 }

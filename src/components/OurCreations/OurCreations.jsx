@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./OurCreations.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -54,6 +54,51 @@ const creations = [
 
 const OurCreations = () => {
   const galleryRef = useRef(null);
+  const sectionRef = useRef(null);
+
+  const [selectedCreation, setSelectedCreation] = useState(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section) return;
+
+    const items = section.querySelectorAll(".creations-reveal");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("creations-item-visible");
+          } else {
+            entry.target.classList.remove("creations-item-visible");
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: "0px 0px -30px 0px",
+      },
+    );
+
+    items.forEach((item) => observer.observe(item));
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setSelectedCreation(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const scrollLeft = () => {
     const gallery = galleryRef.current;
@@ -98,7 +143,7 @@ const OurCreations = () => {
   };
 
   return (
-    <section className="our-creations-section">
+    <section ref={sectionRef} className="our-creations-section">
       {/* Decorative background */}
       <div className="creations-bg-circle creations-bg-circle-left"></div>
       <div className="creations-bg-circle creations-bg-circle-right"></div>
@@ -106,13 +151,15 @@ const OurCreations = () => {
       <div className="our-creations-container">
         {/* HEADER */}
         <div className="our-creations-header">
-          <p className="our-creations-eyebrow">OUR CREATIONS</p>
+          <p className="our-creations-eyebrow creations-reveal">
+            OUR CREATIONS
+          </p>
 
-          <h2 className="our-creations-title">
+          <h2 className="our-creations-title creations-reveal">
             A Glimpse of Our Handmade World
           </h2>
 
-          <p className="our-creations-subtitle">
+          <p className="our-creations-subtitle creations-reveal">
             Little pieces of creativity, made with care and love.
           </p>
         </div>
@@ -131,7 +178,18 @@ const OurCreations = () => {
 
           <div className="creations-gallery" ref={galleryRef}>
             {creations.map((creation) => (
-              <div className="creation-card" key={creation.id}>
+              <div
+                className="creation-card creations-reveal"
+                key={creation.id}
+                onClick={() => setSelectedCreation(creation)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    setSelectedCreation(creation);
+                  }
+                }}
+              >
                 <div className="creation-image-wrapper">
                   <img
                     src={creation.image}
@@ -158,6 +216,34 @@ const OurCreations = () => {
           </button>
         </div>
       </div>
+      {selectedCreation && (
+        <div
+          className="creation-lightbox"
+          onClick={() => setSelectedCreation(null)}
+        >
+          <button
+            type="button"
+            className="creation-lightbox-close"
+            aria-label="Close image"
+            onClick={() => setSelectedCreation(null)}
+          >
+            ×
+          </button>
+
+          <div
+            className="creation-lightbox-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={selectedCreation.image}
+              alt={selectedCreation.title}
+              className="creation-lightbox-image"
+            />
+
+            <p className="creation-lightbox-title">{selectedCreation.title}</p>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
