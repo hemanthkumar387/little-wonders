@@ -112,7 +112,11 @@
 }
 
 .hero-button-arrow {
-  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  animation: heroArrowMove 2.4s ease-in-out infinite;
 }
 
 .hero-features {
@@ -496,7 +500,6 @@
 
 .hero-button-arrow {
   font-size: 20px;
-
   animation: heroArrowMove 2.4s ease-in-out infinite;
 }
 

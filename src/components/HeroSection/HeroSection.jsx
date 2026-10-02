@@ -3,7 +3,12 @@ import "./HeroSection.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { faLeaf, faHeart, faPalette } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLeaf,
+  faHeart,
+  faPalette,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 const HeroSection = () => {
   return (
@@ -69,7 +74,10 @@ const HeroSection = () => {
 
         <Link to="/products" className="hero-button">
           <span>Explore Our Collection</span>
-          <span className="hero-button-arrow">→</span>
+
+          <span className="hero-button-arrow">
+            <FontAwesomeIcon icon={faArrowRight} />
+          </span>
         </Link>
 
         <div className="hero-features">
