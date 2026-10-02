@@ -60,6 +60,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-top: 20px;
 }
 
 .more-feature-icon {
@@ -172,7 +173,7 @@
     min-height: 320px;
   }
 
-    .leaf-orange-morethanproduct {
+  .leaf-orange-morethanproduct {
     width: 35px;
     left: 0;
     bottom: 65px;
@@ -277,6 +278,7 @@
 
   .more-product-features {
     gap: 4px;
+    margin-top: 35px;
   }
 
   .more-feature-icon {
@@ -306,102 +308,129 @@
   }
 }
 
-
-/* ================================
+/* =========================================
    MORE THAN PRODUCT
-   ENTRY ANIMATION
-================================ */
+   INDIVIDUAL SCROLL ANIMATION
+========================================= */
 
-.more-product-section {
+.more-product-reveal {
   opacity: 0;
   transform: translateY(45px);
 
   transition:
-    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.75s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.more-product-section.more-product-visible {
+/* Visible */
+
+.more-product-reveal.more-product-item-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
+/* =========================================
+   EYEBROW
+========================================= */
 
-/* ================================
-   CONTENT ANIMATION
-================================ */
-
-.more-product-content {
-  opacity: 0;
-  transform: translateX(-35px);
-
-  transition:
-    opacity 0.8s ease-out,
-    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-
-  transition-delay: 0.15s;
+.more-product-eyebrow.more-product-reveal {
+  transform: translateY(15px);
 }
 
-.more-product-visible .more-product-content {
-  opacity: 1;
-  transform: translateX(0);
+/* =========================================
+   TITLE
+========================================= */
+
+.more-product-title.more-product-reveal {
+  transform: translateY(20px);
 }
 
+/* =========================================
+   DESCRIPTION
+========================================= */
 
-/* ================================
-   IMAGE ANIMATION
-================================ */
-
-.more-product-image-wrapper {
-  opacity: 0;
-  transform: translateX(45px) scale(0.97);
-
-  transition:
-    opacity 0.9s ease-out,
-    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-
-  transition-delay: 0.25s;
+.more-product-description.more-product-reveal {
+  transform: translateY(25px);
 }
 
-.more-product-visible .more-product-image-wrapper {
-  opacity: 1;
+/* =========================================
+   FEATURES
+========================================= */
+
+.more-product-feature.more-product-reveal {
+  transform: translateY(45px) scale(0.96);
+}
+
+.more-product-feature.more-product-reveal.more-product-item-visible {
+  transform: translateY(0) scale(1);
+}
+
+/* =========================================
+   IMAGE
+========================================= */
+
+.more-product-image-wrapper.more-product-reveal {
+  transform: translateX(50px) scale(0.97);
+}
+
+.more-product-image-wrapper.more-product-reveal.more-product-item-visible {
   transform: translateX(0) scale(1);
 }
 
+/* =========================================
+   MOBILE INDIVIDUAL ANIMATION
+========================================= */
 
-/* ================================
-   FEATURES STAGGER
-================================ */
+@media (max-width: 700px) {
+  .more-product-reveal {
+    opacity: 0;
+    transform: translateY(35px);
 
-.more-product-feature {
-  opacity: 0;
-  transform: translateY(25px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  }
 
-  transition:
-    opacity 0.6s ease,
-    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
+  .more-product-reveal.more-product-item-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-.more-product-visible .more-product-feature:nth-child(1) {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.4s;
-}
+  /* Eyebrow */
 
-.more-product-visible .more-product-feature:nth-child(2) {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.5s;
-}
+  .more-product-eyebrow.more-product-reveal {
+    transform: translateY(20px);
+  }
 
-.more-product-visible .more-product-feature:nth-child(3) {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.6s;
-}
+  /* Title */
 
-.more-product-visible .more-product-feature:nth-child(4) {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.7s;
+  .more-product-title.more-product-reveal {
+    transform: translateY(25px);
+  }
+
+  /* Description */
+
+  .more-product-description.more-product-reveal {
+    transform: translateY(25px);
+  }
+
+  /* Individual features */
+
+  .more-product-feature.more-product-reveal {
+    transform: translateY(35px) scale(0.95);
+  }
+
+  .more-product-feature.more-product-reveal.more-product-item-visible {
+    transform: translateY(0) scale(1);
+  }
+
+  /* Image */
+
+  .more-product-image-wrapper.more-product-reveal {
+    transform: translateY(45px) scale(0.97);
+  }
+
+  .more-product-image-wrapper.more-product-reveal.more-product-item-visible {
+    transform: translateY(0) scale(1);
+  }
 }

@@ -437,73 +437,116 @@
 ================================ */
 
 .collections-section {
+  position: relative;
+  width: 100%;
+  padding: 55px 40px;
+  background: #fbf4e9;
+  overflow: hidden;
+}
+
+/* =========================================
+   EXPLORE COLLECTIONS
+   INDIVIDUAL ITEM SCROLL ANIMATION
+========================================= */
+
+/* Initial state */
+.collection-reveal {
   opacity: 0;
-  transform: translateY(45px);
+  transform: translateY(55px) scale(0.97);
+
   transition:
-    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.collections-section.collections-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-
-/* ================================
-   HEADING ANIMATION
-================================ */
-
-.collections-heading {
-  opacity: 0;
-  transform: translateY(25px);
-  transition:
-    opacity 0.8s ease-out,
-    transform 0.8s ease-out;
-  transition-delay: 0.15s;
-}
-
-.collections-visible .collections-heading {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-
-/* ================================
-   CARDS ANIMATION
-================================ */
-
-.collection-card {
-  opacity: 0;
-  transform: translateY(45px) scale(0.96);
-  transition:
-    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.75s ease,
     transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 
-/* Individual card delays */
-
-.collections-visible .collection-card:nth-child(1) {
+/* Visible state */
+.collection-reveal.collection-item-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
-  transition-delay: 0.25s;
 }
 
-.collections-visible .collection-card:nth-child(2) {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  transition-delay: 0.4s;
+
+/* =========================================
+   HEADING
+========================================= */
+
+.collections-heading.collection-reveal {
+  transform: translateY(30px);
 }
 
-.collections-visible .collection-card:nth-child(3) {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  transition-delay: 0.55s;
+.collections-heading.collection-reveal.collection-item-visible {
+  transform: translateY(0);
 }
 
-.collections-visible .collection-card:nth-child(4) {
-  opacity: 1;
+
+/* =========================================
+   CARDS
+========================================= */
+
+.collection-card.collection-reveal {
+  transform: translateY(55px) scale(0.96);
+}
+
+.collection-card.collection-reveal.collection-item-visible {
   transform: translateY(0) scale(1);
-  transition-delay: 0.7s;
+}
+
+
+/* Keep your hover effect working */
+.collection-card.collection-reveal.collection-item-visible:hover {
+  transform: translateY(-5px) scale(1);
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+  .collection-reveal {
+    opacity: 0;
+    transform: translateY(45px) scale(0.97);
+
+    transition:
+      opacity 0.7s ease,
+      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+
+  .collection-reveal.collection-item-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+
+  /* Heading */
+  .collections-heading.collection-reveal {
+    transform: translateY(25px);
+  }
+
+  .collections-heading.collection-reveal.collection-item-visible {
+    transform: translateY(0);
+  }
+
+
+  /* Individual cards */
+  .collection-card.collection-reveal {
+    transform: translateY(50px) scale(0.96);
+  }
+
+  .collection-card.collection-reveal.collection-item-visible {
+    transform: translateY(0) scale(1);
+  }
+
+
+  /* Hover only on devices that actually support hover */
+  @media (hover: hover) and (pointer: fine) {
+
+    .collection-card.collection-reveal.collection-item-visible:hover {
+      transform: translateY(-5px) scale(1);
+    }
+
+  }
 }

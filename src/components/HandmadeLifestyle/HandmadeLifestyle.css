@@ -655,3 +655,165 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* =========================================
+   MOBILE ENTRY ANIMATION
+========================================= */
+
+@media (max-width: 700px) {
+
+  /* Whole section */
+  .handmade-lifestyle-section {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+
+  .handmade-lifestyle-section.lifestyle-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  /* -----------------------------------------
+     VISUAL AREA
+  ----------------------------------------- */
+
+  .lifestyle-visual {
+    opacity: 0;
+    transform: translateY(-35px);
+
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+
+    transition-delay: 0.1s;
+  }
+
+  .lifestyle-visible .lifestyle-visual {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  /* -----------------------------------------
+     MAIN CIRCLE
+  ----------------------------------------- */
+
+  .lifestyle-visual-circle {
+    opacity: 0;
+    transform: scale(0.8);
+
+    transition:
+      opacity 0.7s ease,
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+
+    transition-delay: 0.25s;
+  }
+
+  .lifestyle-visible .lifestyle-visual-circle {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+
+  /* -----------------------------------------
+     FLOATING CARDS
+  ----------------------------------------- */
+
+  .lifestyle-mini-card {
+    opacity: 0;
+
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+
+  .lifestyle-visible .lifestyle-card-one {
+    opacity: 1;
+    transform: rotate(-5deg) translateY(0) scale(1);
+    transition-delay: 0.4s;
+  }
+
+  .lifestyle-visible .lifestyle-card-two {
+    opacity: 1;
+    transform: rotate(4deg) translateY(0) scale(1);
+    transition-delay: 0.55s;
+  }
+
+  .lifestyle-visible .lifestyle-card-three {
+    opacity: 1;
+    transform: rotate(3deg) translateY(0) scale(1);
+    transition-delay: 0.7s;
+  }
+
+
+  /* -----------------------------------------
+     CONTENT
+  ----------------------------------------- */
+
+  .handmade-lifestyle-content {
+    opacity: 0;
+    transform: translateY(35px);
+
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+
+    transition-delay: 0.35s;
+  }
+
+  .lifestyle-visible .handmade-lifestyle-content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  /* -----------------------------------------
+     BENEFITS
+  ----------------------------------------- */
+
+  .lifestyle-benefit {
+    opacity: 0;
+    transform: translateY(15px);
+
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
+  }
+
+  .lifestyle-visible .lifestyle-benefit:nth-child(1) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.7s;
+  }
+
+  .lifestyle-visible .lifestyle-benefit:nth-child(2) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.8s;
+  }
+
+
+  /* -----------------------------------------
+     BUTTON
+  ----------------------------------------- */
+
+  .handmade-lifestyle-button {
+    opacity: 0;
+    transform: translateY(20px);
+
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      background 0.3s ease,
+      box-shadow 0.3s ease;
+
+    transition-delay: 0.9s;
+  }
+
+  .lifestyle-visible .handmade-lifestyle-button {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

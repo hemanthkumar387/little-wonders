@@ -37,20 +37,25 @@ const ExploreCollections = () => {
 
     if (!section) return;
 
+    const items = section.querySelectorAll(".collection-reveal");
+
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          section.classList.add("collections-visible");
-        } else {
-          section.classList.remove("collections-visible");
-        }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("collection-item-visible");
+          } else {
+            entry.target.classList.remove("collection-item-visible");
+          }
+        });
       },
       {
         threshold: 0.15,
+        rootMargin: "0px 0px -30px 0px",
       },
     );
 
-    observer.observe(section);
+    items.forEach((item) => observer.observe(item));
 
     return () => observer.disconnect();
   }, []);
@@ -78,7 +83,7 @@ const ExploreCollections = () => {
       />
 
       {/* Heading */}
-      <div className="collections-heading">
+      <div className="collections-heading collection-reveal">
         <p className="collections-eyebrow">CATEGORIES</p>
 
         <h2>Explore Our Collections</h2>
@@ -91,7 +96,7 @@ const ExploreCollections = () => {
       {/* Collection Cards */}
       <div className="collections-grid">
         {collections.map((collection) => (
-          <article className="collection-card" key={collection.title}>
+          <article className="collection-card collection-reveal" key={collection.title}>
             {/* Image */}
             <div className="collection-image">
               <img src={collection.image} alt={collection.title} />

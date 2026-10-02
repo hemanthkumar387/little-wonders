@@ -45,20 +45,25 @@ const MoreThanProduct = () => {
 
     if (!section) return;
 
+    const items = section.querySelectorAll(".more-product-reveal");
+
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          section.classList.add("more-product-visible");
-        } else {
-          section.classList.remove("more-product-visible");
-        }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("more-product-item-visible");
+          } else {
+            entry.target.classList.remove("more-product-item-visible");
+          }
+        });
       },
       {
         threshold: 0.15,
+        rootMargin: "0px 0px -30px 0px",
       },
     );
 
-    observer.observe(section);
+    items.forEach((item) => observer.observe(item));
 
     return () => observer.disconnect();
   }, []);
@@ -76,11 +81,11 @@ const MoreThanProduct = () => {
       <div className="more-product-container">
         {/* LEFT CONTENT */}
         <div className="more-product-content">
-          <p className="more-product-eyebrow">WHY CHOOSE HANDMADE?</p>
+          <p className="more-product-eyebrow more-product-reveal">WHY CHOOSE HANDMADE?</p>
 
-          <h2 className="more-product-title">More Than Just a Product</h2>
+          <h2 className="more-product-title more-product-reveal">More Than Just a Product</h2>
 
-          <p className="more-product-description">
+          <p className="more-product-description more-product-reveal">
             Every piece carries a little story, a little effort, and a lot of
             care. That's what makes handmade truly special.
           </p>
@@ -88,7 +93,7 @@ const MoreThanProduct = () => {
           {/* Features */}
           <div className="more-product-features">
             {features.map((feature) => (
-              <div className="more-product-feature" key={feature.title}>
+              <div className="more-product-feature more-product-reveal" key={feature.title}>
                 <div className={`more-feature-icon ${feature.className}`}>
                   <FontAwesomeIcon icon={feature.icon} />
                 </div>
@@ -102,7 +107,7 @@ const MoreThanProduct = () => {
         </div>
 
         {/* RIGHT IMAGE */}
-        <div className="more-product-image-wrapper">
+        <div className="more-product-image-wrapper more-product-reveal">
           <img
             src="/images/morethanproduct_image.png"
             alt="Handmade crochet being crafted"
