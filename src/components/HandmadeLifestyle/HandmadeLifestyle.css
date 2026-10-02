@@ -3,13 +3,7 @@
   width: 100%;
   min-height: 390px;
   overflow: hidden;
-  background:
-    linear-gradient(
-      120deg,
-      #f5eadc 0%,
-      #fbf3e8 48%,
-      #edf0e3 100%
-    );
+  background: linear-gradient(120deg, #f5eadc 0%, #fbf3e8 48%, #edf0e3 100%);
   border-top: 1px solid rgba(180, 150, 120, 0.08);
   border-bottom: 1px solid rgba(180, 150, 120, 0.08);
 }
@@ -25,7 +19,7 @@
   height: 430px;
   left: -170px;
   top: -180px;
-  background: rgba(216, 198, 174, 0.20);
+  background: rgba(216, 198, 174, 0.2);
 }
 
 .lifestyle-bg-circle-two {
@@ -65,23 +59,16 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background:
-    radial-gradient(
-      circle,
-      #fff9f1 0%,
-      #f7e5d6 60%,
-      #ead6c2 100%
-    );
+  background: radial-gradient(circle, #fff9f1 0%, #f7e5d6 60%, #ead6c2 100%);
   border: 1px solid rgba(190, 150, 120, 0.18);
-  box-shadow:
-    0 20px 50px rgba(126, 91, 67, 0.10);
+  box-shadow: 0 20px 50px rgba(126, 91, 67, 0.1);
 }
 
 .lifestyle-visual-circle::before {
   content: "";
   position: absolute;
   inset: 13px;
-  border: 1px dashed rgba(190, 120, 91, 0.30);
+  border: 1px dashed rgba(190, 120, 91, 0.3);
   border-radius: 50%;
 }
 
@@ -95,8 +82,7 @@
   background: #f5d8cd;
   color: #c66e55;
   font-size: 39px;
-  box-shadow:
-    0 10px 25px rgba(190, 100, 75, 0.12);
+  box-shadow: 0 10px 25px rgba(190, 100, 75, 0.12);
   z-index: 2;
 }
 
@@ -131,11 +117,10 @@
   align-items: center;
   gap: 9px;
   padding: 9px 13px;
-  background: rgba(255, 250, 243, 0.90);
-  border: 1px solid rgba(190, 160, 135, 0.20);
+  background: rgba(255, 250, 243, 0.9);
+  border: 1px solid rgba(190, 160, 135, 0.2);
   border-radius: 13px;
-  box-shadow:
-    0 10px 30px rgba(100, 75, 55, 0.10);
+  box-shadow: 0 10px 30px rgba(100, 75, 55, 0.1);
   backdrop-filter: blur(6px);
   z-index: 5;
 }
@@ -278,8 +263,7 @@
   font-family: Arial, sans-serif;
   font-size: 11px;
   font-weight: 700;
-  box-shadow:
-    0 10px 25px rgba(190, 90, 65, 0.18);
+  box-shadow: 0 10px 25px rgba(190, 90, 65, 0.18);
   transition:
     transform 0.3s ease,
     background 0.3s ease,
@@ -289,8 +273,7 @@
 .handmade-lifestyle-button:hover {
   background: #b85f47;
   transform: translateY(-3px);
-  box-shadow:
-    0 15px 30px rgba(190, 90, 65, 0.25);
+  box-shadow: 0 15px 30px rgba(190, 90, 65, 0.25);
 }
 
 .lifestyle-button-arrow {
@@ -324,7 +307,6 @@
 }
 
 @media (max-width: 1000px) {
-
   .handmade-lifestyle-container {
     padding: 35px 35px;
     grid-template-columns: 43% 57%;
@@ -355,7 +337,6 @@
 }
 
 @media (max-width: 700px) {
-
   .handmade-lifestyle-section {
     min-height: auto;
   }
@@ -453,7 +434,6 @@
 }
 
 @media (max-width: 480px) {
-
   .handmade-lifestyle-container {
     padding: 30px 15px 40px;
   }
@@ -518,4 +498,160 @@
     width: 20px;
     height: 20px;
   }
+}
+
+/* =========================================
+   HANDMADE LIFESTYLE
+   ENTRY ANIMATION
+========================================= */
+
+.handmade-lifestyle-section {
+  opacity: 0;
+  transform: translateY(45px);
+
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.handmade-lifestyle-section.lifestyle-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================
+   LEFT VISUAL
+========================================= */
+
+.lifestyle-visual {
+  opacity: 0;
+  transform: translateX(-45px);
+
+  transition:
+    opacity 0.9s ease-out,
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+
+  transition-delay: 0.15s;
+}
+
+.lifestyle-visible .lifestyle-visual {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* =========================================
+   MAIN CIRCLE
+========================================= */
+
+.lifestyle-visual-circle {
+  opacity: 0;
+  transform: scale(0.82);
+
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+
+  transition-delay: 0.3s;
+}
+
+.lifestyle-visible .lifestyle-visual-circle {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* =========================================
+   FLOATING CARDS
+========================================= */
+
+.lifestyle-mini-card {
+  opacity: 0;
+  transform: translateY(25px) scale(0.92);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lifestyle-visible .lifestyle-card-one {
+  opacity: 1;
+  transform: rotate(-5deg) translateY(0) scale(1);
+  transition-delay: 0.45s;
+}
+
+.lifestyle-visible .lifestyle-card-two {
+  opacity: 1;
+  transform: rotate(4deg) translateY(0) scale(1);
+  transition-delay: 0.6s;
+}
+
+.lifestyle-visible .lifestyle-card-three {
+  opacity: 1;
+  transform: rotate(3deg) translateY(0) scale(1);
+  transition-delay: 0.75s;
+}
+
+/* =========================================
+   RIGHT CONTENT
+========================================= */
+
+.handmade-lifestyle-content {
+  opacity: 0;
+  transform: translateX(45px);
+
+  transition:
+    opacity 0.9s ease-out,
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+
+  transition-delay: 0.2s;
+}
+
+.lifestyle-visible .handmade-lifestyle-content {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* =========================================
+   BENEFITS
+========================================= */
+
+.lifestyle-benefit {
+  opacity: 0;
+  transform: translateY(15px);
+
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.lifestyle-visible .lifestyle-benefit:nth-child(1) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.55s;
+}
+
+.lifestyle-visible .lifestyle-benefit:nth-child(2) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.65s;
+}
+
+/* =========================================
+   CTA BUTTON
+========================================= */
+
+.handmade-lifestyle-button {
+  opacity: 0;
+  transform: translateY(20px);
+
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+
+  transition-delay: 0.75s;
+}
+
+.lifestyle-visible .handmade-lifestyle-button {
+  opacity: 1;
+  transform: translateY(0);
 }
