@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import "./ExploreCollections.css";
 
 const collections = [
@@ -96,7 +98,10 @@ const ExploreCollections = () => {
       {/* Collection Cards */}
       <div className="collections-grid">
         {collections.map((collection) => (
-          <article className="collection-card collection-reveal" key={collection.title}>
+          <article
+            className="collection-card collection-reveal"
+            key={collection.title}
+          >
             {/* Image */}
             <div className="collection-image">
               <img src={collection.image} alt={collection.title} />
@@ -115,7 +120,7 @@ const ExploreCollections = () => {
                 className="collection-arrow"
                 aria-label={`Explore ${collection.title}`}
               >
-                →
+                <FontAwesomeIcon icon={faArrowRight} />
               </Link>
             </div>
           </article>

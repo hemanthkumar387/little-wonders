@@ -145,10 +145,8 @@
   border-radius: 50%;
   background: #fffaf4;
   color: #c96f55;
-  font-family: Arial, sans-serif;
-  font-size: 19px;
-  font-weight: 400;
   text-decoration: none;
+  font-size: 11px;
   transition:
     background 0.3s ease,
     color 0.3s ease,
@@ -431,7 +429,6 @@
   }
 } */
 
-
 /* ================================
    PAGE ENTER ANIMATION
 ================================ */
@@ -459,13 +456,11 @@
     transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-
 /* Visible state */
 .collection-reveal.collection-item-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
-
 
 /* =========================================
    HEADING
@@ -479,7 +474,6 @@
   transform: translateY(0);
 }
 
-
 /* =========================================
    CARDS
 ========================================= */
@@ -492,19 +486,16 @@
   transform: translateY(0) scale(1);
 }
 
-
 /* Keep your hover effect working */
 .collection-card.collection-reveal.collection-item-visible:hover {
   transform: translateY(-5px) scale(1);
 }
-
 
 /* =========================================
    MOBILE
 ========================================= */
 
 @media (max-width: 480px) {
-
   .collection-reveal {
     opacity: 0;
     transform: translateY(45px) scale(0.97);
@@ -514,12 +505,10 @@
       transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-
   .collection-reveal.collection-item-visible {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-
 
   /* Heading */
   .collections-heading.collection-reveal {
@@ -530,7 +519,6 @@
     transform: translateY(0);
   }
 
-
   /* Individual cards */
   .collection-card.collection-reveal {
     transform: translateY(50px) scale(0.96);
@@ -540,13 +528,10 @@
     transform: translateY(0) scale(1);
   }
 
-
   /* Hover only on devices that actually support hover */
   @media (hover: hover) and (pointer: fine) {
-
     .collection-card.collection-reveal.collection-item-visible:hover {
       transform: translateY(-5px) scale(1);
     }
-
   }
 }
