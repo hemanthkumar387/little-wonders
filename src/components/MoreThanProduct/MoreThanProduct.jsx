@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import "./MoreThanProduct.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -37,8 +38,32 @@ const features = [
 ];
 
 const MoreThanProduct = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          section.classList.add("more-product-visible");
+        } else {
+          section.classList.remove("more-product-visible");
+        }
+      },
+      {
+        threshold: 0.15,
+      },
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
   return (
-    <section className="more-product-section">
+    <section ref={sectionRef} className="more-product-section">
       <img
         src="/images/leaf-orange.png"
         alt=""

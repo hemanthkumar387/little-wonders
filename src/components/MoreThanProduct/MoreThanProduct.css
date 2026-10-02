@@ -305,3 +305,103 @@
     bottom: 225px;
   }
 }
+
+
+/* ================================
+   MORE THAN PRODUCT
+   ENTRY ANIMATION
+================================ */
+
+.more-product-section {
+  opacity: 0;
+  transform: translateY(45px);
+
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.more-product-section.more-product-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ================================
+   CONTENT ANIMATION
+================================ */
+
+.more-product-content {
+  opacity: 0;
+  transform: translateX(-35px);
+
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+
+  transition-delay: 0.15s;
+}
+
+.more-product-visible .more-product-content {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+
+/* ================================
+   IMAGE ANIMATION
+================================ */
+
+.more-product-image-wrapper {
+  opacity: 0;
+  transform: translateX(45px) scale(0.97);
+
+  transition:
+    opacity 0.9s ease-out,
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+
+  transition-delay: 0.25s;
+}
+
+.more-product-visible .more-product-image-wrapper {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+
+/* ================================
+   FEATURES STAGGER
+================================ */
+
+.more-product-feature {
+  opacity: 0;
+  transform: translateY(25px);
+
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.more-product-visible .more-product-feature:nth-child(1) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.4s;
+}
+
+.more-product-visible .more-product-feature:nth-child(2) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s;
+}
+
+.more-product-visible .more-product-feature:nth-child(3) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.6s;
+}
+
+.more-product-visible .more-product-feature:nth-child(4) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.7s;
+}
