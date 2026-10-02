@@ -360,3 +360,150 @@
     height: 210px;
   }
 }
+
+/* ================================
+   PAGE ENTER ANIMATION
+================================ */
+
+/* .collections-section {
+  animation: collectionsPageEnter 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes collectionsPageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(45px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.collections-heading {
+  animation: collectionsHeadingEnter 0.8s ease-out 0.15s both;
+}
+
+.collection-card {
+  animation: collectionCardEnter 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.collection-card:nth-child(1) {
+  animation-delay: 0.25s;
+}
+
+.collection-card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.collection-card:nth-child(3) {
+  animation-delay: 0.55s;
+}
+
+.collection-card:nth-child(4) {
+  animation-delay: 0.7s;
+}
+
+
+@keyframes collectionsHeadingEnter {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes collectionCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(45px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+} */
+
+
+/* ================================
+   PAGE ENTER ANIMATION
+================================ */
+
+.collections-section {
+  opacity: 0;
+  transform: translateY(45px);
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.collections-section.collections-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ================================
+   HEADING ANIMATION
+================================ */
+
+.collections-heading {
+  opacity: 0;
+  transform: translateY(25px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
+  transition-delay: 0.15s;
+}
+
+.collections-visible .collections-heading {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ================================
+   CARDS ANIMATION
+================================ */
+
+.collection-card {
+  opacity: 0;
+  transform: translateY(45px) scale(0.96);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* Individual card delays */
+
+.collections-visible .collection-card:nth-child(1) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.25s;
+}
+
+.collections-visible .collection-card:nth-child(2) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.4s;
+}
+
+.collections-visible .collection-card:nth-child(3) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.55s;
+}
+
+.collections-visible .collection-card:nth-child(4) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.7s;
+}

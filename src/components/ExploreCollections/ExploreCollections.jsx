@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import "./ExploreCollections.css";
 
 const collections = [
@@ -29,9 +30,33 @@ const collections = [
 ];
 
 const ExploreCollections = () => {
-  return (
-    <section className="collections-section">
+  const sectionRef = useRef(null);
 
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          section.classList.add("collections-visible");
+        } else {
+          section.classList.remove("collections-visible");
+        }
+      },
+      {
+        threshold: 0.15,
+      },
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section ref={sectionRef} className="collections-section">
       {/* Decorative elements */}
 
       <img
@@ -54,49 +79,30 @@ const ExploreCollections = () => {
 
       {/* Heading */}
       <div className="collections-heading">
+        <p className="collections-eyebrow">CATEGORIES</p>
 
-        <p className="collections-eyebrow">
-          CATEGORIES
-        </p>
-
-        <h2>
-          Explore Our Collections
-        </h2>
+        <h2>Explore Our Collections</h2>
 
         <p className="collections-subtitle">
           From cozy wool creations to beautiful handcrafted pieces.
         </p>
-
       </div>
 
       {/* Collection Cards */}
       <div className="collections-grid">
-
         {collections.map((collection) => (
-          <article
-            className="collection-card"
-            key={collection.title}
-          >
-
+          <article className="collection-card" key={collection.title}>
             {/* Image */}
             <div className="collection-image">
-              <img
-                src={collection.image}
-                alt={collection.title}
-              />
+              <img src={collection.image} alt={collection.title} />
             </div>
 
             {/* Card information */}
-            <div
-              className={`collection-info ${collection.color}`}
-            >
-
+            <div className={`collection-info ${collection.color}`}>
               <div className="collection-text">
                 <h3>{collection.title}</h3>
 
-                <p>
-                  {collection.description}
-                </p>
+                <p>{collection.description}</p>
               </div>
 
               <Link
@@ -106,14 +112,10 @@ const ExploreCollections = () => {
               >
                 →
               </Link>
-
             </div>
-
           </article>
         ))}
-
       </div>
-
     </section>
   );
 };
