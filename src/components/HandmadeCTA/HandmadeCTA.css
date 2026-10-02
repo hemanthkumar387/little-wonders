@@ -339,3 +339,184 @@
     font-size: 9px;
   }
 }
+
+
+
+/* =========================================
+   HANDMADE CTA SCROLL REVEAL
+========================================= */
+
+.cta-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+
+  transition:
+    opacity 0.7s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cta-reveal.cta-item-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* =========================================
+   CONTENT ANIMATIONS
+========================================= */
+
+.cta-small-heart.cta-reveal {
+  transform: translateY(15px) scale(0.8);
+}
+
+.cta-small-heart.cta-reveal.cta-item-visible {
+  transform: translateY(0) scale(1);
+}
+
+
+.handmade-cta-eyebrow.cta-reveal {
+  transform: translateY(18px);
+}
+
+.handmade-cta-eyebrow.cta-reveal.cta-item-visible {
+  transform: translateY(0);
+}
+
+
+.handmade-cta-content h2.cta-reveal {
+  transform: translateY(25px) scale(0.97);
+}
+
+.handmade-cta-content h2.cta-reveal.cta-item-visible {
+  transform: translateY(0) scale(1);
+}
+
+
+.handmade-cta-description.cta-reveal {
+  transform: translateY(25px);
+}
+
+.handmade-cta-description.cta-reveal.cta-item-visible {
+  transform: translateY(0);
+}
+
+
+.handmade-cta-button.cta-reveal {
+  transform: translateY(30px) scale(0.94);
+}
+
+.handmade-cta-button.cta-reveal.cta-item-visible {
+  transform: translateY(0) scale(1);
+}
+
+
+/* =========================================
+   DECORATIVE ELEMENTS
+========================================= */
+
+.cta-left-decoration .cta-flower.cta-reveal,
+.cta-right-decoration .cta-flower.cta-reveal {
+  transform: translateY(-15px) scale(0.7) rotate(-15deg);
+}
+
+.cta-left-decoration .cta-flower.cta-reveal.cta-item-visible,
+.cta-right-decoration .cta-flower.cta-reveal.cta-item-visible {
+  transform: translateY(0) scale(1) rotate(-25deg);
+}
+
+
+.cta-yarn.cta-reveal {
+  transform: translateY(35px) scale(0.75);
+}
+
+.cta-yarn.cta-reveal.cta-item-visible {
+  transform: translateY(0) scale(1);
+}
+
+
+@media (max-width: 700px) {
+
+  .cta-reveal {
+    opacity: 0;
+
+    transform: translateY(25px);
+
+    transition:
+      opacity 0.65s ease,
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .cta-reveal.cta-item-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  .cta-small-heart.cta-reveal {
+    transform: translateY(12px) scale(0.85);
+  }
+
+  .cta-small-heart.cta-reveal.cta-item-visible {
+    transform: translateY(0) scale(1);
+  }
+
+
+  .handmade-cta-content h2.cta-reveal {
+    transform: translateY(20px) scale(0.98);
+  }
+
+  .handmade-cta-content h2.cta-reveal.cta-item-visible {
+    transform: translateY(0) scale(1);
+  }
+
+
+  .handmade-cta-button.cta-reveal {
+    transform: translateY(22px) scale(0.96);
+  }
+
+  .handmade-cta-button.cta-reveal.cta-item-visible {
+    transform: translateY(0) scale(1);
+  }
+
+
+  .cta-yarn.cta-reveal {
+    transform: translateY(25px) scale(0.8);
+  }
+
+  .cta-yarn.cta-reveal.cta-item-visible {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================
+   CONTINUOUS "CLICK ME" BUTTON ANIMATION
+========================================= */
+
+.handmade-cta-button {
+  animation: ctaClickMe 2.2s ease-in-out infinite;
+}
+
+
+/* Gentle attention movement */
+
+@keyframes ctaClickMe {
+  0% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 25px rgba(70, 35, 25, 0.15);
+  }
+
+  20% {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 14px 30px rgba(70, 35, 25, 0.22);
+  }
+
+  40% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 25px rgba(70, 35, 25, 0.15);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 25px rgba(70, 35, 25, 0.15);
+  }
+}
