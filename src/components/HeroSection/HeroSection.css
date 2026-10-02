@@ -4,7 +4,7 @@
   min-height: 650px;
   overflow: hidden;
   background: #fbf1e6;
-   margin-top: 60px;
+  margin-top: 60px;
 }
 
 .hero-background {
@@ -101,9 +101,14 @@
 }
 
 .hero-button:hover {
+  animation-play-state: paused;
   background: #b85f47;
-  transform: translateY(-3px);
-  box-shadow: 0 14px 30px rgba(180, 90, 65, 0.28);
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 15px 32px rgba(180, 90, 65, 0.3);
+}
+.hero-button:hover .hero-button-arrow {
+  animation-play-state: paused;
+  transform: translateX(5px);
 }
 
 .hero-button-arrow {
@@ -459,5 +464,56 @@
   }
 }
 
+/* =========================================
+   CONTINUOUS HERO BUTTON ANIMATION
+========================================= */
 
+.hero-button {
+  animation: heroButtonPulse 2.4s ease-in-out infinite;
+}
 
+@keyframes heroButtonPulse {
+  0% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 25px rgba(180, 90, 65, 0.2);
+  }
+
+  18% {
+    transform: translateY(-3px) scale(1.025);
+    box-shadow: 0 14px 30px rgba(180, 90, 65, 0.28);
+  }
+
+  36% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 25px rgba(180, 90, 65, 0.2);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 25px rgba(180, 90, 65, 0.2);
+  }
+}
+
+.hero-button-arrow {
+  font-size: 20px;
+
+  animation: heroArrowMove 2.4s ease-in-out infinite;
+}
+
+@keyframes heroArrowMove {
+  0% {
+    transform: translateX(0);
+  }
+
+  18% {
+    transform: translateX(4px);
+  }
+
+  36% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
