@@ -400,7 +400,7 @@
     min-width: 800px;
     background-image: url("/images/mobile_hero_image.png");
     background-position: center center;
-    background-size: auto 100%;
+    background-size: 100%;
     background-repeat: no-repeat;
   }
 

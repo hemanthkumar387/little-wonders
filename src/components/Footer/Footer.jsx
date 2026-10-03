@@ -109,7 +109,7 @@ const Footer = () => {
       {/* Footer Bottom */}
 
       <div className="footer-bottom">
-        <p>© 2026 Handmade. All rights reserved.</p>
+        <p>© 2026 LittleWonders. All rights reserved.</p>
 
         <div className="footer-bottom-icon">♡</div>
 

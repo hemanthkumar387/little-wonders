@@ -70,7 +70,7 @@ const MoreThanProduct = () => {
   return (
     <section ref={sectionRef} className="more-product-section">
       <img
-        src="/images/leaf-orange.png"
+        src="/images/leaf-orange-left.png"
         alt=""
         className="hero-decoration leaf-orange-morethanproduct"
       />
@@ -79,11 +79,21 @@ const MoreThanProduct = () => {
       <div className="more-product-decoration">♡</div>
 
       <div className="more-product-container">
-        {/* LEFT CONTENT */}
+        <div className="more-product-image-wrapper more-product-reveal">
+          <img
+            src="/images/morethanproduct_image.png"
+            alt="Handmade crochet being crafted"
+            className="more-product-image"
+          />
+        </div>
         <div className="more-product-content">
-          <p className="more-product-eyebrow more-product-reveal">WHY CHOOSE HANDMADE?</p>
+          <p className="more-product-eyebrow more-product-reveal">
+            WHY CHOOSE HANDMADE?
+          </p>
 
-          <h2 className="more-product-title more-product-reveal">More Than Just a Product</h2>
+          <h2 className="more-product-title more-product-reveal">
+            More Than Just a Product
+          </h2>
 
           <p className="more-product-description more-product-reveal">
             Every piece carries a little story, a little effort, and a lot of
@@ -93,7 +103,10 @@ const MoreThanProduct = () => {
           {/* Features */}
           <div className="more-product-features">
             {features.map((feature) => (
-              <div className="more-product-feature more-product-reveal" key={feature.title}>
+              <div
+                className="more-product-feature more-product-reveal"
+                key={feature.title}
+              >
                 <div className={`more-feature-icon ${feature.className}`}>
                   <FontAwesomeIcon icon={feature.icon} />
                 </div>
@@ -104,15 +117,6 @@ const MoreThanProduct = () => {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* RIGHT IMAGE */}
-        <div className="more-product-image-wrapper more-product-reveal">
-          <img
-            src="/images/morethanproduct_image.png"
-            alt="Handmade crochet being crafted"
-            className="more-product-image"
-          />
         </div>
       </div>
     </section>

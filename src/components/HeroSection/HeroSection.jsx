@@ -58,7 +58,7 @@ const HeroSection = () => {
 
       {/* Hero content */}
       <div className="hero-content">
-        <p className="hero-eyebrow">HANDMADE COLLECTION</p>
+        <p className="hero-eyebrow">LITTLE WORLD MADE BY TWO SISTERS.</p>
 
         <h1 className="hero-title">
           Made by Hand.

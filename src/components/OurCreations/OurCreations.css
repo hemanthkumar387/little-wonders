@@ -83,7 +83,7 @@
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  padding: 5px 2px 15px;
+  padding: 15px 2px;
 }
 
 .creations-gallery::-webkit-scrollbar {

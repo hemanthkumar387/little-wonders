@@ -39,6 +39,15 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink
+            to="/about-us"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            About Us
+          </NavLink>
+
+          <NavLink
             to="/products"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
@@ -81,6 +90,16 @@ const Navbar = () => {
           }
         >
           Home
+        </NavLink>
+
+        <NavLink
+          to="/about-us"
+          onClick={closeMenu}
+          className={({ isActive }) =>
+            isActive ? "mobile-nav-link active" : "mobile-nav-link"
+          }
+        >
+          About Us
         </NavLink>
 
         <NavLink

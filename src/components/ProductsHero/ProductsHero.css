@@ -49,7 +49,7 @@
   margin: 0 0 18px;
   color: #b9614b;
   font-family: Arial, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -115,14 +115,14 @@
 
 .product-heart-left {
   width: 65px;
-  left: -9px;
-  top: 570px;
+  left: 0px;
+  top: 590px;
   opacity: 0.9;
 }
 
 .product-heart-bottom {
   width: 60px;
-  right: 5%;
+  right: 2%;
   top: 600px;
   opacity: 0.9;
 }
@@ -200,7 +200,7 @@
 
   .product-hero-eyebrow {
     margin-bottom: 15px;
-    font-size: 10px;
+    font-size: 14px;
     letter-spacing: 3px;
   }
 
@@ -278,11 +278,11 @@
   }
 
   .product-hero-title {
-    font-size: 36px;
+    font-size: 48px;
   }
 
   .product-hero-description {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
     color: #3e1a02;
   }

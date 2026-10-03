@@ -226,7 +226,7 @@
   margin: 16px 0 18px;
   color: #6e675f;
   font-family: Arial, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.6;
 }
 
@@ -243,7 +243,7 @@
   gap: 7px;
   color: #716960;
   font-family: Arial, sans-serif;
-  font-size: 9px;
+  font-size: 10px;
 }
 
 .lifestyle-benefit svg {
@@ -479,6 +479,7 @@
   .handmade-lifestyle-description {
     max-width: 310px;
     font-size: 10px;
+    font-weight: 600;
   }
 
   .lifestyle-benefits {
@@ -486,7 +487,7 @@
   }
 
   .lifestyle-benefit {
-    font-size: 7px;
+    font-size: 9px;
   }
 
   .handmade-lifestyle-button {
@@ -661,7 +662,6 @@
 ========================================= */
 
 @media (max-width: 700px) {
-
   /* Whole section */
   .handmade-lifestyle-section {
     opacity: 0;
@@ -672,7 +672,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-
 
   /* -----------------------------------------
      VISUAL AREA
@@ -694,7 +693,6 @@
     transform: translateY(0);
   }
 
-
   /* -----------------------------------------
      MAIN CIRCLE
   ----------------------------------------- */
@@ -715,7 +713,6 @@
     transform: scale(1);
   }
 
-
   /* -----------------------------------------
      FLOATING CARDS
   ----------------------------------------- */
@@ -727,7 +724,6 @@
       opacity 0.6s ease,
       transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
-
 
   .lifestyle-visible .lifestyle-card-one {
     opacity: 1;
@@ -746,7 +742,6 @@
     transform: rotate(3deg) translateY(0) scale(1);
     transition-delay: 0.7s;
   }
-
 
   /* -----------------------------------------
      CONTENT
@@ -767,7 +762,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-
 
   /* -----------------------------------------
      BENEFITS
@@ -794,7 +788,6 @@
     transition-delay: 0.8s;
   }
 
-
   /* -----------------------------------------
      BUTTON
   ----------------------------------------- */
@@ -815,5 +808,241 @@
   .lifestyle-visible .handmade-lifestyle-button {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* =========================================
+   HOME DECOR REFERENCE BACKGROUND
+   DESKTOP
+========================================= */
+
+.handmade-lifestyle-section::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+
+  /* Position */
+  top: 0;
+  right: 0;
+
+  /* Size */
+  width: 62%;
+  height: 100%;
+
+  /* Image */
+  background-image:
+    linear-gradient(
+      to right,
+      #edf0e3 0%,
+      rgba(237, 240, 227, 0.92) 10%,
+      rgba(237, 240, 227, 0.35) 32%,
+      rgba(237, 240, 227, 0) 58%
+    ),
+    url("/images/home-decor-reference.png");
+
+  background-repeat: no-repeat;
+
+  /* Keep the room on the right side */
+  background-position:
+    left center,
+    right center;
+
+  /* Fill the available background area neatly */
+  background-size:
+    100% 100%,
+    cover;
+
+  /* Soft and subtle */
+  opacity: 0.9;
+
+  /* Match the handmade color palette */
+  filter: saturate(0.72);
+
+  pointer-events: none;
+}
+
+/* Keep existing content above background */
+.handmade-lifestyle-container {
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================================
+   MOBILE
+   SOFT / DULL HOME DECOR BACKGROUND
+========================================= */
+@media (max-width: 1024px) {
+  .handmade-lifestyle-section::after {
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 700px) {
+  .handmade-lifestyle-section::after {
+    top: auto;
+    right: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 48%;
+
+    background-image:
+      linear-gradient(
+        to bottom,
+        #edf0e3 0%,
+        rgba(237, 240, 227, 0.88) 18%,
+        rgba(237, 240, 227, 0.5) 45%,
+        rgba(237, 240, 227, 0.15) 100%
+      ),
+      url("/images/home-decor-reference.png");
+
+    background-repeat: no-repeat;
+
+    background-position:
+      center,
+      right center;
+
+    background-size:
+      100% 100%,
+      cover;
+
+    /* Very subtle on mobile */
+    opacity: 0.1;
+
+    filter: saturate(0.45) blur(0.2px);
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  .handmade-lifestyle-section::after {
+    bottom: 0;
+
+    width: 100%;
+    height: 45%;
+
+    background-position:
+      center,
+      75% center;
+
+    background-size:
+      100% 100%,
+      cover;
+
+    /* Keep it very dull behind content */
+    opacity: 0.55;
+
+    filter: saturate(0.35) blur(0.25px);
+  }
+}
+
+
+/* =========================================
+   CONTINUOUS FLOATING MINI CARDS
+========================================= */
+
+.lifestyle-visible .lifestyle-card-one {
+  animation: lifestyleFloatOne 4s ease-in-out infinite;
+}
+
+.lifestyle-visible .lifestyle-card-two {
+  animation: lifestyleFloatTwo 4.5s ease-in-out infinite;
+}
+
+.lifestyle-visible .lifestyle-card-three {
+  animation: lifestyleFloatThree 4.2s ease-in-out infinite;
+}
+
+
+/* Card 1 */
+@keyframes lifestyleFloatOne {
+  0%,
+  100% {
+    transform: rotate(-5deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(-5deg) translateY(-7px);
+  }
+}
+
+
+/* Card 2 */
+@keyframes lifestyleFloatTwo {
+  0%,
+  100% {
+    transform: rotate(4deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(4deg) translateY(-9px);
+  }
+}
+
+
+/* Card 3 */
+@keyframes lifestyleFloatThree {
+  0%,
+  100% {
+    transform: rotate(3deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(3deg) translateY(-6px);
+  }
+}
+
+
+/* =========================================
+   MOBILE - GENTLER FLOAT
+========================================= */
+
+@media (max-width: 700px) {
+  .lifestyle-visible .lifestyle-card-one {
+    animation: lifestyleFloatOneMobile 4.5s ease-in-out infinite;
+  }
+
+  .lifestyle-visible .lifestyle-card-two {
+    animation: lifestyleFloatTwoMobile 5s ease-in-out infinite;
+  }
+
+  .lifestyle-visible .lifestyle-card-three {
+    animation: lifestyleFloatThreeMobile 4.7s ease-in-out infinite;
+  }
+
+  @keyframes lifestyleFloatOneMobile {
+    0%,
+    100% {
+      transform: rotate(-5deg) translateY(0);
+    }
+
+    50% {
+      transform: rotate(-5deg) translateY(-4px);
+    }
+  }
+
+  @keyframes lifestyleFloatTwoMobile {
+    0%,
+    100% {
+      transform: rotate(4deg) translateY(0);
+    }
+
+    50% {
+      transform: rotate(4deg) translateY(-5px);
+    }
+  }
+
+  @keyframes lifestyleFloatThreeMobile {
+    0%,
+    100% {
+      transform: rotate(3deg) translateY(0);
+    }
+
+    50% {
+      transform: rotate(3deg) translateY(-4px);
+    }
   }
 }
