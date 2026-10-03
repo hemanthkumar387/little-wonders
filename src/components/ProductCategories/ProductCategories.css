@@ -1,7 +1,7 @@
 .products-page {
   width: 100%;
   min-height: 100vh;
-  background: #fbf4e9;
+  background: #e9eedf;
   color: #302a25;
 }
 
@@ -67,13 +67,13 @@
 .product-categories-section {
   width: 100%;
   padding: 12px 24px 16px;
-  background: #fbf4e9;
+  background: #e9eedf;
 }
 
 .product-categories-scroll {
   width: 100%;
   max-width: 1280px;
-  margin: 50px auto;
+  margin: 25px auto;
   display: flex;
   align-items: center;
   gap: 13px;
@@ -145,7 +145,7 @@
 .product-category-card span {
   font-family: Arial, sans-serif;
 
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
 
   white-space: nowrap;
@@ -183,7 +183,7 @@
 
   font-family: Arial, sans-serif;
 
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .products-grid-header strong {
@@ -200,7 +200,7 @@
 
   font-family: Arial, sans-serif;
 
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .products-sort select {
@@ -214,7 +214,7 @@
 
   color: #4b433d;
 
-  font-size: 9px;
+  font-size: 10px;
 
   outline: none;
 
@@ -352,7 +352,7 @@
 
   font-family: Arial, sans-serif;
 
-  font-size: 7px;
+  font-size: 10px;
   font-weight: 700;
 }
 
@@ -363,7 +363,7 @@
 
   font-family: Arial, sans-serif;
 
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
 
   line-height: 1.25;
@@ -378,7 +378,7 @@
 
   font-family: Arial, sans-serif;
 
-  font-size: 8px;
+  font-size: 12px;
 
   line-height: 1.4;
 }
@@ -409,7 +409,7 @@
 
   font-family: Arial, sans-serif;
 
-  font-size: 7px;
+  font-size: 14px;
   font-weight: 700;
 
   transition:
@@ -765,7 +765,7 @@
   }
 
   .product-category-card span {
-    font-size: 8px;
+    font-size: 9px;
   }
 
   /* PRODUCT HEADER */
@@ -779,16 +779,16 @@
   }
 
   .products-grid-header p {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .products-sort {
-    font-size: 8px;
+    font-size: 10px;
   }
 
   .products-sort select {
     padding: 6px 8px;
-    font-size: 8px;
+    font-size: 9px;
   }
 
   /* PRODUCT GRID */
@@ -814,7 +814,7 @@
   }
 
   .product-card-tag {
-    font-size: 6px;
+    font-size: 7px;
   }
 
   .product-card-content h3 {
@@ -830,7 +830,7 @@
   .product-details-button {
     padding: 5px 9px;
 
-    font-size: 6px;
+    font-size: 10px;
   }
 
   .product-favorite {
@@ -935,11 +935,11 @@
   }
 
   .product-card-content h3 {
-    font-size: 8.5px;
+    font-size: 10px;
   }
 
   .product-card-content p {
-    font-size: 6.5px;
+    font-size: 8px;
   }
 
   .products-bottom-cta-image {
