@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faBorderAll,
   faSeedling,
@@ -19,7 +21,7 @@ const categories = [
     icon: faBorderAll,
   },
   {
-    name: "Flower Bouquet",
+    name: "Flower Bouquets",
     icon: faSeedling,
   },
   {
@@ -30,10 +32,6 @@ const categories = [
     name: "Handmade Keychains",
     icon: faGift,
   },
-  //   {
-  //     name: "Wrist Bands",
-  //     icon: faPaw,
-  //   },
   {
     name: "Wrist Bands",
     icon: faGem,
@@ -44,7 +42,7 @@ const products = [
   {
     id: 1,
     name: "Crochet Flower Bouquet",
-    category: "Flower Bouquet",
+    category: "Flower Bouquets",
     tag: "Flower Bouquet",
     description: "A beautiful handmade flower bouquet.",
     image: "/myimages/flower.jpeg",
@@ -54,71 +52,71 @@ const products = [
     name: "Handmade Bunny Bag",
     category: "Home Decor",
     tag: "Home Decor",
-    description: "Soft and cute handmade bunny bag.",
+    description: "A soft and beautifully crafted handmade bag.",
     image: "/myimages/bag.jpeg",
   },
   {
     id: 3,
-    name: "Krishna KeyChain",
+    name: "Krishna Keychain",
     category: "Handmade Keychains",
     tag: "Keychain",
-    description: "Cute and colorful keychain.",
+    description: "A colorful handmade Krishna keychain.",
     image: "/myimages/keychain1.jpeg",
   },
   {
     id: 4,
-    name: "Sunflower KeyChain",
+    name: "Sunflower Keychain",
     category: "Handmade Keychains",
     tag: "Keychain",
-    description: "Cute and colorful keychain.",
+    description: "A cheerful handmade sunflower keychain.",
     image: "/myimages/keychain.jpeg",
   },
   {
     id: 5,
-    name: "Ribbon KeyChain",
+    name: "Ribbon Keychain",
     category: "Handmade Keychains",
     tag: "Keychain",
-    description: "Cute and colorful keychains.",
+    description: "A cute handmade ribbon keychain.",
     image: "/myimages/keychain2.jpeg",
   },
   {
     id: 6,
-    name: "Star and Moon Keychains",
+    name: "Star & Moon Keychains",
     category: "Handmade Keychains",
     tag: "Keychain",
-    description: "Cute Star and Moon keychains.",
+    description: "Beautiful handmade star and moon charms.",
     image: "/myimages/keychain4.jpeg",
   },
   {
     id: 7,
-    name: "Bow Keychains",
+    name: "Bow Keychain",
     category: "Handmade Keychains",
     tag: "Keychain",
-    description: "A beautiful piece.",
+    description: "A delicate handmade bow keychain.",
     image: "/myimages/keychain5.jpeg",
   },
   {
     id: 8,
-    name: "Flower Bouquet",
-    category: "Flower Bouquet",
+    name: "Handmade Flower Bouquet",
+    category: "Flower Bouquets",
     tag: "Flower Bouquet",
-    description: "A beautiful handmade flower bouquet.",
+    description: "A colorful bouquet made with care.",
     image: "/myimages/flower1.jpeg",
   },
   {
     id: 9,
-    name: "Wrist Band",
+    name: "Handmade Wrist Band",
     category: "Wrist Bands",
-    tag: "Bands",
-    description: "A perfect little gift.",
+    tag: "Wrist Band",
+    description: "A simple handmade band for everyday wear.",
     image: "/myimages/wrist_art1.jpeg",
   },
   {
     id: 10,
-    name: "Wrist Band",
+    name: "Crochet Wrist Band",
     category: "Wrist Bands",
-    tag: "Bands",
-    description: "A perfect little gift.",
+    tag: "Wrist Band",
+    description: "A comfortable handmade wrist band.",
     image: "/myimages/wrist_band.jpeg",
   },
 ];
@@ -126,25 +124,75 @@ const products = [
 const ProductCategory = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Products");
 
+  // Sort option
+  const [sortOption, setSortOption] = useState("latest");
+
   const filteredProducts = useMemo(() => {
-    if (selectedCategory === "All Products") {
-      return products;
+    // Filter products by category
+    let result =
+      selectedCategory === "All Products"
+        ? [...products]
+        : products.filter((product) => product.category === selectedCategory);
+
+    // Sort products
+    if (sortOption === "az") {
+      result.sort((a, b) => a.name.localeCompare(b.name));
     }
 
-    return products.filter((product) => product.category === selectedCategory);
-  }, [selectedCategory]);
+    if (sortOption === "za") {
+      result.sort((a, b) => b.name.localeCompare(a.name));
+    }
+
+    // latest = original product order
+    return result;
+  }, [selectedCategory, sortOption]);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
 
+  const handleSortChange = (event) => {
+    setSortOption(event.target.value);
+  };
+
   return (
     <main className="products-page">
+      {/* Decorative background elements */}
+
+      <div className="products-bg-circle products-bg-circle-one"></div>
+
+      <div className="products-bg-circle products-bg-circle-two"></div>
+
+      <span className="products-bg-heart products-bg-heart-one">♡</span>
+
+      <span className="products-bg-heart products-bg-heart-two">♡</span>
+
+      <div className="products-bg-leaf products-bg-leaf-one">
+        <FontAwesomeIcon icon={faSeedling} />
+      </div>
+
       {/* =====================================================
           CATEGORY SECTION
       ===================================================== */}
 
       <section className="product-categories-section">
+        <div className="product-section-heading">
+          <p>EXPLORE OUR COLLECTION</p>
+
+          <h2>
+            Find Something
+            <span> Handmade & Special</span>
+          </h2>
+
+          <div className="product-heading-line">
+            <span></span>
+
+            <FontAwesomeIcon icon={faHeart} />
+
+            <span></span>
+          </div>
+        </div>
+
         <div className="product-categories-scroll">
           {categories.map((category) => {
             const isActive = selectedCategory === category.name;
@@ -156,12 +204,8 @@ const ProductCategory = () => {
                 className={`product-category-card ${isActive ? "active" : ""}`}
                 onClick={() => handleCategoryClick(category.name)}
               >
-                <div className="product-category-image">
-                  {category.image ? (
-                    <img src={category.image} alt={category.name} />
-                  ) : (
-                    <FontAwesomeIcon icon={category.icon} />
-                  )}
+                <div className="product-category-icon">
+                  <FontAwesomeIcon icon={category.icon} />
                 </div>
 
                 <span>{category.name}</span>
@@ -172,22 +216,31 @@ const ProductCategory = () => {
       </section>
 
       {/* =====================================================
-          PRODUCTS HEADER
+          PRODUCTS
       ===================================================== */}
 
       <section className="products-grid-section">
         <div className="products-grid-header">
-          <p>
-            Showing <strong>{filteredProducts.length}</strong> products
-          </p>
+          <div>
+            <p className="products-showing">
+              Showing <strong>{filteredProducts.length}</strong>{" "}
+              {filteredProducts.length === 1 ? "creation" : "creations"}
+            </p>
+
+            <p className="products-selected-category">{selectedCategory}</p>
+          </div>
+
+          {/* SORT */}
 
           <div className="products-sort">
             <span>Sort by:</span>
 
-            <select defaultValue="latest">
+            <select value={sortOption} onChange={handleSortChange}>
               <option value="latest">Latest First</option>
 
-              <option value="name">Name</option>
+              <option value="az">A - Z</option>
+
+              <option value="za">Z - A</option>
             </select>
           </div>
         </div>
@@ -239,9 +292,11 @@ const ProductCategory = () => {
 
         {filteredProducts.length === 0 && (
           <div className="no-products">
-            <h3>No products found</h3>
+            <FontAwesomeIcon icon={faSeedling} />
 
-            <p>We are adding more handmade creations soon.</p>
+            <h3>No creations found</h3>
+
+            <p>More handmade creations are coming soon.</p>
           </div>
         )}
       </section>
