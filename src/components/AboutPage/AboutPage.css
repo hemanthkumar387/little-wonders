@@ -1,0 +1,1033 @@
+/* =========================================
+   ABOUT PAGE
+========================================= */
+
+.about-page {
+  overflow: hidden;
+  background: #fbf4e9;
+  color: #211e1b;
+}
+
+/* =========================================
+   COMMON
+========================================= */
+
+.section-label {
+  display: inline-block;
+
+  color: #bd684f;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.about-hero {
+  position: relative;
+
+  min-height: 580px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 120px 20px 80px;
+
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 255, 255, 0.6),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(198, 110, 85, 0.08),
+      transparent 35%
+    ),
+    #f7eee2;
+}
+
+.about-hero-content {
+  position: relative;
+  z-index: 2;
+
+  max-width: 800px;
+
+  text-align: center;
+}
+
+.about-eyebrow {
+  display: inline-block;
+
+  margin-bottom: 20px;
+
+  color: #66725d;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 3px;
+}
+
+.about-hero h1 {
+  margin: 0;
+
+  color: #211e1b;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(45px, 7vw, 78px);
+
+  line-height: 1.05;
+}
+
+.about-hero h1 span {
+  display: block;
+
+  color: #bd684f;
+
+  font-style: italic;
+}
+
+.about-hero p {
+  max-width: 600px;
+
+  margin: 28px auto 0;
+
+  color: #68615b;
+
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.about-scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 45px;
+
+  color: #66725d;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.about-scroll-indicator svg {
+  animation: aboutArrowFloat 2s ease-in-out infinite;
+}
+
+@keyframes aboutArrowFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* =========================================
+   HERO DECORATIONS
+========================================= */
+
+.about-hero-decoration {
+  position: absolute;
+
+  color: #bd684f;
+
+  pointer-events: none;
+
+  user-select: none;
+}
+
+.about-leaf {
+  left: 9%;
+  top: 25%;
+
+  font-size: 80px;
+
+  color: #66725d;
+
+  transform: rotate(-25deg);
+
+  opacity: 0.14;
+}
+
+.about-heart {
+  right: 10%;
+  bottom: 23%;
+
+  font-size: 100px;
+
+  color: #bd684f;
+
+  transform: rotate(12deg);
+
+  opacity: 0.12;
+}
+
+/* =========================================
+   STORY
+========================================= */
+
+.about-story {
+  padding: 110px 20px;
+
+  background: #fbf4e9;
+}
+
+.about-story-container {
+  width: 100%;
+  max-width: 1150px;
+
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+
+  gap: 80px;
+
+  align-items: center;
+}
+
+/* IMAGE */
+
+.about-story-image {
+  position: relative;
+}
+
+.story-image-frame {
+  position: relative;
+
+  padding: 14px;
+
+  background: #e9eedf;
+
+  border-radius: 28px;
+
+  transform: rotate(-2deg);
+
+  box-shadow: 0 25px 60px rgba(65, 48, 35, 0.12);
+}
+
+.story-image-frame img {
+  display: block;
+
+  width: 100%;
+  aspect-ratio: 4 / 5;
+
+  object-fit: cover;
+
+  border-radius: 20px;
+}
+
+.story-image-badge {
+  position: absolute;
+
+  right: -25px;
+  bottom: 30px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 13px 18px;
+
+  background: #fffaf3;
+
+  border-radius: 50px;
+
+  color: #66725d;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  box-shadow: 0 10px 25px rgba(50, 40, 30, 0.12);
+
+  transform: rotate(2deg);
+}
+
+.story-image-badge svg {
+  color: #bd684f;
+}
+
+/* =========================================
+   MADE WITH LOVE ANIMATION
+========================================= */
+
+.story-image-badge {
+  animation: madeWithLoveFloat 3s ease-in-out infinite;
+}
+
+.story-image-badge svg {
+  animation: madeWithLoveHeart 1.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes madeWithLoveFloat {
+  0%,
+  100% {
+    transform: rotate(2deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(2deg) translateY(-6px);
+  }
+}
+
+@keyframes madeWithLoveHeart {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  20% {
+    transform: scale(1.18);
+  }
+
+  40% {
+    transform: scale(1);
+  }
+
+  60% {
+    transform: scale(1.08);
+  }
+
+  80% {
+    transform: scale(1);
+  }
+}
+
+/* CONTENT */
+
+.about-story-content h2,
+.journey-heading h2,
+.purpose-heading h2,
+.thank-you-content h2 {
+  margin: 15px 0 20px;
+
+  color: #211e1b;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(35px, 4vw, 52px);
+
+  line-height: 1.1;
+}
+
+.about-story-content h2 span,
+.journey-heading h2 span,
+.purpose-heading h2 span,
+.thank-you-content h2 span {
+  color: #bd684f;
+  font-style: italic;
+}
+
+.story-line {
+  width: 60px;
+  height: 3px;
+
+  margin: 25px 0;
+
+  background: #bd684f;
+}
+
+.about-story-content p {
+  margin: 0 0 17px;
+
+  color: #68615b;
+
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.about-story-content strong {
+  color: #66725d;
+}
+
+.story-highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  margin-top: 28px;
+  padding: 18px 20px;
+
+  background: #e9eedf;
+
+  border-left: 3px solid #66725d;
+
+  border-radius: 0 14px 14px 0;
+}
+
+.story-highlight svg {
+  margin-top: 4px;
+
+  color: #bd684f;
+}
+
+.story-highlight p {
+  margin: 0;
+
+  color: #596251;
+
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* =========================================
+   JOURNEY
+========================================= */
+
+.about-journey {
+  padding: 110px 20px;
+
+  background: #e9eedf;
+}
+
+.journey-container {
+  max-width: 1050px;
+
+  margin: 0 auto;
+}
+
+.journey-heading {
+  max-width: 650px;
+
+  margin: 0 auto 70px;
+
+  text-align: center;
+}
+
+.journey-heading p {
+  color: #68615b;
+
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* TIMELINE */
+
+.journey-timeline {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 25px;
+}
+
+.timeline-line {
+  position: absolute;
+
+  left: 16%;
+  right: 16%;
+  top: 38px;
+
+  height: 2px;
+
+  background: rgba(102, 114, 93, 0.3);
+}
+
+.timeline-item {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.timeline-dot {
+  position: relative;
+  z-index: 2;
+
+  width: 76px;
+  height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #fffaf3;
+
+  color: #bd684f;
+
+  font-size: 22px;
+
+  box-shadow: 0 8px 20px rgba(60, 50, 40, 0.1);
+}
+
+.timeline-card {
+  width: 100%;
+
+  margin-top: 25px;
+  padding: 28px 22px;
+
+  background: rgba(255, 250, 243, 0.65);
+
+  border: 1px solid rgba(102, 114, 93, 0.15);
+
+  border-radius: 20px;
+}
+
+.timeline-year {
+  color: #bd684f;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.timeline-card h3 {
+  margin: 10px 0;
+
+  color: #211e1b;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 23px;
+}
+
+.timeline-card p {
+  margin: 0;
+
+  color: #68615b;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+/* =========================================
+   PURPOSE
+========================================= */
+
+.about-purpose {
+  padding: 110px 20px;
+
+  background: #fbf4e9;
+}
+
+.purpose-container {
+  max-width: 1100px;
+
+  margin: 0 auto;
+}
+
+.purpose-heading {
+  max-width: 700px;
+
+  margin: 0 auto 60px;
+
+  text-align: center;
+}
+
+.purpose-heading p {
+  color: #68615b;
+
+  line-height: 1.8;
+}
+
+.purpose-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 24px;
+}
+
+.purpose-card {
+  position: relative;
+
+  min-height: 300px;
+
+  padding: 35px 28px;
+
+  background: #fffaf3;
+
+  border: 1px solid #e2d8cc;
+
+  border-radius: 22px;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.purpose-card::after {
+  content: "";
+
+  position: absolute;
+
+  right: -35px;
+  bottom: -40px;
+
+  width: 120px;
+  height: 120px;
+
+  border-radius: 50%;
+
+  background: #e9eedf;
+
+  opacity: 0.6;
+}
+
+.purpose-card:hover {
+  transform: translateY(-8px);
+
+  box-shadow: 0 20px 40px rgba(65, 48, 35, 0.1);
+}
+
+.purpose-icon {
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 25px;
+
+  border-radius: 18px;
+
+  background: #e9eedf;
+
+  color: #66725d;
+
+  font-size: 22px;
+
+  animation: purposeIconFloat 3s ease-in-out infinite;
+}
+
+.purpose-card:nth-child(2) .purpose-icon {
+  animation-delay: 0.4s;
+}
+
+.purpose-card:nth-child(3) .purpose-icon {
+  animation-delay: 0.8s;
+}
+
+@keyframes purposeIconFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.purpose-number {
+  color: #cfc2b5;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.purpose-card h3 {
+  margin: 10px 0;
+
+  color: #211e1b;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 25px;
+}
+
+.purpose-card p {
+  position: relative;
+  z-index: 1;
+
+  color: #68615b;
+
+  font-size: 14px;
+
+  line-height: 1.75;
+}
+
+/* =========================================
+   HANDMADE QUOTE SECTION
+========================================= */
+
+.about-handmade {
+  position: relative;
+
+  min-height: 440px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 80px 20px;
+
+  background-image: url("/images/about_image1.png");
+
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+  text-align: center;
+}
+
+.handmade-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(45, 39, 33, 0.48);
+}
+
+.handmade-content {
+  position: relative;
+  z-index: 2;
+
+  max-width: 700px;
+
+  color: #fffaf3;
+}
+
+.handmade-symbol {
+  margin-bottom: 15px;
+
+  color: #f3c7a8;
+
+  font-size: 35px;
+}
+
+.handmade-content h2 {
+  margin: 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(34px, 5vw, 58px);
+
+  line-height: 1.15;
+}
+
+.handmade-content p {
+  margin-top: 25px;
+
+  color: #f7e9dc;
+
+  font-size: 15px;
+
+  letter-spacing: 2px;
+}
+
+/* =========================================
+   THANK YOU
+========================================= */
+
+.about-thank-you {
+  position: relative;
+
+  padding: 120px 20px;
+
+  background: #f7eee2;
+
+  overflow: hidden;
+}
+
+.thank-you-content {
+  position: relative;
+  z-index: 2;
+
+  max-width: 700px;
+
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+.thank-you-content p {
+  max-width: 570px;
+
+  margin: 0 auto 15px;
+
+  color: #68615b;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+}
+
+.thank-you-message {
+  font-style: italic;
+}
+
+.love-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 15px;
+
+  margin: 35px auto;
+}
+
+.love-line span {
+  width: 70px;
+  height: 1px;
+
+  background: #cfc2b5;
+}
+
+.love-line svg {
+  color: #bd684f;
+
+  font-size: 18px;
+}
+
+.with-love {
+  margin-bottom: 5px !important;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 18px !important;
+
+  font-style: italic;
+}
+
+.thank-you-content h3 {
+  margin: 0;
+
+  color: #66725d;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 34px;
+}
+
+.tiny-hearts {
+  margin-top: 20px;
+
+  color: #bd684f;
+
+  font-size: 18px;
+}
+
+.thank-you-decoration {
+  position: absolute;
+
+  color: #bd684f;
+
+  opacity: 0.1;
+
+  font-size: 140px;
+}
+
+.thank-you-decoration.left {
+  left: 4%;
+  top: 15%;
+}
+
+.thank-you-decoration.right {
+  right: 4%;
+  bottom: 10%;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+  .about-story-container {
+    grid-template-columns: 1fr;
+
+    gap: 55px;
+  }
+
+  .about-story-image {
+    max-width: 520px;
+
+    margin: 0 auto;
+
+    width: 100%;
+  }
+
+  .about-story-content {
+    max-width: 700px;
+
+    margin: 0 auto;
+  }
+
+  .purpose-grid {
+    grid-template-columns: 1fr;
+
+    max-width: 600px;
+
+    margin: 0 auto;
+  }
+
+  .purpose-card {
+    min-height: auto;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+  .about-hero {
+    min-height: 520px;
+
+    padding: 110px 20px 70px;
+  }
+
+  .about-hero h1 {
+    font-size: 45px;
+  }
+
+  .about-hero p {
+    font-size: 15px;
+  }
+
+  .about-leaf {
+    left: -10px;
+    top: 20%;
+
+    font-size: 55px;
+  }
+
+  .about-heart {
+    right: -15px;
+    bottom: 15%;
+
+    font-size: 70px;
+  }
+
+  .about-story,
+  .about-journey,
+  .about-purpose {
+    padding: 75px 18px;
+  }
+
+  .story-image-badge {
+    right: 10px;
+    bottom: 20px;
+  }
+
+  .about-story-content h2,
+  .journey-heading h2,
+  .purpose-heading h2,
+  .thank-you-content h2 {
+    font-size: 36px;
+  }
+
+  /* Timeline */
+
+  .journey-timeline {
+    display: flex;
+    flex-direction: column;
+
+    gap: 30px;
+
+    padding-left: 25px;
+  }
+
+  .timeline-line {
+    top: 20px;
+    bottom: 20px;
+
+    left: 28px;
+
+    width: 2px;
+    height: auto;
+
+    right: auto;
+  }
+
+  .timeline-item {
+    display: grid;
+
+    grid-template-columns: 55px 1fr;
+
+    gap: 18px;
+
+    align-items: start;
+
+    text-align: left;
+  }
+
+  .timeline-dot {
+    width: 55px;
+    height: 55px;
+
+    font-size: 17px;
+  }
+
+  .timeline-card {
+    margin-top: 0;
+
+    padding: 22px 18px;
+  }
+
+  .timeline-card h3 {
+    font-size: 20px;
+  }
+
+  .about-handmade {
+    min-height: 380px;
+
+    background-attachment: scroll;
+  }
+
+  .handmade-content h2 {
+    font-size: 35px;
+  }
+
+  .about-thank-you {
+    padding: 85px 18px;
+  }
+
+  .thank-you-decoration {
+    font-size: 80px;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 420px) {
+  .about-hero h1 {
+    font-size: 38px;
+  }
+
+  .about-story-content h2,
+  .journey-heading h2,
+  .purpose-heading h2,
+  .thank-you-content h2 {
+    font-size: 31px;
+  }
+
+  .story-image-badge {
+    font-size: 10px;
+
+    padding: 10px 13px;
+  }
+
+  .purpose-card {
+    padding: 28px 22px;
+  }
+}

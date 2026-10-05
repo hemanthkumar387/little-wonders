@@ -39,7 +39,7 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink
-            to="/about-us"
+            to="/about"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
@@ -93,7 +93,7 @@ const Navbar = () => {
         </NavLink>
 
         <NavLink
-          to="/about-us"
+          to="/about"
           onClick={closeMenu}
           className={({ isActive }) =>
             isActive ? "mobile-nav-link active" : "mobile-nav-link"

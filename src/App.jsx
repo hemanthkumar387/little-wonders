@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./Pages/HomePage/HomePage";
 import ProductsPage from "./Pages/ProductsPage/ProductsPage";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
+import AboutPage from "./components/AboutPage/AboutPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import Footer from "./components/Footer/Footer";
 
@@ -24,6 +25,8 @@ function App() {
             <Route path="/products" element={<ProductsPage />} />
 
             <Route path="/products/:id" element={<ProductDetails />} />
+
+            <Route path="/about" element={<AboutPage />} />
 
             <Route path="/contact" element={<ProductsPage />} />
           </Routes>

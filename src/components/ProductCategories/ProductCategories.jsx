@@ -15,6 +15,7 @@ import {
   faHeart,
   faArrowRight,
   faBagShopping,
+  faTag
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./ProductCategories.css";
@@ -107,6 +108,17 @@ const ProductCategory = () => {
 
             <span></span>
           </div>
+        </div>
+
+        <div className="price-note">
+          <FontAwesomeIcon icon={faTag} />
+
+          <p>
+            Please note:{" "}
+            <strong>
+              Prices may vary depending on the size and design of the product.
+            </strong>
+          </p>
         </div>
 
         <div className="product-categories-scroll">

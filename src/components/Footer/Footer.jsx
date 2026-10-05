@@ -53,7 +53,7 @@ const Footer = () => {
             </Link>
 
             {/* WhatsApp */}
-            <a href="#" aria-label="WhatsApp" className="social-icon">
+            <Link to="#" aria-label="WhatsApp" className="social-icon">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -64,16 +64,16 @@ const Footer = () => {
 
                 <path d="M8.5 8.5c.2-.4.5-.5.8-.5h.5c.2 0 .4.1.5.4l.7 1.6c.1.3.1.5-.1.7l-.5.6c.6 1.1 1.5 2 2.6 2.6l.6-.5c.2-.2.4-.2.7-.1l1.6.7c.3.1.4.3.4.5v.5c0 .3-.1.6-.5.8-.4.2-1 .3-1.5.1-2.8-.8-5-3-5.8-5.8-.2-.5-.1-1.1.1-1.5Z" />
               </svg>
-            </a>
+            </Link>
 
             {/* YouTube */}
-            <a href="#" aria-label="YouTube" className="social-icon">
+            <Link to="#" aria-label="YouTube" className="social-icon">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8Z" />
 
                 <path d="M9.7 15.8 15.8 12 9.7 8.2v7.6Z" fill="#fbf4e9" />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -81,18 +81,14 @@ const Footer = () => {
         <div className="footer-column">
           <h3>Explore</h3>
 
-          <a href="/products">All Products</a>
-          <a href="/products#products">Categories</a>
+          <Link to="/products">All Products</Link>
         </div>
 
         {/* About */}
         <div className="footer-column">
           <h3>About</h3>
 
-          <a href="/about">Our Story</a>
-          <a href="/process">Our Process</a>
-          <a href="/why-handmade">Why Handmade</a>
-          <a href="/contact">Contact</a>
+          <Link to="/about">Our Story</Link>
         </div>
 
         {/* Connect */}
@@ -100,8 +96,8 @@ const Footer = () => {
           <h3>Connect</h3>
 
           <Link to="https://ig.me/m/littlewonders_04">Instagram</Link>
-          <a href="#">WhatsApp</a>
-          <a href="#">Email</a>
+          <Link to="#">WhatsApp</Link>
+          <Link to="#">Email</Link>
         </div>
       </div>
 
