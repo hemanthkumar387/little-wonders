@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Footer.css";
 
 const Footer = () => {
@@ -30,7 +31,7 @@ const Footer = () => {
 
           <div className="footer-socials">
             {/* Instagram */}
-            <a href="#" aria-label="Instagram" className="social-icon">
+            <Link to="https://www.instagram.com/littlewonders_04?stkn=djBpeXgxOG1qYXht" aria-label="Instagram" className="social-icon">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -49,7 +50,7 @@ const Footer = () => {
                   stroke="none"
                 />
               </svg>
-            </a>
+            </Link>
 
             {/* WhatsApp */}
             <a href="#" aria-label="WhatsApp" className="social-icon">
@@ -81,9 +82,7 @@ const Footer = () => {
           <h3>Explore</h3>
 
           <a href="/products">All Products</a>
-          <a href="/categories">Categories</a>
-          <a href="/new-arrivals">New Arrivals</a>
-          <a href="/collection">Our Collection</a>
+          <a href="/products#products">Categories</a>
         </div>
 
         {/* About */}
@@ -100,7 +99,7 @@ const Footer = () => {
         <div className="footer-column">
           <h3>Connect</h3>
 
-          <a href="#">Instagram</a>
+          <Link to="https://ig.me/m/littlewonders_04">Instagram</Link>
           <a href="#">WhatsApp</a>
           <a href="#">Email</a>
         </div>

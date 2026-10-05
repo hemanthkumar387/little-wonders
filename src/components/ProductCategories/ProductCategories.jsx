@@ -1,16 +1,20 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import products from "../../data/products";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
   faBorderAll,
+  faKey,
   faSeedling,
-  faHouse,
-  faGift,
+  // faHouse,
+  faWandMagicSparkles,
+  // faGift,
   faGem,
   faHeart,
   faArrowRight,
+  faBagShopping,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./ProductCategories.css";
@@ -25,139 +29,51 @@ const categories = [
     icon: faSeedling,
   },
   {
-    name: "Home Decor",
-    icon: faHouse,
+    name: "Hair Accessories",
+    icon: faWandMagicSparkles,
   },
   {
-    name: "Handmade Keychains",
-    icon: faGift,
+    name: "Keychains",
+    icon: faKey,
   },
   {
-    name: "Wrist Bands",
+    name: "Wrist Bracelets",
     icon: faGem,
-  },
-];
-
-const products = [
-  {
-    id: 1,
-    name: "Crochet Flower Bouquet",
-    category: "Flower Bouquets",
-    tag: "Flower Bouquet",
-    description: "A beautiful handmade flower bouquet.",
-    image: "/myimages/flower.jpeg",
-  },
-  {
-    id: 2,
-    name: "Handmade Bunny Bag",
-    category: "Home Decor",
-    tag: "Home Decor",
-    description: "A soft and beautifully crafted handmade bag.",
-    image: "/myimages/bag.jpeg",
-  },
-  {
-    id: 3,
-    name: "Krishna Keychain",
-    category: "Handmade Keychains",
-    tag: "Keychain",
-    description: "A colorful handmade Krishna keychain.",
-    image: "/myimages/keychain1.jpeg",
-  },
-  {
-    id: 4,
-    name: "Sunflower Keychain",
-    category: "Handmade Keychains",
-    tag: "Keychain",
-    description: "A cheerful handmade sunflower keychain.",
-    image: "/myimages/keychain.jpeg",
-  },
-  {
-    id: 5,
-    name: "Ribbon Keychain",
-    category: "Handmade Keychains",
-    tag: "Keychain",
-    description: "A cute handmade ribbon keychain.",
-    image: "/myimages/keychain2.jpeg",
-  },
-  {
-    id: 6,
-    name: "Star & Moon Keychains",
-    category: "Handmade Keychains",
-    tag: "Keychain",
-    description: "Beautiful handmade star and moon charms.",
-    image: "/myimages/keychain4.jpeg",
-  },
-  {
-    id: 7,
-    name: "Bow Keychain",
-    category: "Handmade Keychains",
-    tag: "Keychain",
-    description: "A delicate handmade bow keychain.",
-    image: "/myimages/keychain5.jpeg",
-  },
-  {
-    id: 8,
-    name: "Handmade Flower Bouquet",
-    category: "Flower Bouquets",
-    tag: "Flower Bouquet",
-    description: "A colorful bouquet made with care.",
-    image: "/myimages/flower1.jpeg",
-  },
-  {
-    id: 9,
-    name: "Handmade Wrist Band",
-    category: "Wrist Bands",
-    tag: "Wrist Band",
-    description: "A simple handmade band for everyday wear.",
-    image: "/myimages/wrist_art1.jpeg",
-  },
-  {
-    id: 10,
-    name: "Crochet Wrist Band",
-    category: "Wrist Bands",
-    tag: "Wrist Band",
-    description: "A comfortable handmade wrist band.",
-    image: "/myimages/wrist_band.jpeg",
   },
 ];
 
 const ProductCategory = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Products");
 
-  // Sort option
   const [sortOption, setSortOption] = useState("latest");
 
+  const [favorites, setFavorites] = useState([]);
+
   const filteredProducts = useMemo(() => {
-    // Filter products by category
     let result =
       selectedCategory === "All Products"
         ? [...products]
         : products.filter((product) => product.category === selectedCategory);
 
-    // Sort products
     if (sortOption === "az") {
       result.sort((a, b) => a.name.localeCompare(b.name));
     }
-
-    if (sortOption === "za") {
-      result.sort((a, b) => b.name.localeCompare(a.name));
-    }
-
-    // latest = original product order
     return result;
   }, [selectedCategory, sortOption]);
 
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-  };
+  const toggleFavorite = (productId) => {
+    setFavorites((current) => {
+      if (current.includes(productId)) {
+        return current.filter((id) => id !== productId);
+      }
 
-  const handleSortChange = (event) => {
-    setSortOption(event.target.value);
+      return [...current, productId];
+    });
   };
 
   return (
     <main className="products-page">
-      {/* Decorative background elements */}
+      {/* Background Decorations */}
 
       <div className="products-bg-circle products-bg-circle-one"></div>
 
@@ -171,11 +87,11 @@ const ProductCategory = () => {
         <FontAwesomeIcon icon={faSeedling} />
       </div>
 
-      {/* =====================================================
+      {/* ==========================================
           CATEGORY SECTION
-      ===================================================== */}
+      ========================================== */}
 
-      <section className="product-categories-section">
+      <section id="products" className="product-categories-section">
         <div className="product-section-heading">
           <p>EXPLORE OUR COLLECTION</p>
 
@@ -202,30 +118,40 @@ const ProductCategory = () => {
                 type="button"
                 key={category.name}
                 className={`product-category-card ${isActive ? "active" : ""}`}
-                onClick={() => handleCategoryClick(category.name)}
+                onClick={() => setSelectedCategory(category.name)}
               >
                 <div className="product-category-icon">
                   <FontAwesomeIcon icon={category.icon} />
                 </div>
 
                 <span>{category.name}</span>
+
+                {isActive && <span className="category-active-dot"></span>}
               </button>
             );
           })}
         </div>
       </section>
 
-      {/* =====================================================
-          PRODUCTS
-      ===================================================== */}
+      {/* ==========================================
+          PRODUCTS SECTION
+      ========================================== */}
 
       <section className="products-grid-section">
+        {/* HEADER */}
+
         <div className="products-grid-header">
-          <div>
-            <p className="products-showing">
-              Showing <strong>{filteredProducts.length}</strong>{" "}
-              {filteredProducts.length === 1 ? "creation" : "creations"}
-            </p>
+          <div className="products-heading-info">
+            <div className="products-count-row">
+              <span className="products-bag-icon">
+                <FontAwesomeIcon icon={faBagShopping} />
+              </span>
+
+              <p className="products-showing">
+                <strong>{filteredProducts.length}</strong>{" "}
+                {filteredProducts.length === 1 ? "creation" : "creations"}
+              </p>
+            </div>
 
             <p className="products-selected-category">{selectedCategory}</p>
           </div>
@@ -233,62 +159,82 @@ const ProductCategory = () => {
           {/* SORT */}
 
           <div className="products-sort">
-            <span>Sort by:</span>
+            <span>Sort by</span>
 
-            <select value={sortOption} onChange={handleSortChange}>
+            <select
+              value={sortOption}
+              onChange={(event) => setSortOption(event.target.value)}
+            >
               <option value="latest">Latest First</option>
 
               <option value="az">A - Z</option>
-
-              <option value="za">Z - A</option>
             </select>
           </div>
         </div>
 
-        {/* =====================================================
-            PRODUCT CARDS
-        ===================================================== */}
+        {/* PRODUCT GRID */}
 
         <div className="products-grid">
-          {filteredProducts.map((product) => (
-            <article className="product-card" key={product.id}>
-              {/* IMAGE */}
+          {filteredProducts.map((product, index) => {
+            const isFavorite = favorites.includes(product.id);
 
-              <div className="product-card-image">
-                <img src={product.image} alt={product.name} />
+            return (
+              <article
+                className="product-card"
+                key={product.id}
+                style={{
+                  "--card-index": index,
+                }}
+              >
+                {/* IMAGE */}
 
-                <button
-                  type="button"
-                  className="product-favorite"
-                  aria-label={`Add ${product.name} to favorites`}
-                >
-                  <FontAwesomeIcon icon={faHeart} />
-                </button>
-              </div>
+                <div className="product-card-image">
+                  <img src={product.image} alt={product.name} />
 
-              {/* CONTENT */}
+                  <span className="product-image-shine"></span>
 
-              <div className="product-card-content">
-                <span className="product-card-tag">{product.tag}</span>
+                  <button
+                    type="button"
+                    className={`product-favorite ${
+                      isFavorite ? "favorite-active" : ""
+                    }`}
+                    aria-label={
+                      isFavorite
+                        ? `Remove ${product.name} from favorites`
+                        : `Add ${product.name} to favorites`
+                    }
+                    onClick={() => toggleFavorite(product.id)}
+                  >
+                    <FontAwesomeIcon icon={faHeart} />
+                  </button>
+                </div>
 
-                <h3>{product.name}</h3>
+                {/* CONTENT */}
 
-                <p>{product.description}</p>
+                <div className="product-card-content">
+                  <span className="product-card-tag">{product.tag}</span>
 
-                <Link
-                  to={`/products/${product.id}`}
-                  className="product-details-button"
-                >
-                  <span>View Details</span>
+                  <h3>{product.name}</h3>
 
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </Link>
-              </div>
-            </article>
-          ))}
+                  {/* <p>{product.description}</p> */}
+
+                  <Link
+                    to={`/products/${product.id}`}
+                    className="product-details-button"
+                  >
+                    <span>View Details</span>
+
+                    <span className="product-button-icon">
+                      <FontAwesomeIcon icon={faArrowRight} />
+                    </span>
+                  </Link>
+                </div>
+              </article>
+            );
+          })}
         </div>
 
-        {/* NO PRODUCTS */}
+        {/* EMPTY STATE */}
 
         {filteredProducts.length === 0 && (
           <div className="no-products">
