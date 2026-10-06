@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import products from "../../data/products";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,7 +16,7 @@ import {
   faHeart,
   faArrowRight,
   faBagShopping,
-  faTag
+  faTag,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./ProductCategories.css";
@@ -48,7 +49,19 @@ const ProductCategory = () => {
 
   const [sortOption, setSortOption] = useState("latest");
 
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState(() => {
+    try {
+      const savedFavorites = localStorage.getItem("littleWondersWishlist");
+      return savedFavorites ? JSON.parse(savedFavorites) : [];
+    } catch (error) {
+      console.error("Failed to load wishlist:", error);
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("littleWondersWishlist", JSON.stringify(favorites));
+  }, [favorites]);
 
   const filteredProducts = useMemo(() => {
     let result =
@@ -63,6 +76,10 @@ const ProductCategory = () => {
   }, [selectedCategory, sortOption]);
 
   const toggleFavorite = (productId) => {
+    const product = products.find((item) => item.id === productId);
+
+    const isAlreadyFavorite = favorites.includes(productId);
+
     setFavorites((current) => {
       if (current.includes(productId)) {
         return current.filter((id) => id !== productId);
@@ -70,6 +87,40 @@ const ProductCategory = () => {
 
       return [...current, productId];
     });
+
+    if (isAlreadyFavorite) {
+      toast(
+        <div className="wishlist-toast">
+          <span className="wishlist-toast-icon">♡</span>
+
+          <span>
+            <strong>{product.name}</strong>
+            <small>Removed from the wishlist</small>
+          </span>
+        </div>,
+        {
+          className: "wishlist-toast-wrapper removed",
+          autoClose: 2200,
+          closeButton: true,
+        },
+      );
+    } else {
+      toast(
+        <div className="wishlist-toast">
+          <span className="wishlist-toast-icon">♥</span>
+
+          <span>
+            <strong>{product.name}</strong>
+            <small>Added to the wishlist</small>
+          </span>
+        </div>,
+        {
+          className: "wishlist-toast-wrapper added",
+          autoClose: 2200,
+          closeButton: true,
+        },
+      );
+    }
   };
 
   return (
@@ -212,8 +263,8 @@ const ProductCategory = () => {
                     }`}
                     aria-label={
                       isFavorite
-                        ? `Remove ${product.name} from favorites`
-                        : `Add ${product.name} to favorites`
+                        ? `Remove ${product.name} from wishlist`
+                        : `Add ${product.name} to wishlist`
                     }
                     onClick={() => toggleFavorite(product.id)}
                   >

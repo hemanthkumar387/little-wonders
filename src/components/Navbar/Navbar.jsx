@@ -1,9 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import "./Navbar.css";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
   const closeMenu = () => {
     setMenuOpen(false);
@@ -27,44 +41,59 @@ const Navbar = () => {
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="nav-links">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
-          >
-            Home
-          </NavLink>
+        <div className="navbar-right">
+          {/* Desktop Navigation */}
+          <nav className="nav-links">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              Home
+            </NavLink>
 
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
-          >
-            About Us
-          </NavLink>
+            <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              About Us
+            </NavLink>
 
-          <NavLink
-            to="/products"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
-          >
-            Products
-          </NavLink>
+            <NavLink
+              to="/products"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              Products
+            </NavLink>
 
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
-          >
-            Contact
-          </NavLink>
-        </nav>
+            <NavLink
+              to="/contact"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              Contact
+            </NavLink>
+          </nav>
+
+          <div className="navbar-cart">
+            <NavLink
+              to="/cart"
+              className="cart-link"
+              aria-label="Shopping cart"
+              onClick={closeMenu}
+            >
+              <FontAwesomeIcon icon={faCartShopping} />
+
+              <span className="cart-count">0</span>
+            </NavLink>
+          </div>
+        </div>
 
         {/* Mobile Toggle */}
         <button

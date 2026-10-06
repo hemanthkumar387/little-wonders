@@ -199,6 +199,73 @@
   color: #bd684f;
 }
 
+/* =========================================
+   SHOPPING CART
+========================================= */
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.navbar-right .navbar-cart {
+  margin-left: 0;
+}
+
+.navbar-cart {
+  display: flex;
+  align-items: center;
+  margin-left: 25px;
+}
+
+.cart-link {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d8c8bb;
+  border-radius: 50%;
+  background: #fffaf3;
+  color: #403c38;
+  font-size: 17px;
+  transition:
+    color 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.cart-link:hover {
+  color: #bd684f;
+  background: #f8e8dc;
+  border-color: #c8755d;
+  transform: translateY(-2px);
+}
+
+/* Cart count */
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #bd684f;
+  color: #fffaf3;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
 @media (max-width: 900px) {
   .nav-links {
     gap: 18px;
@@ -235,8 +302,42 @@
     height: 40px;
   }
 
+  /* Full-screen mobile menu */
   .mobile-menu {
+    position: fixed;
     top: 68px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(100vh - 68px);
+    padding: 20px;
+    background: rgba(255, 250, 243, 0.98);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(200, 117, 93, 0.12);
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-height: none;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-15px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease,
+      visibility 0.3s ease;
+  }
+
+  .mobile-menu-open {
+    height: calc(100vh - 68px);
+    max-height: none;
+    padding: 30px 20px;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
   }
 }
 
