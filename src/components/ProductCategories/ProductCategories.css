@@ -421,7 +421,7 @@
 .product-card:hover .product-image-shine {
   left: 140%;
 }
-
+/* 
 .product-favorite {
   position: absolute;
   top: 12px;
@@ -472,6 +472,23 @@
   100% {
     transform: scale(1);
   }
+} */
+
+.product-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  height: 100%;
+}
+
+.product-card-link:focus {
+  outline: none;
+}
+
+.product-card-link:focus-visible {
+  outline: 2px solid rgba(189, 104, 79, 0.4);
+  outline-offset: 5px;
+  border-radius: 18px;
 }
 
 .product-card-content {
@@ -997,12 +1014,10 @@
   min-width: 320px;
   padding: 0 !important;
   border-radius: 12px !important;
-  box-shadow:
-    0 12px 30px rgba(65, 48, 35, 0.15) !important;
+  box-shadow: 0 12px 30px rgba(65, 48, 35, 0.15) !important;
   overflow: hidden;
   font-family: Arial, sans-serif;
 }
-
 
 /* Added */
 
@@ -1010,7 +1025,6 @@
   background: #8b4f3d !important;
   color: #fffaf3 !important;
 }
-
 
 /* Removed */
 
@@ -1020,7 +1034,6 @@
   border: 1px solid #d8c8bb;
 }
 
-
 /* Toast content */
 
 .wishlist-toast {
@@ -1029,7 +1042,6 @@
   gap: 12px;
   padding: 14px 16px;
 }
-
 
 /* Heart */
 
@@ -1044,24 +1056,19 @@
   font-size: 17px;
 }
 
-
 /* Added heart */
 
-.wishlist-toast-wrapper.added
-.wishlist-toast-icon {
+.wishlist-toast-wrapper.added .wishlist-toast-icon {
   background: rgba(255, 255, 255, 0.14);
   color: #fffaf3;
 }
 
-
 /* Removed heart */
 
-.wishlist-toast-wrapper.removed
-.wishlist-toast-icon {
+.wishlist-toast-wrapper.removed .wishlist-toast-icon {
   background: #f7e4d5;
   color: #bd684f;
 }
-
 
 /* Text container */
 
@@ -1071,7 +1078,6 @@
   gap: 3px;
   min-width: 0;
 }
-
 
 /* Product name */
 
@@ -1085,7 +1091,6 @@
   max-width: 220px;
 }
 
-
 /* Message */
 
 .wishlist-toast small {
@@ -1093,7 +1098,6 @@
   line-height: 1.4;
   opacity: 0.85;
 }
-
 
 /* Close button */
 
@@ -1107,9 +1111,7 @@
   opacity: 1;
 }
 
-
 @media (max-width: 600px) {
-
   .wishlist-toast-wrapper {
     min-width: 0;
     width: calc(100vw - 30px);
@@ -1129,5 +1131,4 @@
   .wishlist-toast small {
     font-size: 10px;
   }
-
 }

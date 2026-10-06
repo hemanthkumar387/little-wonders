@@ -365,3 +365,166 @@
     height: 40px;
   }
 }
+
+/* ==========================================
+   CART
+========================================== */
+
+.navbar-cart {
+  display: flex;
+  align-items: center;
+}
+
+.cart-link {
+  position: relative;
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #d8c8bb;
+  border-radius: 50%;
+
+  background: #fffaf3;
+  color: #403c38;
+
+  font-size: 17px;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.cart-link:hover,
+.cart-link.active {
+  background: #f8e8dc;
+  border-color: #c8755d;
+  color: #bd684f;
+}
+
+.cart-link:hover {
+  transform: translateY(-2px);
+}
+
+/* ==========================================
+   CART COUNT
+========================================== */
+
+.cart-count {
+  position: absolute;
+
+  top: -5px;
+  right: -5px;
+
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #bd684f;
+  color: #fffaf3;
+
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+
+  border: 2px solid #fffaf3;
+
+  animation: cartBadgePop 0.3s ease;
+}
+
+@keyframes cartBadgePop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+
+  70% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==========================================
+   MOBILE CART
+========================================== */
+
+.mobile-cart-link {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 14px 10px;
+
+  color: #403c38;
+  text-decoration: none;
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+
+  border-top: 1px solid #eee2d8;
+
+  transition:
+    color 0.25s ease,
+    padding-left 0.25s ease;
+}
+
+.mobile-cart-link:hover,
+.mobile-cart-link.active {
+  color: #bd684f;
+}
+
+.mobile-cart-link:hover {
+  padding-left: 15px;
+}
+
+.mobile-cart-icon {
+  width: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 15px;
+}
+
+.mobile-cart-count {
+  min-width: 20px;
+  height: 20px;
+
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 5px;
+
+  border-radius: 50%;
+
+  background: #bd684f;
+  color: #fffaf3;
+
+  font-size: 10px;
+  font-weight: 700;
+}

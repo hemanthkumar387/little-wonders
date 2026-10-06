@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import products from "../../data/products";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,9 +8,7 @@ import {
   faBorderAll,
   faKey,
   faSeedling,
-  // faHouse,
   faWandMagicSparkles,
-  // faGift,
   faGem,
   faHeart,
   faArrowRight,
@@ -49,20 +46,6 @@ const ProductCategory = () => {
 
   const [sortOption, setSortOption] = useState("latest");
 
-  const [favorites, setFavorites] = useState(() => {
-    try {
-      const savedFavorites = localStorage.getItem("littleWondersWishlist");
-      return savedFavorites ? JSON.parse(savedFavorites) : [];
-    } catch (error) {
-      console.error("Failed to load wishlist:", error);
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem("littleWondersWishlist", JSON.stringify(favorites));
-  }, [favorites]);
-
   const filteredProducts = useMemo(() => {
     let result =
       selectedCategory === "All Products"
@@ -72,60 +55,15 @@ const ProductCategory = () => {
     if (sortOption === "az") {
       result.sort((a, b) => a.name.localeCompare(b.name));
     }
+
     return result;
   }, [selectedCategory, sortOption]);
 
-  const toggleFavorite = (productId) => {
-    const product = products.find((item) => item.id === productId);
-
-    const isAlreadyFavorite = favorites.includes(productId);
-
-    setFavorites((current) => {
-      if (current.includes(productId)) {
-        return current.filter((id) => id !== productId);
-      }
-
-      return [...current, productId];
-    });
-
-    if (isAlreadyFavorite) {
-      toast(
-        <div className="wishlist-toast">
-          <span className="wishlist-toast-icon">♡</span>
-
-          <span>
-            <strong>{product.name}</strong>
-            <small>Removed from the wishlist</small>
-          </span>
-        </div>,
-        {
-          className: "wishlist-toast-wrapper removed",
-          autoClose: 2200,
-          closeButton: true,
-        },
-      );
-    } else {
-      toast(
-        <div className="wishlist-toast">
-          <span className="wishlist-toast-icon">♥</span>
-
-          <span>
-            <strong>{product.name}</strong>
-            <small>Added to the wishlist</small>
-          </span>
-        </div>,
-        {
-          className: "wishlist-toast-wrapper added",
-          autoClose: 2200,
-          closeButton: true,
-        },
-      );
-    }
-  };
-
   return (
     <main className="products-page">
-      {/* Background Decorations */}
+      {/* ==========================================
+          BACKGROUND DECORATIONS
+      ========================================== */}
 
       <div className="products-bg-circle products-bg-circle-one"></div>
 
@@ -161,6 +99,8 @@ const ProductCategory = () => {
           </div>
         </div>
 
+        {/* PRICE NOTE */}
+
         <div className="price-note">
           <FontAwesomeIcon icon={faTag} />
 
@@ -171,6 +111,8 @@ const ProductCategory = () => {
             </strong>
           </p>
         </div>
+
+        {/* CATEGORIES */}
 
         <div className="product-categories-scroll">
           {categories.map((category) => {
@@ -237,64 +179,77 @@ const ProductCategory = () => {
 
         {/* PRODUCT GRID */}
 
+        {/* <div className="products-grid">
+          {filteredProducts.map((product, index) => (
+            <article
+              className="product-card"
+              key={product.id}
+              style={{
+                "--card-index": index,
+              }}
+            >
+
+              <div className="product-card-image">
+                <img src={product.image} alt={product.name} />
+
+                <span className="product-image-shine"></span>
+              </div>
+
+              <div className="product-card-content">
+                <span className="product-card-tag">{product.tag}</span>
+
+                <h3>{product.name}</h3>
+
+                <Link
+                  to={`/products/${product.id}`}
+                  className="product-details-button"
+                >
+                  <span>View Details</span>
+
+                  <span className="product-button-icon">
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  </span>
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div> */}
+
         <div className="products-grid">
-          {filteredProducts.map((product, index) => {
-            const isFavorite = favorites.includes(product.id);
-
-            return (
-              <article
-                className="product-card"
-                key={product.id}
-                style={{
-                  "--card-index": index,
-                }}
-              >
+          {filteredProducts.map((product, index) => (
+            <Link
+              to={`/products/${product.id}`}
+              className="product-card-link"
+              key={product.id}
+              style={{
+                "--card-index": index,
+              }}
+            >
+              <article className="product-card">
                 {/* IMAGE */}
-
                 <div className="product-card-image">
                   <img src={product.image} alt={product.name} />
 
                   <span className="product-image-shine"></span>
-
-                  <button
-                    type="button"
-                    className={`product-favorite ${
-                      isFavorite ? "favorite-active" : ""
-                    }`}
-                    aria-label={
-                      isFavorite
-                        ? `Remove ${product.name} from wishlist`
-                        : `Add ${product.name} to wishlist`
-                    }
-                    onClick={() => toggleFavorite(product.id)}
-                  >
-                    <FontAwesomeIcon icon={faHeart} />
-                  </button>
                 </div>
 
                 {/* CONTENT */}
-
                 <div className="product-card-content">
                   <span className="product-card-tag">{product.tag}</span>
 
                   <h3>{product.name}</h3>
 
-                  {/* <p>{product.description}</p> */}
-
-                  <Link
-                    to={`/products/${product.id}`}
-                    className="product-details-button"
-                  >
+                  <div className="product-details-button">
                     <span>View Details</span>
 
                     <span className="product-button-icon">
                       <FontAwesomeIcon icon={faArrowRight} />
                     </span>
-                  </Link>
+                  </div>
                 </div>
               </article>
-            );
-          })}
+            </Link>
+          ))}
         </div>
 
         {/* EMPTY STATE */}
