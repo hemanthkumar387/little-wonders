@@ -171,12 +171,31 @@ const CartPage = () => {
      DECREASE QUANTITY
   ========================================== */
 
+  /* ==========================================
+   DECREASE QUANTITY
+========================================== */
+
   const decreaseQuantity = (productId) => {
+    const currentItem = cartItems.find((item) => item.id === productId);
+
+    if (!currentItem) return;
+
+    // If quantity is 1, remove the product completely
+    if (currentItem.quantity <= 1) {
+      const updatedCart = cartItems.filter((item) => item.id !== productId);
+
+      setCartItems(updatedCart);
+      saveCart(updatedCart);
+
+      return;
+    }
+
+    // Otherwise decrease quantity
     const updatedCart = cartItems.map((item) =>
       item.id === productId
         ? {
             ...item,
-            quantity: Math.max(1, item.quantity - 1),
+            quantity: item.quantity - 1,
           }
         : item,
     );
@@ -184,7 +203,6 @@ const CartPage = () => {
     setCartItems(updatedCart);
     saveCart(updatedCart);
   };
-
   /* ==========================================
      REMOVE CART ITEM
   ========================================== */
@@ -382,11 +400,6 @@ const CartPage = () => {
 
                     <strong>₹{cartTotal.toLocaleString("en-IN")}</strong>
                   </div>
-
-                  <p>
-                    Final pricing may vary depending on the size and design of
-                    your handmade products.
-                  </p>
 
                   <button type="button" className="proceed-button">
                     <span>Proceed to Order</span>

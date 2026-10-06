@@ -29,6 +29,8 @@ const ProductDetails = () => {
     product?.images?.[0] || product?.image,
   );
 
+  const [quantity, setQuantity] = useState(1);
+
   /* ==========================================
      WISHLIST STATE
   ========================================== */
@@ -111,7 +113,7 @@ const ProductDetails = () => {
             </span>
           </div>,
           {
-            className: "wishlist-toast-wrapper removed",
+            className: "wishlist-toast-wrapper wishlist-removed",
 
             autoClose: 2200,
 
@@ -138,7 +140,7 @@ const ProductDetails = () => {
             </span>
           </div>,
           {
-            className: "wishlist-toast-wrapper added",
+            className: "wishlist-toast-wrapper wishlist-added",
 
             autoClose: 2200,
 
@@ -159,7 +161,6 @@ const ProductDetails = () => {
   const addToCart = () => {
     try {
       const savedCart = localStorage.getItem("littleWondersCart");
-
       const cartItems = savedCart ? JSON.parse(savedCart) : [];
 
       const existingItemIndex = cartItems.findIndex(
@@ -169,31 +170,26 @@ const ProductDetails = () => {
       let updatedCart;
 
       if (existingItemIndex !== -1) {
-        // Product already exists → increase quantity
-
         updatedCart = cartItems.map((item, index) =>
           index === existingItemIndex
             ? {
                 ...item,
-                quantity: (item.quantity || 1) + 1,
+                quantity: (item.quantity || 1) + quantity,
               }
             : item,
         );
       } else {
-        // New product → add to cart
-
         updatedCart = [
           ...cartItems,
           {
             ...product,
-            quantity: 1,
+            quantity,
           },
         ];
       }
 
       localStorage.setItem("littleWondersCart", JSON.stringify(updatedCart));
 
-      // Tell navbar/cart that cart changed
       window.dispatchEvent(new Event("cartUpdated"));
 
       toast(
@@ -204,11 +200,13 @@ const ProductDetails = () => {
 
           <span className="cart-toast-content">
             <strong>{product.name}</strong>
-            <small>Added to your cart</small>
+            <small>
+              {quantity} {quantity === 1 ? "item" : "items"} added to your cart
+            </small>
           </span>
         </div>,
         {
-          className: "cart-toast-wrapper added",
+          className: "cart-toast-wrapper cart-added",
           autoClose: 2200,
           closeButton: true,
         },
@@ -334,6 +332,32 @@ const ProductDetails = () => {
 
                   <span>Carefully packed before delivery.</span>
                 </div>
+              </div>
+            </div>
+
+            <div className="product-quantity-section">
+              <span className="quantity-label">Quantity</span>
+
+              <div className="products-quantity-control">
+                <button
+                  type="button"
+                  className="quantity-btn"
+                  onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                  aria-label="Decrease quantity"
+                >
+                  −
+                </button>
+
+                <span className="quantity-value">{quantity}</span>
+
+                <button
+                  type="button"
+                  className="quantity-btn"
+                  onClick={() => setQuantity((prev) => prev + 1)}
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
               </div>
             </div>
 
