@@ -301,6 +301,10 @@ const ProductDetails = () => {
               Category: <span>{product.category}</span>
             </div>
 
+            <div className="product-price">
+              ₹{Number(product.price || 0).toLocaleString("en-IN")}
+            </div>
+
             <div className="product-divider"></div>
 
             <p className="product-description">{product.description}</p>

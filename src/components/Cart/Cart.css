@@ -387,7 +387,7 @@
 .cart-summary {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 25px;
   margin-top: 22px;
   padding: 20px 22px;
