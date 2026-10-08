@@ -14,12 +14,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import products from "../../data/products";
+
 import "./Cart.css";
 
 const CartPage = () => {
-  /* ==========================================
+  /* =========================================================
      LOAD CART
-  ========================================== */
+  ========================================================= */
 
   const loadCart = () => {
     try {
@@ -32,7 +33,7 @@ const CartPage = () => {
       const cartData = JSON.parse(savedCart);
 
       /*
-        Supports BOTH formats:
+        Supports both:
 
         New format:
         {
@@ -77,13 +78,14 @@ const CartPage = () => {
         .filter(Boolean);
     } catch (error) {
       console.error("Failed to load cart:", error);
+
       return [];
     }
   };
 
-  /* ==========================================
+  /* =========================================================
      LOAD WISHLIST
-  ========================================== */
+  ========================================================= */
 
   const loadWishlist = () => {
     try {
@@ -94,20 +96,22 @@ const CartPage = () => {
       return products.filter((product) => wishlistIds.includes(product.id));
     } catch (error) {
       console.error("Failed to load wishlist:", error);
+
       return [];
     }
   };
 
-  /* ==========================================
+  /* =========================================================
      STATE
-  ========================================== */
+  ========================================================= */
 
   const [cartItems, setCartItems] = useState(loadCart);
+
   const [wishlist, setWishlist] = useState(loadWishlist);
 
-  /* ==========================================
+  /* =========================================================
      SYNC CART + WISHLIST
-  ========================================== */
+  ========================================================= */
 
   useEffect(() => {
     const syncCartAndWishlist = () => {
@@ -115,29 +119,24 @@ const CartPage = () => {
       setWishlist(loadWishlist());
     };
 
-    /*
-      storage:
-      Handles changes from another browser tab.
-
-      cartUpdated:
-      Handles changes made inside the same tab,
-      such as Product Details -> Add to Cart.
-    */
-
     window.addEventListener("storage", syncCartAndWishlist);
+
     window.addEventListener("cartUpdated", syncCartAndWishlist);
+
     window.addEventListener("wishlistUpdated", syncCartAndWishlist);
 
     return () => {
       window.removeEventListener("storage", syncCartAndWishlist);
+
       window.removeEventListener("cartUpdated", syncCartAndWishlist);
+
       window.removeEventListener("wishlistUpdated", syncCartAndWishlist);
     };
   }, []);
 
-  /* ==========================================
+  /* =========================================================
      SAVE CART
-  ========================================== */
+  ========================================================= */
 
   const saveCart = (items) => {
     const cartData = items.map((item) => ({
@@ -150,9 +149,9 @@ const CartPage = () => {
     window.dispatchEvent(new Event("cartUpdated"));
   };
 
-  /* ==========================================
+  /* =========================================================
      INCREASE QUANTITY
-  ========================================== */
+  ========================================================= */
 
   const increaseQuantity = (productId) => {
     const updatedCart = cartItems.map((item) =>
@@ -165,32 +164,36 @@ const CartPage = () => {
     );
 
     setCartItems(updatedCart);
+
     saveCart(updatedCart);
   };
-  /* ==========================================
-     DECREASE QUANTITY
-  ========================================== */
 
-  /* ==========================================
-   DECREASE QUANTITY
-========================================== */
+  /* =========================================================
+     DECREASE QUANTITY
+  ========================================================= */
 
   const decreaseQuantity = (productId) => {
     const currentItem = cartItems.find((item) => item.id === productId);
 
-    if (!currentItem) return;
+    if (!currentItem) {
+      return;
+    }
 
-    // If quantity is 1, remove the product completely
+    /*
+      If quantity is 1,
+      remove the item completely.
+    */
+
     if (currentItem.quantity <= 1) {
       const updatedCart = cartItems.filter((item) => item.id !== productId);
 
       setCartItems(updatedCart);
+
       saveCart(updatedCart);
 
       return;
     }
 
-    // Otherwise decrease quantity
     const updatedCart = cartItems.map((item) =>
       item.id === productId
         ? {
@@ -201,22 +204,25 @@ const CartPage = () => {
     );
 
     setCartItems(updatedCart);
+
     saveCart(updatedCart);
   };
-  /* ==========================================
+
+  /* =========================================================
      REMOVE CART ITEM
-  ========================================== */
+  ========================================================= */
 
   const removeCartItem = (productId) => {
     const updatedCart = cartItems.filter((item) => item.id !== productId);
 
     setCartItems(updatedCart);
+
     saveCart(updatedCart);
   };
 
-  /* ==========================================
+  /* =========================================================
      REMOVE WISHLIST ITEM
-  ========================================== */
+  ========================================================= */
 
   const removeFromWishlist = (productId) => {
     try {
@@ -241,42 +247,55 @@ const CartPage = () => {
     }
   };
 
-  /* ==========================================
-     CART TOTAL
-  ========================================== */
+  /* =========================================================
+     TOTALS
+  ========================================================= */
 
   const totalItems = cartItems.reduce(
     (total, item) => total + item.quantity,
     0,
   );
 
-  const cartTotal = cartItems.reduce(
+  const cartSubtotal = cartItems.reduce(
     (total, item) => total + (Number(item.price) || 0) * item.quantity,
     0,
   );
 
+  const shipping = 0;
+
+  const totalAmount = cartSubtotal + shipping;
+
   const hasCartItems = cartItems.length > 0;
+
   const hasWishlistItems = wishlist.length > 0;
 
-  /* ==========================================
+  /* =========================================================
+     FORMAT PRICE
+  ========================================================= */
+
+  const formatPrice = (price) => {
+    return `₹${Number(price || 0).toLocaleString("en-IN")}`;
+  };
+
+  /* =========================================================
      RENDER
-  ========================================== */
+  ========================================================= */
 
   return (
     <main className="cart-page">
       <section className="cart-main-section">
         <div className="cart-container">
-          {/* ==========================================
+          {/* =================================================
               PAGE HEADER
-          ========================================== */}
+          ================================================= */}
 
-          <div className="cart-page-header">
-            <div className="cart-page-title">
+          <header className="cart-page-header">
+            <div className="cart-heading-left">
               <span className="cart-page-label">Shopping</span>
 
-              <h1>Shopping Cart</h1>
+              <h1>Your Items</h1>
 
-              <p>Review your selected items before placing your order.</p>
+              <p>Review your handmade selections before placing your order.</p>
             </div>
 
             <Link to="/products" className="continue-shopping-link">
@@ -284,264 +303,189 @@ const CartPage = () => {
 
               <span>Continue Shopping</span>
             </Link>
-          </div>
+          </header>
 
-          {/* ==========================================
-              CART SECTION
-          ========================================== */}
+          {/* =================================================
+              CART
+          ================================================= */}
 
-          <section className="cart-section">
-            {/* ==========================================
-                CART HAS ITEMS
-            ========================================== */}
+          {hasCartItems ? (
+            <section className="cart-content">
+              {/* CART HEADER */}
 
-            {hasCartItems ? (
-              <>
-                <div className="section-heading-row">
-                  <div>
-                    <h2>Cart Items</h2>
-
-                    <p>Your selected handmade products</p>
-                  </div>
-
-                  <span className="item-count">
-                    {totalItems} {totalItems === 1 ? "Item" : "Items"}
+              <div className="cart-items-header">
+                <div className="cart-items-title">
+                  <span className="cart-bag-icon">
+                    <FontAwesomeIcon icon={faBagShopping} />
                   </span>
+
+                  <h2>Your Items</h2>
                 </div>
 
-                {/* CART ITEMS */}
+                <span className="cart-items-count">
+                  {totalItems} {totalItems === 1 ? "Item" : "Items"}
+                </span>
+              </div>
 
-                <div className="cart-items-list">
-                  {cartItems.map((product) => (
-                    <article className="cart-item" key={product.id}>
-                      {/* IMAGE */}
+              {/* =================================================
+                  CART ITEMS
+              ================================================= */}
 
-                      <div className="cart-item-image">
-                        <img src={product.image} alt={product.name} />
-                      </div>
+              <div className="cart-items-list">
+                {cartItems.map((product) => (
+                  <article className="cart-item" key={product.id}>
+                    {/* PRODUCT IMAGE */}
 
-                      {/* PRODUCT INFORMATION */}
+                    <div className="cart-product-image">
+                      <img src={product.image} alt={product.name} />
+                    </div>
 
-                      <div className="cart-item-content">
-                        <span className="cart-item-category">
-                          {product.tag}
+                    {/* PRODUCT DETAILS */}
+
+                    <div className="cart-product-details">
+                      <h3>{product.name}</h3>
+
+                      <div className="cart-product-bottom">
+                        {/* PRICE */}
+
+                        <span className="cart-product-price">
+                          {formatPrice(product.price)}
                         </span>
 
-                        <h3>{product.name}</h3>
-
-                        {product.description && <p>{product.description}</p>}
-
-                        {product.price != null && (
-                          <span className="cart-item-price">
-                            ₹{Number(product.price).toLocaleString("en-IN")}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* ACTIONS */}
-
-                      <div className="cart-item-actions">
                         {/* QUANTITY */}
 
-                        <div className="quantity-control">
+                        <div className="cart-quantity">
                           <button
                             type="button"
+                            className="quantity-button"
                             onClick={() => decreaseQuantity(product.id)}
-                            aria-label="Decrease quantity"
+                            aria-label={`Decrease quantity of ${product.name}`}
                           >
                             <FontAwesomeIcon icon={faMinus} />
                           </button>
 
-                          <span>{product.quantity}</span>
+                          <span className="quantity-number">
+                            {product.quantity}
+                          </span>
 
                           <button
                             type="button"
+                            className="quantity-button"
                             onClick={() => increaseQuantity(product.id)}
-                            aria-label="Increase quantity"
+                            aria-label={`Increase quantity of ${product.name}`}
                           >
                             <FontAwesomeIcon icon={faPlus} />
                           </button>
                         </div>
-
-                        {/* TOTAL */}
-
-                        {product.price != null && (
-                          <strong className="cart-item-total">
-                            ₹
-                            {(
-                              Number(product.price) * product.quantity
-                            ).toLocaleString("en-IN")}
-                          </strong>
-                        )}
-
-                        {/* DELETE */}
-
-                        <button
-                          type="button"
-                          className="cart-remove-button"
-                          onClick={() => removeCartItem(product.id)}
-                          aria-label={`Remove ${product.name} from cart`}
-                          title="Remove from cart"
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                        </button>
                       </div>
-                    </article>
-                  ))}
-                </div>
-
-                {/* ==========================================
-                    CART SUMMARY
-                ========================================== */}
-
-                <div className="cart-summary">
-                  <div className="cart-summary-info">
-                    <span>Subtotal</span>
-
-                    <strong>₹{cartTotal.toLocaleString("en-IN")}</strong>
-                  </div>
-
-                  <button type="button" className="proceed-button">
-                    <span>Proceed to Order</span>
-
-                    <FontAwesomeIcon icon={faArrowRight} />
-                  </button>
-                </div>
-              </>
-            ) : hasWishlistItems ? (
-              /* ==========================================
-                 CART EMPTY + WISHLIST EXISTS
-              ========================================== */
-
-              <>
-                <div className="section-heading-row">
-                  <div>
-                    <div className="wishlist-title-row">
-                      <h2>Your Wishlist</h2>
-
-                      <span className="wishlist-heart">
-                        <FontAwesomeIcon icon={faHeart} />
-                      </span>
                     </div>
 
-                    <p>Your saved handmade products</p>
-                  </div>
+                    {/* =================================================
+                          DELETE BUTTON
+                      ================================================= */}
 
-                  <span className="item-count">
-                    {wishlist.length} {wishlist.length === 1 ? "Item" : "Items"}
-                  </span>
+                    <button
+                      type="button"
+                      className="cart-delete-button"
+                      onClick={() => removeCartItem(product.id)}
+                      aria-label={`Remove ${product.name} from cart`}
+                      title="Remove from cart"
+                    >
+                      <FontAwesomeIcon icon={faTrash}/>
+                    </button>
+                  </article>
+                ))}
+              </div>
+
+              {/* =================================================
+                  SUMMARY
+              ================================================= */}
+
+              <section className="cart-summary">
+                <div className="summary-row">
+                  <span>Sub Total</span>
+
+                  <strong>{formatPrice(cartSubtotal)}</strong>
                 </div>
 
-                <div className="wishlist-grid main-wishlist-grid">
-                  {wishlist.map((product) => (
-                    <article className="wishlist-card" key={product.id}>
-                      <div className="wishlist-card-image">
-                        <img src={product.image} alt={product.name} />
+                <div className="summary-row">
+                  <span>Shipping</span>
 
-                        <span className="saved-badge">
-                          <FontAwesomeIcon icon={faHeart} />
-                          Saved
-                        </span>
-
-                        <button
-                          type="button"
-                          className="wishlist-remove"
-                          onClick={() => removeFromWishlist(product.id)}
-                          aria-label={`Remove ${product.name} from wishlist`}
-                          title="Remove from wishlist"
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                      </div>
-
-                      <div className="wishlist-card-content">
-                        <span className="wishlist-product-category">
-                          {product.tag}
-                        </span>
-
-                        <h3>{product.name}</h3>
-
-                        {product.description && <p>{product.description}</p>}
-
-                        <Link
-                          to={`/products/${product.id}`}
-                          className="view-product-button"
-                        >
-                          <span>View Product</span>
-
-                          <span className="view-product-arrow">
-                            <FontAwesomeIcon icon={faArrowRight} />
-                          </span>
-                        </Link>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </>
-            ) : (
-              /* ==========================================
-                 CART EMPTY + WISHLIST EMPTY
-              ========================================== */
-
-              <>
-                <div className="section-heading-row">
-                  <div>
-                    <h2>Cart Items</h2>
-
-                    <p>Your selected handmade products</p>
-                  </div>
-
-                  <span className="item-count">0 Items</span>
+                  <strong>
+                    {shipping === 0 ? "Free" : formatPrice(shipping)}
+                  </strong>
                 </div>
 
-                <div className="empty-cart-box">
-                  <div className="empty-cart-pattern empty-pattern-one">✦</div>
+                <div className="summary-divider"></div>
 
-                  <div className="empty-cart-pattern empty-pattern-two">♡</div>
+                <div className="summary-total-row">
+                  <span>Total Amount</span>
 
-                  <div className="empty-cart-icon">
-                    <FontAwesomeIcon icon={faBagShopping} />
-                  </div>
-
-                  <h3>Your cart is empty</h3>
-
-                  <p>
-                    Looks like you haven't added anything to your cart yet.
-                    Explore our handmade collection and find something you love.
-                  </p>
-
-                  <Link to="/products" className="shop-now-button">
-                    <span>Shop Our Collection</span>
-
-                    <FontAwesomeIcon icon={faArrowRight} />
-                  </Link>
+                  <strong>{formatPrice(totalAmount)}</strong>
                 </div>
-              </>
-            )}
-          </section>
 
-          {/* ==========================================
-              BOTTOM WISHLIST
+                {/* CHECKOUT */}
 
-              ONLY WHEN BOTH CART + WISHLIST EXIST
-          ========================================== */}
+                <button type="button" className="checkout-button">
+                  <span>Checkout</span>
 
-          {hasCartItems && hasWishlistItems && (
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
+              </section>
+            </section>
+          ) : (
+            /* =================================================
+               EMPTY CART
+            ================================================= */
+
+            <section className="empty-cart-section">
+              <div className="empty-cart-decoration empty-decoration-one">
+                ✦
+              </div>
+
+              <div className="empty-cart-decoration empty-decoration-two">
+                ♡
+              </div>
+
+              <div className="empty-cart-icon">
+                <FontAwesomeIcon icon={faBagShopping} />
+              </div>
+
+              <h2>Your cart is empty</h2>
+
+              <p>
+                Looks like you haven't added anything to your cart yet. Explore
+                our handmade collection and find something you love.
+              </p>
+
+              <Link to="/products" className="shop-now-button">
+                <span>Shop Our Collection</span>
+
+                <FontAwesomeIcon icon={faArrowRight} />
+              </Link>
+            </section>
+          )}
+
+          {/* =================================================
+              WISHLIST
+          ================================================= */}
+
+          {hasWishlistItems && (
             <section className="wishlist-section">
-              <div className="section-heading-row wishlist-heading">
+              <div className="wishlist-heading">
                 <div>
-                  <div className="wishlist-title-row">
-                    <h2>Your Wishlist</h2>
-
-                    <span className="wishlist-heart">
+                  <div className="wishlist-title">
+                    <span className="wishlist-icon">
                       <FontAwesomeIcon icon={faHeart} />
                     </span>
+
+                    <h2>Your Wishlist</h2>
                   </div>
 
                   <p>Products you've saved for later</p>
                 </div>
 
-                <span className="item-count wishlist-count">
+                <span className="wishlist-count">
                   {wishlist.length} {wishlist.length === 1 ? "Item" : "Items"}
                 </span>
               </div>
@@ -549,7 +493,7 @@ const CartPage = () => {
               <div className="wishlist-grid">
                 {wishlist.map((product) => (
                   <article className="wishlist-card" key={product.id}>
-                    <div className="wishlist-card-image">
+                    <div className="wishlist-image">
                       <img src={product.image} alt={product.name} />
 
                       <span className="saved-badge">
@@ -562,16 +506,13 @@ const CartPage = () => {
                         className="wishlist-remove"
                         onClick={() => removeFromWishlist(product.id)}
                         aria-label={`Remove ${product.name} from wishlist`}
-                        title="Remove from wishlist"
                       >
                         <FontAwesomeIcon icon={faTrash} />
                       </button>
                     </div>
 
-                    <div className="wishlist-card-content">
-                      <span className="wishlist-product-category">
-                        {product.tag}
-                      </span>
+                    <div className="wishlist-content">
+                      <span className="wishlist-category">{product.tag}</span>
 
                       <h3>{product.name}</h3>
 

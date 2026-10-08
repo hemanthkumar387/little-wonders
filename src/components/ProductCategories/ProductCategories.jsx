@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+
 import products from "../../data/products";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +15,7 @@ import {
   faArrowRight,
   faBagShopping,
   faTag,
+  // faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./ProductCategories.css";
@@ -28,7 +30,7 @@ const categories = [
     icon: faSeedling,
   },
   {
-    name: "Hair Accessories",
+    name: "Fashion Accessories",
     icon: faWandMagicSparkles,
   },
   {
@@ -61,9 +63,9 @@ const ProductCategory = () => {
 
   return (
     <main className="products-page">
-      {/* ==========================================
+      {/* =====================================================
           BACKGROUND DECORATIONS
-      ========================================== */}
+      ===================================================== */}
 
       <div className="products-bg-circle products-bg-circle-one"></div>
 
@@ -77,9 +79,9 @@ const ProductCategory = () => {
         <FontAwesomeIcon icon={faSeedling} />
       </div>
 
-      {/* ==========================================
+      {/* =====================================================
           CATEGORY SECTION
-      ========================================== */}
+      ===================================================== */}
 
       <section id="products" className="product-categories-section">
         <div className="product-section-heading">
@@ -112,7 +114,7 @@ const ProductCategory = () => {
           </p>
         </div>
 
-        {/* CATEGORIES */}
+        {/* CATEGORY FILTER */}
 
         <div className="product-categories-scroll">
           {categories.map((category) => {
@@ -138,12 +140,14 @@ const ProductCategory = () => {
         </div>
       </section>
 
-      {/* ==========================================
-          PRODUCTS SECTION
-      ========================================== */}
+      {/* =====================================================
+          PRODUCTS
+      ===================================================== */}
 
       <section className="products-grid-section">
-        {/* HEADER */}
+        {/* =================================================
+            PRODUCTS HEADER
+        ================================================= */}
 
         <div className="products-grid-header">
           <div className="products-heading-info">
@@ -169,6 +173,7 @@ const ProductCategory = () => {
             <select
               value={sortOption}
               onChange={(event) => setSortOption(event.target.value)}
+              aria-label="Sort products"
             >
               <option value="latest">Latest First</option>
 
@@ -177,90 +182,80 @@ const ProductCategory = () => {
           </div>
         </div>
 
-        {/* PRODUCT GRID */}
+        {/* =================================================
+            PRODUCT CARDS
+        ================================================= */}
 
-        {/* <div className="products-grid">
-          {filteredProducts.map((product, index) => (
-            <article
-              className="product-card"
-              key={product.id}
-              style={{
-                "--card-index": index,
-              }}
-            >
+        {filteredProducts.length > 0 && (
+          <div className="products-grid">
+            {filteredProducts.map((product, index) => (
+              <Link
+                key={product.id}
+                to={`/products/${product.id}`}
+                className="product-card-link"
+                style={{
+                  "--card-index": index,
+                }}
+              >
+                <article className="product-card">
+                  {/* PRODUCT IMAGE */}
 
-              <div className="product-card-image">
-                <img src={product.image} alt={product.name} />
-
-                <span className="product-image-shine"></span>
-              </div>
-
-              <div className="product-card-content">
-                <span className="product-card-tag">{product.tag}</span>
-
-                <h3>{product.name}</h3>
-
-                <Link
-                  to={`/products/${product.id}`}
-                  className="product-details-button"
-                >
-                  <span>View Details</span>
-
-                  <span className="product-button-icon">
-                    <FontAwesomeIcon icon={faArrowRight} />
-                  </span>
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div> */}
-
-        <div className="products-grid">
-          {filteredProducts.map((product, index) => (
-            <Link
-              to={`/products/${product.id}`}
-              className="product-card-link"
-              key={product.id}
-              style={{
-                "--card-index": index,
-              }}
-            >
-              <article className="product-card">
-                {/* IMAGE */}
-                <div className="product-card-image">
-                  <img src={product.image} alt={product.name} />
-
-                  <span className="product-image-shine"></span>
-                </div>
-
-                {/* CONTENT */}
-                <div className="product-card-content">
-                  <span className="product-card-tag">{product.tag}</span>
-
-                  <h3>{product.name}</h3>
-
-                  <div className="product-details-button">
-                    <span>View Details</span>
-
-                    <span className="product-button-icon">
-                      <FontAwesomeIcon icon={faArrowRight} />
-                    </span>
+                  <div className="product-card-image">
+                    <div className="product-image-frame">
+                      <img src={product.image} alt={product.name} />
+                    </div>
                   </div>
-                </div>
-              </article>
-            </Link>
-          ))}
-        </div>
 
-        {/* EMPTY STATE */}
+                  {/* PRODUCT DETAILS */}
+
+                  <div className="product-card-content">
+                    <h3>{product.name}</h3>
+
+                    <p className="product-card-category">
+                      {product.tag || product.category}
+                    </p>
+
+                    <div className="product-card-bottom">
+                      <div className="product-card-price">
+                        ₹{Number(product.price || 0).toLocaleString("en-IN")}
+                      </div>
+
+                      {/* ADD BUTTON */}
+
+                      <span
+                        className="product-add-button"
+                        aria-label={`Add ${product.name} to cart`}
+                      >
+                        <FontAwesomeIcon icon={faArrowRight} />
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* =================================================
+            EMPTY STATE
+        ================================================= */}
 
         {filteredProducts.length === 0 && (
           <div className="no-products">
-            <FontAwesomeIcon icon={faSeedling} />
+            <div className="no-products-icon">
+              <FontAwesomeIcon icon={faSeedling} />
+            </div>
 
             <h3>No creations found</h3>
 
             <p>More handmade creations are coming soon.</p>
+
+            <button
+              type="button"
+              onClick={() => setSelectedCategory("All Products")}
+            >
+              View All Products
+            </button>
           </div>
         )}
       </section>
