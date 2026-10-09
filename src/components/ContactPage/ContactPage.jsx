@@ -70,6 +70,7 @@ const initialForm = {
 const ContactPage = () => {
   const [formData, setFormData] = useState(initialForm);
   const [openFaq, setOpenFaq] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState({
     type: "",
     message: "",
@@ -86,11 +87,14 @@ const ContactPage = () => {
     setFormStatus({ type: "", message: "" });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (isSubmitting) return;
 
     const { name, email, category, subject, message } = formData;
 
+    // Validate required fields
     if (
       !name.trim() ||
       !email.trim() ||
@@ -105,6 +109,7 @@ const ContactPage = () => {
       return;
     }
 
+    // Validate email address
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailPattern.test(email.trim())) {
@@ -115,13 +120,58 @@ const ContactPage = () => {
       return;
     }
 
-    // TODO: Send formData to your backend or email service.
-    // Do not show a delivery confirmation until the server succeeds.
+    setIsSubmitting(true);
     setFormStatus({
       type: "info",
-      message:
-        "Your details are valid. Connect the form to your backend or email service to submit your message.",
+      message: "Sending your message...",
     });
+
+    try {
+      const apiBaseUrl = (
+        import.meta.env.VITE_API_URL || "http://localhost:5000"
+      ).replace(/\/$/, "");
+
+      const response = await fetch(`${apiBaseUrl}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          subject: `[${category}] ${subject.trim()}`,
+          message: message.trim(),
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Unable to send your message. Please try again.",
+        );
+      }
+
+      // Show success only after the backend confirms delivery.
+      setFormStatus({
+        type: "success",
+        message: result.message || "Your message has been sent successfully!",
+      });
+
+      // Clear the form after a successful submission.
+      setFormData(initialForm);
+    } catch (error) {
+      console.error("Contact form submission failed:", error);
+
+      setFormStatus({
+        type: "error",
+        message:
+          error.message ||
+          "Unable to send your message. Please check your connection and try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -370,11 +420,17 @@ const ContactPage = () => {
               )}
 
               <div className="contact-form-actions">
-                <button type="submit" className="contact-submit-button">
-                  Send your message
-                  <FontAwesomeIcon icon={faPaperPlane} />
-                </button>
+                <button
+                  type="submit"
+                  className="contact-submit-button"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Sending..." : "Send your message"}
 
+                  <FontAwesomeIcon
+                    icon={isSubmitting ? faClock : faPaperPlane}
+                  />
+                </button>
                 <button
                   type="button"
                   className="contact-reset-button"

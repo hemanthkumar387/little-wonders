@@ -57,6 +57,165 @@ const CartPage = () => {
 
   const [cartItems, setCartItems] = useState(loadCart);
   const [wishlist, setWishlist] = useState(loadWishlist);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
+  const [orderStatus, setOrderStatus] = useState({
+    type: "",
+    message: "",
+  });
+
+  const [checkoutForm, setCheckoutForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    city: "",
+    pincode: "",
+    notes: "",
+  });
+
+  const handleCheckoutChange = (event) => {
+    const { name, value } = event.target;
+
+    setCheckoutForm((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
+
+  const handleCheckoutSubmit = async (event) => {
+    event.preventDefault();
+
+    if (isSubmittingOrder) return;
+
+    if (!cartItems.length) {
+      setOrderStatus({
+        type: "error",
+        message: "Your cart is empty. Please add a product first.",
+      });
+      return;
+    }
+
+    const { name, phone, email, address, city, pincode, notes } = checkoutForm;
+
+    if (
+      !name.trim() ||
+      !phone.trim() ||
+      !address.trim() ||
+      !city.trim() ||
+      !pincode.trim()
+    ) {
+      setOrderStatus({
+        type: "error",
+        message: "Please complete all required fields.",
+      });
+      return;
+    }
+
+    if (!/^[0-9]{10}$/.test(phone.trim())) {
+      setOrderStatus({
+        type: "error",
+        message: "Please enter a valid 10-digit phone number.",
+      });
+      return;
+    }
+
+    if (!/^[0-9]{6}$/.test(pincode.trim())) {
+      setOrderStatus({
+        type: "error",
+        message: "Please enter a valid 6-digit PIN code.",
+      });
+      return;
+    }
+
+    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setOrderStatus({
+        type: "error",
+        message: "Please enter a valid email address.",
+      });
+      return;
+    }
+
+    const orderItems = cartItems.map((item) => ({
+      productId: item.id,
+      name: item.name,
+      quantity: item.quantity,
+      price: Number(item.price) || 0,
+      subtotal: (Number(item.price) || 0) * item.quantity,
+    }));
+
+    setIsSubmittingOrder(true);
+    setOrderStatus({
+      type: "info",
+      message: "Sending your order request...",
+    });
+
+    try {
+      const apiBaseUrl = (
+        import.meta.env.VITE_API_URL || "http://localhost:5000"
+      ).replace(/\/$/, "");
+
+      const response = await fetch(`${apiBaseUrl}/api/checkout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          customer: {
+            name: name.trim(),
+            phone: phone.trim(),
+            email: email.trim(),
+            address: address.trim(),
+            city: city.trim(),
+            pincode: pincode.trim(),
+            notes: notes.trim(),
+          },
+          items: orderItems,
+          total: totalAmount,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Unable to submit your request. Please try again.",
+        );
+      }
+
+      setOrderStatus({
+        type: "success",
+        message:
+          "Thank you for choosing LittleWonders! Your order request has been sent successfully. We'll get in touch with you soon to confirm the details.",
+      });
+
+      // Clear the cart only after the server confirms the request was sent.
+      localStorage.removeItem("littleWondersCart");
+      setCartItems([]);
+      window.dispatchEvent(new Event("cartUpdated"));
+
+      setCheckoutForm({
+        name: "",
+        phone: "",
+        email: "",
+        address: "",
+        city: "",
+        pincode: "",
+        notes: "",
+      });
+    } catch (error) {
+      console.error("Checkout submission failed:", error);
+
+      setOrderStatus({
+        type: "error",
+        message:
+          error.message ||
+          "Something went wrong. Please try again in a moment.",
+      });
+    } finally {
+      setIsSubmittingOrder(false);
+    }
+  };
 
   useEffect(() => {
     const syncCartAndWishlist = () => {
@@ -295,7 +454,14 @@ const CartPage = () => {
                   <span>Back to Shop</span>
                 </Link>
 
-                <button type="button" className="checkout-button">
+                <button
+                  type="button"
+                  className="checkout-button"
+                  onClick={() => {
+                    setOrderStatus({ type: "", message: "" });
+                    setShowCheckout(true);
+                  }}
+                >
                   <span>Checkout</span>
                   <FontAwesomeIcon icon={faArrowRight} />
                 </button>
@@ -395,6 +561,270 @@ const CartPage = () => {
           )}
         </div>
       </section>
+
+      {showCheckout && (
+        <div
+          className="checkout-modal-backdrop"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget && !isSubmittingOrder) {
+              setShowCheckout(false);
+            }
+          }}
+        >
+          <section
+            className="checkout-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="checkout-modal-title"
+          >
+            <div className="checkout-modal-header">
+              <div>
+                <span className="checkout-eyebrow">
+                  LITTLEWONDERS · MADE WITH LOVE
+                </span>
+                <h2 id="checkout-modal-title">Let's get your details.</h2>
+                <p>
+                  Share your delivery information and we'll get in touch to
+                  confirm your order.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="checkout-close-button"
+                onClick={() => setShowCheckout(false)}
+                disabled={isSubmittingOrder}
+                aria-label="Close checkout"
+              >
+                ×
+              </button>
+            </div>
+
+            {orderStatus.type === "success" ? (
+              <div className="checkout-success">
+                <div className="checkout-success-icon">
+                  <FontAwesomeIcon icon={faHeart} />
+                </div>
+
+                <h3>Thank you for your order request!</h3>
+
+                <p>{orderStatus.message}</p>
+
+                <button
+                  type="button"
+                  className="checkout-submit-button"
+                  onClick={() => {
+                    setShowCheckout(false);
+                    setOrderStatus({ type: "", message: "" });
+                  }}
+                >
+                  Continue shopping
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
+              </div>
+            ) : (
+              <form className="checkout-form" onSubmit={handleCheckoutSubmit}>
+                <div className="checkout-form-section-title">
+                  <span>01</span>
+                  Your contact details
+                </div>
+
+                <div className="checkout-form-grid">
+                  <div className="checkout-field">
+                    <label htmlFor="checkout-name">Full name *</label>
+                    <input
+                      id="checkout-name"
+                      name="name"
+                      value={checkoutForm.name}
+                      onChange={handleCheckoutChange}
+                      placeholder="Enter your full name"
+                      autoComplete="name"
+                      maxLength={100}
+                      required
+                    />
+                  </div>
+
+                  <div className="checkout-field">
+                    <label htmlFor="checkout-phone">Phone number *</label>
+                    <input
+                      id="checkout-phone"
+                      name="phone"
+                      type="tel"
+                      value={checkoutForm.phone}
+                      onChange={handleCheckoutChange}
+                      placeholder="10-digit mobile number"
+                      autoComplete="tel"
+                      inputMode="numeric"
+                      pattern="[0-9]{10}"
+                      maxLength={10}
+                      required
+                    />
+                  </div>
+
+                  <div className="checkout-field checkout-field-full">
+                    <label htmlFor="checkout-email">
+                      Email address <span>(optional)</span>
+                    </label>
+                    <input
+                      id="checkout-email"
+                      name="email"
+                      type="email"
+                      value={checkoutForm.email}
+                      onChange={handleCheckoutChange}
+                      placeholder="you@example.com"
+                      autoComplete="email"
+                      maxLength={254}
+                    />
+                  </div>
+                </div>
+
+                <div className="checkout-form-section-title">
+                  <span>02</span>
+                  Delivery address
+                </div>
+
+                <div className="checkout-form-grid">
+                  <div className="checkout-field checkout-field-full">
+                    <label htmlFor="checkout-address">
+                      House / flat number and street address *
+                    </label>
+                    <textarea
+                      id="checkout-address"
+                      name="address"
+                      value={checkoutForm.address}
+                      onChange={handleCheckoutChange}
+                      placeholder="House number, street, area, landmark..."
+                      rows={3}
+                      autoComplete="street-address"
+                      maxLength={500}
+                      required
+                    />
+                  </div>
+
+                  <div className="checkout-field">
+                    <label htmlFor="checkout-city">City / town *</label>
+                    <input
+                      id="checkout-city"
+                      name="city"
+                      value={checkoutForm.city}
+                      onChange={handleCheckoutChange}
+                      placeholder="Your city or town"
+                      autoComplete="address-level2"
+                      maxLength={100}
+                      required
+                    />
+                  </div>
+
+                  <div className="checkout-field">
+                    <label htmlFor="checkout-pincode">PIN code *</label>
+                    <input
+                      id="checkout-pincode"
+                      name="pincode"
+                      value={checkoutForm.pincode}
+                      onChange={handleCheckoutChange}
+                      placeholder="6-digit PIN code"
+                      inputMode="numeric"
+                      pattern="[0-9]{6}"
+                      maxLength={6}
+                      autoComplete="postal-code"
+                      required
+                    />
+                  </div>
+
+                  <div className="checkout-field checkout-field-full">
+                    <label htmlFor="checkout-notes">
+                      Additional instructions <span>(optional)</span>
+                    </label>
+                    <textarea
+                      id="checkout-notes"
+                      name="notes"
+                      value={checkoutForm.notes}
+                      onChange={handleCheckoutChange}
+                      placeholder="Gift message, preferred time, or anything else..."
+                      rows={2}
+                      maxLength={500}
+                    />
+                  </div>
+                </div>
+
+                <div className="checkout-order-preview">
+                  <div className="checkout-order-preview-heading">
+                    <h3>Your selected items</h3>
+                    <span>
+                      {totalItems} {totalItems === 1 ? "item" : "items"}
+                    </span>
+                  </div>
+
+                  <div className="checkout-order-items">
+                    {cartItems.map((item) => (
+                      <div className="checkout-order-item" key={item.id}>
+                        <div>
+                          <span className="checkout-order-item-name">
+                            {item.name}
+                          </span>
+                          <span className="checkout-order-item-quantity">
+                            Qty: {item.quantity}
+                          </span>
+                        </div>
+
+                        <strong>
+                          {formatPrice(
+                            (Number(item.price) || 0) * item.quantity,
+                          )}
+                        </strong>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="checkout-order-total">
+                    <span>Estimated total</span>
+                    <strong>{formatPrice(totalAmount)}</strong>
+                  </div>
+
+                  <p className="checkout-total-note">
+                    This is an order request, not a payment. We'll contact you
+                    to confirm availability, delivery details, and the final
+                    amount.
+                  </p>
+                </div>
+
+                {orderStatus.message && (
+                  <div
+                    className={`checkout-status ${orderStatus.type}`}
+                    role="status"
+                    aria-live="polite"
+                  >
+                    {orderStatus.message}
+                  </div>
+                )}
+
+                <div className="checkout-form-actions">
+                  <button
+                    type="button"
+                    className="checkout-cancel-button"
+                    onClick={() => setShowCheckout(false)}
+                    disabled={isSubmittingOrder}
+                  >
+                    Back to cart
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="checkout-submit-button"
+                    disabled={isSubmittingOrder || cartItems.length === 0}
+                  >
+                    {isSubmittingOrder
+                      ? "Sending request..."
+                      : "Submit order request"}
+
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  </button>
+                </div>
+              </form>
+            )}
+          </section>
+        </div>
+      )}
     </main>
   );
 };
