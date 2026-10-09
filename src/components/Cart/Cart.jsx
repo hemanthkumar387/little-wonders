@@ -151,9 +151,7 @@ const CartPage = () => {
     });
 
     try {
-      const apiBaseUrl = (
-        import.meta.env.VITE_API_URL || "http://localhost:5000"
-      ).replace(/\/$/, "");
+      const apiBaseUrl = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
       const response = await fetch(`${apiBaseUrl}/api/checkout`, {
         method: "POST",
