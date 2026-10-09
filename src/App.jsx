@@ -6,6 +6,7 @@ import ProductDetails from "./components/ProductDetails/ProductDetails";
 import AboutPage from "./components/AboutPage/AboutPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import CartPage from "./components/Cart/Cart";
+import ContactPage from "./components/ContactPage/ContactPage";
 import Footer from "./components/Footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -42,7 +43,7 @@ function App() {
 
             <Route path="/cart" element={<CartPage />} />
 
-            <Route path="/contact" element={<ProductsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </main>
 

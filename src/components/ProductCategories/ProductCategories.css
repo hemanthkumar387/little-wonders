@@ -1017,7 +1017,7 @@
   /* HORIZONTAL CATEGORY SCROLL */
 
   .product-categories-scroll {
-    justify-content: flex-start;
+    /* justify-content: flex-start; */
 
     overflow-x: auto;
 
@@ -1227,6 +1227,7 @@
   /* CATEGORY */
 
   .product-categories-scroll {
+    justify-content: flex-start;
     gap: 7px;
   }
 

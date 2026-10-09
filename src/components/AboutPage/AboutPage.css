@@ -916,10 +916,13 @@
     font-size: 70px;
   }
 
-  .about-story,
   .about-journey,
   .about-purpose {
     padding: 75px 18px;
+  }
+
+    .about-story{
+    padding: 85px 18px;
   }
 
   .story-image-badge {
