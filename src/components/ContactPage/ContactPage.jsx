@@ -45,7 +45,7 @@ const faqs = [
   {
     question: "Can I cancel or return an order?",
     answer:
-      "Cancellation and return eligibility depends on your order status and the applicable store policy. Contact us with your order number so we can review your request.",
+      "Cancellation and return eligibility depends on your order status. Contact us with your order number so we can review your request.",
   },
   {
     question: "How can I check my order status?",
