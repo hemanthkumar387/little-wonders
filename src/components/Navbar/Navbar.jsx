@@ -1,28 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-
 import "./Navbar.css";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const mobileMenuRef = useRef(null);
+  const menuToggleRef = useRef(null);
 
-  /* ==========================================
-     LOAD CART COUNT
-  ========================================== */
-
+  // Get the total quantity of items in the cart
   const getCartCount = () => {
     try {
       const savedCart = localStorage.getItem("littleWondersCart");
 
-      if (!savedCart) {
-        return 0;
-      }
+      if (!savedCart) return 0;
 
       const cartItems = JSON.parse(savedCart);
+
+      if (!Array.isArray(cartItems)) return 0;
 
       return cartItems.reduce(
         (total, item) => total + (Number(item.quantity) || 1),
@@ -30,45 +26,26 @@ const Navbar = () => {
       );
     } catch (error) {
       console.error("Failed to load cart count:", error);
-
       return 0;
     }
   };
 
   const [cartCount, setCartCount] = useState(getCartCount);
 
-  /* ==========================================
-     MOBILE MENU SCROLL LOCK
-  ========================================== */
-
+  // Lock background scrolling while the mobile menu is open
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = menuOpen ? "hidden" : "";
 
     return () => {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
 
-  /* ==========================================
-     UPDATE CART COUNT
-  ========================================== */
-
+  // Update the cart count when cart data changes
   useEffect(() => {
     const updateCartCount = () => {
       setCartCount(getCartCount());
     };
-
-    /*
-      Same tab:
-      Product Details / Cart dispatches cartUpdated.
-
-      Other tab:
-      Browser fires storage event.
-    */
 
     window.addEventListener("cartUpdated", updateCartCount);
     window.addEventListener("storage", updateCartCount);
@@ -79,22 +56,41 @@ const Navbar = () => {
     };
   }, []);
 
-  /* ==========================================
-     CLOSE MOBILE MENU
-  ========================================== */
-
+  // Close the menu and return focus to the hamburger button
   const closeMenu = () => {
     setMenuOpen(false);
+    menuToggleRef.current?.focus();
   };
+
+  // Close the menu when Escape is pressed
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        closeMenu();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [menuOpen]);
+
+  // Shared navigation link styling
+  const desktopLinkClass = ({ isActive }) =>
+    isActive ? "nav-link active" : "nav-link";
+
+  const mobileLinkClass = ({ isActive }) =>
+    isActive ? "mobile-nav-link active" : "mobile-nav-link";
 
   return (
     <header className="navbar">
       <div className="navbar-container">
-        {/* ==========================================
-            LOGO
-        ========================================== */}
-
-        <Link to="/" className="navbar-logo" onClick={closeMenu}>
+        {/* Logo */}
+        <Link to="/" className="navbar-logo">
           <img
             src="/images/logo.png"
             alt="LittleWonders"
@@ -103,166 +99,93 @@ const Navbar = () => {
 
           <div className="logo-text">
             <span className="logo-title">LittleWonders</span>
-
             <span className="logo-subtitle">NURTURE. GROW. INSPIRE.</span>
           </div>
         </Link>
 
-        {/* ==========================================
-            RIGHT SIDE
-        ========================================== */}
-
+        {/* Desktop navigation */}
         <div className="navbar-right">
-          {/* ==========================================
-              DESKTOP NAVIGATION
-          ========================================== */}
-
-          <nav className="nav-links">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
+          <nav className="nav-links" aria-label="Main navigation">
+            <NavLink to="/" end className={desktopLinkClass}>
               Home
             </NavLink>
 
-            <NavLink
-              to="/about"
-              className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
+            <NavLink to="/about" className={desktopLinkClass}>
               About Us
             </NavLink>
 
-            <NavLink
-              to="/products"
-              className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
+            <NavLink to="/products" className={desktopLinkClass}>
               Products
             </NavLink>
 
-            <NavLink
-              to="/contact"
-              className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
+            <NavLink to="/contact" className={desktopLinkClass}>
               Contact
             </NavLink>
           </nav>
-
-          {/* ==========================================
-              CART
-          ========================================== */}
-
-          <div className="navbar-cart">
-            <NavLink
-              to="/cart"
-              className={({ isActive }) =>
-                `cart-link ${isActive ? "active" : ""}`
-              }
-              aria-label={`Shopping cart with ${cartCount} items`}
-              onClick={closeMenu}
-            >
-              <FontAwesomeIcon icon={faCartShopping} />
-
-              {cartCount > 0 && (
-                <span className="cart-count">
-                  {cartCount > 99 ? "99+" : cartCount}
-                </span>
-              )}
-            </NavLink>
-          </div>
         </div>
 
-        {/* ==========================================
-            MOBILE TOGGLE
-        ========================================== */}
-
-        <button
-          type="button"
-          className={`menu-toggle ${menuOpen ? "open" : ""}`}
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle navigation"
-          aria-expanded={menuOpen}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-
-      {/* ==========================================
-          MOBILE NAVIGATION
-      ========================================== */}
-
-      <div className={`mobile-menu ${menuOpen ? "mobile-menu-open" : ""}`}>
-        <NavLink
-          to="/"
-          onClick={closeMenu}
-          className={({ isActive }) =>
-            isActive ? "mobile-nav-link active" : "mobile-nav-link"
-          }
-        >
-          Home
-        </NavLink>
-
-        <NavLink
-          to="/about"
-          onClick={closeMenu}
-          className={({ isActive }) =>
-            isActive ? "mobile-nav-link active" : "mobile-nav-link"
-          }
-        >
-          About Us
-        </NavLink>
-
-        <NavLink
-          to="/products"
-          onClick={closeMenu}
-          className={({ isActive }) =>
-            isActive ? "mobile-nav-link active" : "mobile-nav-link"
-          }
-        >
-          Products
-        </NavLink>
-
-        <NavLink
-          to="/contact"
-          onClick={closeMenu}
-          className={({ isActive }) =>
-            isActive ? "mobile-nav-link active" : "mobile-nav-link"
-          }
-        >
-          Contact
-        </NavLink>
-
-        {/* MOBILE CART */}
-
+        {/* Cart stays beside the hamburger on mobile */}
         <NavLink
           to="/cart"
-          onClick={closeMenu}
-          className={({ isActive }) =>
-            `mobile-cart-link ${isActive ? "active" : ""}`
-          }
+          className={({ isActive }) => `cart-link ${isActive ? "active" : ""}`}
+          aria-label={`Shopping cart with ${cartCount} items`}
         >
-          <span className="mobile-cart-icon">
-            <FontAwesomeIcon icon={faCartShopping} />
-          </span>
-
-          <span>Cart</span>
+          <FontAwesomeIcon icon={faCartShopping} />
 
           {cartCount > 0 && (
-            <span className="mobile-cart-count">
+            <span className="cart-count" aria-hidden="true">
               {cartCount > 99 ? "99+" : cartCount}
             </span>
           )}
         </NavLink>
+
+        {/* Mobile hamburger toggle */}
+        <button
+          ref={menuToggleRef}
+          type="button"
+          className={`menu-toggle ${menuOpen ? "open" : ""}`}
+          onClick={() => {
+            if (menuOpen) {
+              closeMenu();
+            } else {
+              setMenuOpen(true);
+            }
+          }}
+          aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-navigation"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </div>
+
+      {/* Mobile navigation */}
+      <nav
+        ref={mobileMenuRef}
+        id="mobile-navigation"
+        className={`mobile-menu ${menuOpen ? "mobile-menu-open" : ""}`}
+        aria-label="Mobile navigation"
+        aria-hidden={!menuOpen}
+        inert={!menuOpen}
+      >
+        <NavLink to="/" end className={mobileLinkClass} onClick={closeMenu}>
+          Home
+        </NavLink>
+
+        <NavLink to="/about" className={mobileLinkClass} onClick={closeMenu}>
+          About Us
+        </NavLink>
+
+        <NavLink to="/products" className={mobileLinkClass} onClick={closeMenu}>
+          Products
+        </NavLink>
+
+        <NavLink to="/contact" className={mobileLinkClass} onClick={closeMenu}>
+          Contact
+        </NavLink>
+      </nav>
     </header>
   );
 };
