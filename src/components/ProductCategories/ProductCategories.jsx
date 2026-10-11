@@ -15,11 +15,11 @@ import {
   faArrowRight,
   faBagShopping,
   faTag,
+  faScissors
   // faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./ProductCategories.css";
-
 const categories = [
   {
     name: "All Products",
@@ -40,6 +40,10 @@ const categories = [
   {
     name: "Wrist Bracelets",
     icon: faGem,
+  },
+  {
+    name: "Hair Accessories",
+    icon: faScissors,
   },
 ];
 
