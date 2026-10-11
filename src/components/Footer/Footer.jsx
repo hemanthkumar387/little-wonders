@@ -96,7 +96,7 @@ const Footer = () => {
           <h3>Connect</h3>
 
           <Link to="https://ig.me/m/littlewonders_04">Instagram</Link>
-          <Link to="#">WhatsApp</Link>
+          <Link to="https://wa.me/+919398723651?text=Hi">WhatsApp</Link>
           <Link to="#">Email</Link>
         </div>
       </div>
