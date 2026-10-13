@@ -37,15 +37,8 @@ const FloatingSocials = () => {
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            {/* Person in the center */}
-            <circle cx="12" cy="7" r="3" />
-            <path d="M6.5 21v-2a5.5 5.5 0 0 1 11 0v2" />
-
-            {/* People on the sides */}
-            <path d="M5 11a3 3 0 1 1 2-5.25" />
-            <path d="M2 19v-1a4 4 0 0 1 3-3.87" />
-            <path d="M19 11a3 3 0 1 0-2-5.25" />
-            <path d="M22 19v-1a4 4 0 0 0-3-3.87" />
+            <path d="M7 10v11H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3Z" />
+            <path d="M7 10 12 3a2 2 0 0 1 2 2v5h5.5a2 2 0 0 1 2 2.4l-1.5 7A2 2 0 0 1 18 21H7" />
           </svg>
         )}
       </button>
