@@ -11,8 +11,8 @@
 
 /* Common button styles */
 .floating-social {
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
   flex-shrink: 0;
 
   display: flex;
@@ -97,8 +97,8 @@
   }
 
   .floating-social {
-    width: 36px;
-    height: 36px;
+    width: 50px;
+    height: 50px;
   }
 
   .floating-social svg {
@@ -119,8 +119,8 @@
   }
 
   .floating-social {
-    width: 32px;
-    height: 32px;
+    width: 45px;
+    height: 45px;
   }
 
   .floating-social svg {
