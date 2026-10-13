@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+
 import { Link } from "react-router-dom";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faHeart,
   faTrash,
@@ -12,33 +15,62 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import products from "../../data/products";
+
 import "./Cart.css";
 
 const CartPage = () => {
+  const getCartItemKey = (item) =>
+    item.variantKey ||
+    `${item.id ?? item.productId}-${JSON.stringify(item.selectedOptions || {})}`;
+
   const loadCart = () => {
     try {
       const savedCart = localStorage.getItem("littleWondersCart");
+
       if (!savedCart) return [];
 
       const cartData = JSON.parse(savedCart);
 
       return cartData
+
         .map((item) => {
+          const productId = Number(item.id ?? item.productId);
+
           const product = products.find(
-            (productItem) =>
-              productItem.id === Number(item.id ?? item.productId),
+            (productItem) => productItem.id === productId,
           );
 
           if (!product) return null;
 
           return {
             ...product,
+
+            ...item,
+
+            id: product.id,
+
+            productId: product.id,
+
+            price: Number(item.price ?? product.price),
+
             quantity: Math.max(1, Number(item.quantity) || 1),
+
+            selectedOptions: item.selectedOptions || {},
+
+            variantLabel: item.variantLabel || "",
+
+            optionSummary: item.optionSummary || "",
+
+            variantKey:
+              item.variantKey ||
+              `${product.id}-${JSON.stringify(item.selectedOptions || {})}`,
           };
         })
+
         .filter(Boolean);
     } catch (error) {
       console.error("Failed to load cart:", error);
+
       return [];
     }
   };
@@ -46,31 +78,44 @@ const CartPage = () => {
   const loadWishlist = () => {
     try {
       const savedWishlist = localStorage.getItem("littleWondersWishlist");
+
       const wishlistIds = savedWishlist ? JSON.parse(savedWishlist) : [];
 
       return products.filter((product) => wishlistIds.includes(product.id));
     } catch (error) {
       console.error("Failed to load wishlist:", error);
+
       return [];
     }
   };
 
   const [cartItems, setCartItems] = useState(loadCart);
+
   const [wishlist, setWishlist] = useState(loadWishlist);
+
   const [showCheckout, setShowCheckout] = useState(false);
+
   const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
+
   const [orderStatus, setOrderStatus] = useState({
     type: "",
+
     message: "",
   });
 
   const [checkoutForm, setCheckoutForm] = useState({
     name: "",
+
     phone: "",
+
     email: "",
+
     address: "",
+
     city: "",
+
     pincode: "",
+
     notes: "",
   });
 
@@ -79,6 +124,7 @@ const CartPage = () => {
 
     setCheckoutForm((previous) => ({
       ...previous,
+
       [name]: value,
     }));
   };
@@ -91,8 +137,10 @@ const CartPage = () => {
     if (!cartItems.length) {
       setOrderStatus({
         type: "error",
+
         message: "Your cart is empty. Please add a product first.",
       });
+
       return;
     }
 
@@ -107,46 +155,68 @@ const CartPage = () => {
     ) {
       setOrderStatus({
         type: "error",
+
         message: "Please complete all required fields.",
       });
+
       return;
     }
 
     if (!/^[0-9]{10}$/.test(phone.trim())) {
       setOrderStatus({
         type: "error",
+
         message: "Please enter a valid 10-digit phone number.",
       });
+
       return;
     }
 
     if (!/^[0-9]{6}$/.test(pincode.trim())) {
       setOrderStatus({
         type: "error",
+
         message: "Please enter a valid 6-digit PIN code.",
       });
+
       return;
     }
 
     if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       setOrderStatus({
         type: "error",
+
         message: "Please enter a valid email address.",
       });
+
       return;
     }
 
     const orderItems = cartItems.map((item) => ({
       productId: item.id,
+
       name: item.name,
+
       quantity: item.quantity,
+
       price: Number(item.price) || 0,
+
       subtotal: (Number(item.price) || 0) * item.quantity,
+
+      variantKey: getCartItemKey(item),
+
+      variantLabel: item.variantLabel || "",
+
+      optionSummary: item.optionSummary || "",
+
+      selectedOptions: item.selectedOptions || {},
     }));
 
     setIsSubmittingOrder(true);
+
     setOrderStatus({
       type: "info",
+
       message: "Sending your order request...",
     });
 
@@ -155,20 +225,30 @@ const CartPage = () => {
 
       const response = await fetch(`${apiBaseUrl}/api/checkout`, {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
           customer: {
             name: name.trim(),
+
             phone: phone.trim(),
+
             email: email.trim(),
+
             address: address.trim(),
+
             city: city.trim(),
+
             pincode: pincode.trim(),
+
             notes: notes.trim(),
           },
+
           items: orderItems,
+
           total: totalAmount,
         }),
       });
@@ -183,22 +263,32 @@ const CartPage = () => {
 
       setOrderStatus({
         type: "success",
+
         message:
           "Thank you for choosing LittleWonders! Your order request has been sent successfully. We'll get in touch with you soon to confirm the details.",
       });
 
       // Clear the cart only after the server confirms the request was sent.
+
       localStorage.removeItem("littleWondersCart");
+
       setCartItems([]);
+
       window.dispatchEvent(new Event("cartUpdated"));
 
       setCheckoutForm({
         name: "",
+
         phone: "",
+
         email: "",
+
         address: "",
+
         city: "",
+
         pincode: "",
+
         notes: "",
       });
     } catch (error) {
@@ -206,6 +296,7 @@ const CartPage = () => {
 
       setOrderStatus({
         type: "error",
+
         message:
           error.message ||
           "Something went wrong. Please try again in a moment.",
@@ -218,76 +309,108 @@ const CartPage = () => {
   useEffect(() => {
     const syncCartAndWishlist = () => {
       setCartItems(loadCart());
+
       setWishlist(loadWishlist());
     };
 
     window.addEventListener("storage", syncCartAndWishlist);
+
     window.addEventListener("cartUpdated", syncCartAndWishlist);
+
     window.addEventListener("wishlistUpdated", syncCartAndWishlist);
 
     return () => {
       window.removeEventListener("storage", syncCartAndWishlist);
+
       window.removeEventListener("cartUpdated", syncCartAndWishlist);
+
       window.removeEventListener("wishlistUpdated", syncCartAndWishlist);
     };
   }, []);
 
   const saveCart = (items) => {
     const cartData = items.map((item) => ({
+      ...item,
+
       productId: item.id,
+
+      variantKey: getCartItemKey(item),
+
       quantity: item.quantity,
+
+      price: Number(item.price) || 0,
+
+      selectedOptions: item.selectedOptions || {},
+
+      variantLabel: item.variantLabel || "",
+
+      optionSummary: item.optionSummary || "",
     }));
 
     localStorage.setItem("littleWondersCart", JSON.stringify(cartData));
+
     window.dispatchEvent(new Event("cartUpdated"));
   };
 
-  const increaseQuantity = (productId) => {
+  const increaseQuantity = (variantKey) => {
     const updatedCart = cartItems.map((item) =>
-      item.id === productId ? { ...item, quantity: item.quantity + 1 } : item,
+      getCartItemKey(item) === variantKey
+        ? { ...item, quantity: item.quantity + 1 }
+        : item,
     );
 
     setCartItems(updatedCart);
+
     saveCart(updatedCart);
   };
 
-  const decreaseQuantity = (productId) => {
-    const currentItem = cartItems.find((item) => item.id === productId);
+  const decreaseQuantity = (variantKey) => {
+    const currentItem = cartItems.find(
+      (item) => getCartItemKey(item) === variantKey,
+    );
 
     if (!currentItem) return;
 
-    if (currentItem.quantity <= 1) {
-      const updatedCart = cartItems.filter((item) => item.id !== productId);
+    let updatedCart;
 
-      setCartItems(updatedCart);
-      saveCart(updatedCart);
-      return;
+    if (currentItem.quantity <= 1) {
+      updatedCart = cartItems.filter(
+        (item) => getCartItemKey(item) !== variantKey,
+      );
+    } else {
+      updatedCart = cartItems.map((item) =>
+        getCartItemKey(item) === variantKey
+          ? { ...item, quantity: item.quantity - 1 }
+          : item,
+      );
     }
 
-    const updatedCart = cartItems.map((item) =>
-      item.id === productId ? { ...item, quantity: item.quantity - 1 } : item,
-    );
-
     setCartItems(updatedCart);
+
     saveCart(updatedCart);
   };
 
-  const removeCartItem = (productId) => {
-    const updatedCart = cartItems.filter((item) => item.id !== productId);
+  const removeCartItem = (variantKey) => {
+    const updatedCart = cartItems.filter(
+      (item) => getCartItemKey(item) !== variantKey,
+    );
 
     setCartItems(updatedCart);
+
     saveCart(updatedCart);
   };
 
   const removeFromWishlist = (productId) => {
     try {
       const savedWishlist = localStorage.getItem("littleWondersWishlist");
+
       const wishlistIds = savedWishlist ? JSON.parse(savedWishlist) : [];
 
       const updatedWishlist = wishlistIds.filter((id) => id !== productId);
 
       localStorage.setItem(
         "littleWondersWishlist",
+
         JSON.stringify(updatedWishlist),
       );
 
@@ -303,15 +426,18 @@ const CartPage = () => {
 
   const totalItems = cartItems.reduce(
     (total, item) => total + item.quantity,
+
     0,
   );
 
   const totalAmount = cartItems.reduce(
     (total, item) => total + (Number(item.price) || 0) * item.quantity,
+
     0,
   );
 
   const hasCartItems = cartItems.length > 0;
+
   const hasWishlistItems = wishlist.length > 0;
 
   const formatPrice = (price) =>
@@ -320,6 +446,17 @@ const CartPage = () => {
   const getItemTotal = (product) =>
     (Number(product.price) || 0) * product.quantity;
 
+  useEffect(() => {
+    if (!showCheckout) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [showCheckout]);
+
   return (
     <main className="cart-page">
       <section className="cart-main-section">
@@ -327,12 +464,15 @@ const CartPage = () => {
           <header className="cart-page-header">
             <div className="cart-heading-left">
               {/* <span className="cart-page-label">LITTLEWONDERS</span> */}
+
               <h1>My Shopping Cart</h1>
+
               <p>Review your handmade favourites before checking out.</p>
             </div>
 
             <Link to="/products" className="continue-shopping-link">
               <FontAwesomeIcon icon={faArrowLeft} />
+
               <span>Back to Shop</span>
             </Link>
           </header>
@@ -344,6 +484,7 @@ const CartPage = () => {
                   <span className="cart-bag-icon">
                     <FontAwesomeIcon icon={faBagShopping} />
                   </span>
+
                   <h2>Your Items</h2>
                 </div>
 
@@ -354,93 +495,150 @@ const CartPage = () => {
 
               <div className="cart-table-header">
                 <span className="cart-column-product">Product</span>
+
                 <span className="cart-column-quantity">Quantity</span>
+
                 <span className="cart-column-price">Price</span>
+
                 <span className="cart-column-remove" aria-hidden="true" />
               </div>
 
               <div className="cart-items-list">
-                {cartItems.map((product) => (
-                  <article className="cart-item" key={product.id}>
-                    <div className="cart-product-info">
-                      <Link
-                        to={`/products/${product.id}`}
-                        className="cart-product-image"
-                        aria-label={`View ${product.name}`}
-                      >
-                        <img src={product.image} alt={product.name} />
-                      </Link>
+                {cartItems.map((product) => {
+                  const itemKey = getCartItemKey(product);
 
-                      <div className="cart-product-details">
+                  return (
+                    <article className="cart-item" key={itemKey}>
+                      <div className="cart-product-info">
                         <Link
                           to={`/products/${product.id}`}
-                          className="cart-product-name"
+                          className="cart-product-image"
+                          aria-label={`View ${product.name}`}
                         >
-                          {product.name}
+                          <img src={product.image} alt={product.name} />
                         </Link>
 
-                        <span className="cart-product-category">
-                          {product.tag || product.category || "Handmade"}
-                        </span>
+                        <div className="cart-product-details">
+                          <Link
+                            to={`/products/${product.id}`}
+                            className="cart-product-name"
+                          >
+                            {product.name}
+                          </Link>
 
-                        {/* Mobile amount updates with quantity */}
-                        <span className="cart-product-mobile-price">
+                          <div className="cart-variant-details">
+                            {/* <span className="cart-variant-heading">
+                              Your selection
+                            </span> */}
+
+                            <div className="cart-variant-chips">
+                              {product.variantLabel
+                                ? product.variantLabel
+
+                                    .split(" | ")
+
+                                    .map((option, index) => {
+                                      const value = option
+
+                                        .split(":")
+
+                                        .slice(1)
+
+                                        .join(":")
+
+                                        .trim();
+
+                                      return (
+                                        <span
+                                          className="cart-variant-chip"
+                                          key={index}
+                                        >
+                                          {value || option.trim()}
+                                        </span>
+                                      );
+                                    })
+                                : product.optionSummary
+
+                                    ?.split(" | ")
+
+                                    .map((option, index) => (
+                                      <span
+                                        className="cart-variant-chip"
+                                        key={index}
+                                      >
+                                        {option.trim()}
+                                      </span>
+                                    ))}
+                            </div>
+                          </div>
+
+                          <span className="cart-product-category">
+                            Category :{" "}
+                            {product.tag || product.category || "Handmade"}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="cart-item-bottom">
+                        <div className="cart-quantity">
+                          <button
+                            type="button"
+                            className="quantity-button"
+                            onClick={() => decreaseQuantity(itemKey)}
+                            aria-label={`Decrease quantity of ${product.name}`}
+                          >
+                            <FontAwesomeIcon icon={faMinus} />
+                          </button>
+
+                          <span className="quantity-number">
+                            {String(product.quantity).padStart(2, "0")}
+                          </span>
+
+                          <button
+                            type="button"
+                            className="quantity-button"
+                            onClick={() => increaseQuantity(itemKey)}
+                            aria-label={`Increase quantity of ${product.name}`}
+                          >
+                            <FontAwesomeIcon icon={faPlus} />
+                          </button>
+                        </div>
+
+                        <span className="cart-product-price">
                           {formatPrice(getItemTotal(product))}
+                          <span className="cart-item-price-label">
+                            Item total
+                          </span>
                         </span>
                       </div>
-                    </div>
-
-                    <div className="cart-quantity">
-                      <button
-                        type="button"
-                        className="quantity-button"
-                        onClick={() => decreaseQuantity(product.id)}
-                        aria-label={`Decrease quantity of ${product.name}`}
-                      >
-                        <FontAwesomeIcon icon={faMinus} />
-                      </button>
-
-                      <span className="quantity-number">
-                        {String(product.quantity).padStart(2, "0")}
-                      </span>
 
                       <button
                         type="button"
-                        className="quantity-button"
-                        onClick={() => increaseQuantity(product.id)}
-                        aria-label={`Increase quantity of ${product.name}`}
+                        className="cart-delete-button"
+                        onClick={() => removeCartItem(itemKey)}
+                        aria-label={`Remove ${product.name} from cart`}
+                        title="Remove from cart"
                       >
-                        <FontAwesomeIcon icon={faPlus} />
+                        <FontAwesomeIcon icon={faTrash} />
                       </button>
-                    </div>
-
-                    <span className="cart-product-price">
-                      {formatPrice(getItemTotal(product))}
-                    </span>
-
-                    <button
-                      type="button"
-                      className="cart-delete-button"
-                      onClick={() => removeCartItem(product.id)}
-                      aria-label={`Remove ${product.name} from cart`}
-                      title="Remove from cart"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </article>
-                ))}
+                    </article>
+                  );
+                })}
               </div>
 
               {/* Only the total summary remains */}
+
               <section className="cart-summary">
                 <div className="summary-card summary-total-card">
                   <div className="summary-row">
                     <span>Total Items</span>
+
                     <strong>{totalItems}</strong>
                   </div>
 
                   <div className="summary-total-row">
                     <span>Total Amount</span>
+
                     <strong>{formatPrice(totalAmount)}</strong>
                   </div>
                 </div>
@@ -449,6 +647,7 @@ const CartPage = () => {
               <div className="cart-actions">
                 <Link to="/products" className="cart-back-button">
                   <FontAwesomeIcon icon={faArrowLeft} />
+
                   <span>Back to Shop</span>
                 </Link>
 
@@ -457,10 +656,12 @@ const CartPage = () => {
                   className="checkout-button"
                   onClick={() => {
                     setOrderStatus({ type: "", message: "" });
+
                     setShowCheckout(true);
                   }}
                 >
                   <span>Checkout</span>
+
                   <FontAwesomeIcon icon={faArrowRight} />
                 </button>
               </div>
@@ -488,6 +689,7 @@ const CartPage = () => {
 
               <Link to="/products" className="shop-now-button">
                 <span>Shop Our Collection</span>
+
                 <FontAwesomeIcon icon={faArrowRight} />
               </Link>
             </section>
@@ -501,6 +703,7 @@ const CartPage = () => {
                     <span className="wishlist-icon">
                       <FontAwesomeIcon icon={faHeart} />
                     </span>
+
                     <h2>Your Wishlist</h2>
                   </div>
 
@@ -547,6 +750,7 @@ const CartPage = () => {
                         className="view-product-button"
                       >
                         <span>View Product</span>
+
                         <span className="view-product-arrow">
                           <FontAwesomeIcon icon={faArrowRight} />
                         </span>
@@ -577,10 +781,10 @@ const CartPage = () => {
           >
             <div className="checkout-modal-header">
               <div>
-                <span className="checkout-eyebrow">
-                  LITTLEWONDERS · MADE WITH LOVE
-                </span>
+                <span className="checkout-eyebrow">LITTLEWONDERS</span>
+
                 <h2 id="checkout-modal-title">Let's get your details.</h2>
+
                 <p>
                   Share your delivery information and we'll get in touch to
                   confirm your order.
@@ -613,6 +817,7 @@ const CartPage = () => {
                   className="checkout-submit-button"
                   onClick={() => {
                     setShowCheckout(false);
+
                     setOrderStatus({ type: "", message: "" });
                   }}
                 >
@@ -630,6 +835,7 @@ const CartPage = () => {
                 <div className="checkout-form-grid">
                   <div className="checkout-field">
                     <label htmlFor="checkout-name">Full name *</label>
+
                     <input
                       id="checkout-name"
                       name="name"
@@ -644,6 +850,7 @@ const CartPage = () => {
 
                   <div className="checkout-field">
                     <label htmlFor="checkout-phone">Phone number *</label>
+
                     <input
                       id="checkout-phone"
                       name="phone"
@@ -663,6 +870,7 @@ const CartPage = () => {
                     <label htmlFor="checkout-email">
                       Email address <span>(optional)</span>
                     </label>
+
                     <input
                       id="checkout-email"
                       name="email"
@@ -686,6 +894,7 @@ const CartPage = () => {
                     <label htmlFor="checkout-address">
                       House / flat number and street address *
                     </label>
+
                     <textarea
                       id="checkout-address"
                       name="address"
@@ -701,6 +910,7 @@ const CartPage = () => {
 
                   <div className="checkout-field">
                     <label htmlFor="checkout-city">City / town *</label>
+
                     <input
                       id="checkout-city"
                       name="city"
@@ -715,6 +925,7 @@ const CartPage = () => {
 
                   <div className="checkout-field">
                     <label htmlFor="checkout-pincode">PIN code *</label>
+
                     <input
                       id="checkout-pincode"
                       name="pincode"
@@ -733,6 +944,7 @@ const CartPage = () => {
                     <label htmlFor="checkout-notes">
                       Additional instructions <span>(optional)</span>
                     </label>
+
                     <textarea
                       id="checkout-notes"
                       name="notes"
@@ -748,18 +960,28 @@ const CartPage = () => {
                 <div className="checkout-order-preview">
                   <div className="checkout-order-preview-heading">
                     <h3>Your selected items</h3>
+
                     <span>
                       {totalItems} {totalItems === 1 ? "item" : "items"}
                     </span>
                   </div>
-
                   <div className="checkout-order-items">
                     {cartItems.map((item) => (
-                      <div className="checkout-order-item" key={item.id}>
+                      <div
+                        className="checkout-order-item"
+                        key={getCartItemKey(item)}
+                      >
                         <div>
                           <span className="checkout-order-item-name">
                             {item.name}
                           </span>
+
+                          {item.variantLabel && (
+                            <span className="cart-product-variant">
+                              {item.variantLabel}
+                            </span>
+                          )}
+
                           <span className="checkout-order-item-quantity">
                             Qty: {item.quantity}
                           </span>
@@ -773,16 +995,15 @@ const CartPage = () => {
                       </div>
                     ))}
                   </div>
-
                   <div className="checkout-order-total">
-                    <span>Estimated total</span>
+                    <span>Total</span>
+
                     <strong>{formatPrice(totalAmount)}</strong>
                   </div>
-
                   <p className="checkout-total-note">
-                    This is an order request, not a payment. We'll contact you
-                    to confirm availability, delivery details, and the final
-                    amount.
+                    Note: Your order request does not require payment at this
+                    stage. We’ll contact you to confirm product availability,
+                    delivery details, and the amount before proceeding.
                   </p>
                 </div>
 

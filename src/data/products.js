@@ -8,8 +8,51 @@ const products = [
     price: 100,
     image: "/myimages/flower.jpeg",
     images: ["/myimages/flower.jpeg", "/myimages/flower3.jpeg"],
+    options: [
+      {
+        id: "size",
+        label: "Bouquet size",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Small", value: "Small", price: 100 },
+          { label: "Medium", value: "Medium", price: 180 },
+          { label: "Large", value: "Large", price: 280 },
+        ],
+      },
+      {
+        id: "wrap",
+        label: "Wrapping style",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Classic wrapping", value: "Classic wrapping", price: 0 },
+          { label: "Premium wrapping", value: "Premium wrapping", price: 40 },
+          {
+            label: "Premium wrapping + message card",
+            value: "Premium wrapping + message card",
+            price: 60,
+          },
+        ],
+      },
+      {
+        id: "flowerColor",
+        label: "Flower color",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Mixed colors", value: "Mixed colors", price: 0 },
+          { label: "Pink theme", value: "Pink theme", price: 10 },
+          { label: "Yellow theme", value: "Yellow theme", price: 10 },
+          {
+            label: "Custom color theme",
+            value: "Custom color theme",
+            price: 25,
+          },
+        ],
+      },
+    ],
   },
-
   {
     id: 2,
     name: "Handmade Bunny Bag",
@@ -19,8 +62,44 @@ const products = [
     price: 250,
     image: "/myimages/bag.jpeg",
     images: ["/myimages/bag.jpeg"],
+    options: [
+      {
+        id: "size",
+        label: "Bag size",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Small", value: "Small", price: 250 },
+          { label: "Medium", value: "Medium", price: 350 },
+          { label: "Large", value: "Large", price: 450 },
+        ],
+      },
+      {
+        id: "strap",
+        label: "Strap style",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Short strap", value: "Short strap", price: 0 },
+          {
+            label: "Long adjustable strap",
+            value: "Long adjustable strap",
+            price: 50,
+          },
+        ],
+      },
+      // {
+      //   id: "lining",
+      //   label: "Inner lining",
+      //   type: "select",
+      //   required: true,
+      //   choices: [
+      //     { label: "Without lining", value: "Without lining", price: 0 },
+      //     { label: "With inner lining", value: "With inner lining", price: 35 },
+      //   ],
+      // },
+    ],
   },
-
   {
     id: 3,
     name: "Morpankh Keychain",
@@ -30,8 +109,37 @@ const products = [
     price: 70,
     image: "/myimages/keychain1.jpeg",
     images: ["/myimages/keychain1.jpeg"],
+    options: [
+      {
+        id: "finish",
+        label: "Finish",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Standard ring", value: "Standard ring", price: 0 },
+          {
+            label: "Premium gold-tone ring",
+            value: "Premium gold-tone ring",
+            price: 15,
+          },
+        ],
+      },
+      {
+        id: "personalization",
+        label: "Personalization",
+        type: "select",
+        required: true,
+        choices: [
+          {
+            label: "No personalization",
+            value: "No personalization",
+            price: 0,
+          },
+          { label: "Add name charm", value: "Add name charm", price: 25 },
+        ],
+      },
+    ],
   },
-
   {
     id: 4,
     name: "Sunshine Keychain",
@@ -41,8 +149,37 @@ const products = [
     price: 70,
     image: "/myimages/keychain.jpeg",
     images: ["/myimages/keychain.jpeg"],
+    options: [
+      {
+        id: "finish",
+        label: "Finish",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Standard ring", value: "Standard ring", price: 0 },
+          {
+            label: "Premium gold-tone ring",
+            value: "Premium gold-tone ring",
+            price: 15,
+          },
+        ],
+      },
+      {
+        id: "center",
+        label: "Flower center",
+        type: "select",
+        required: true,
+        choices: [
+          {
+            label: "Classic brown center",
+            value: "Classic brown center",
+            price: 0,
+          },
+          { label: "Pearl center", value: "Pearl center", price: 20 },
+        ],
+      },
+    ],
   },
-
   {
     id: 5,
     name: "Ribbon Bow Keychain",
@@ -52,8 +189,29 @@ const products = [
     price: 30,
     image: "/myimages/keychain2.jpeg",
     images: ["/myimages/keychain2.jpeg"],
+    options: [
+      {
+        id: "ribbon",
+        label: "Ribbon style",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Single bow", value: "Single bow", price: 30 },
+          { label: "Double bow", value: "Double bow", price: 45 },
+        ],
+      },
+      {
+        id: "finish",
+        label: "Keyring finish",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Silver-tone ring", value: "Silver-tone ring", price: 0 },
+          { label: "Gold-tone ring", value: "Gold-tone ring", price: 10 },
+        ],
+      },
+    ],
   },
-
   {
     id: 6,
     name: "Star & Moon Keychains",
@@ -63,8 +221,34 @@ const products = [
     price: 120,
     image: "/myimages/keychain4.jpeg",
     images: ["/myimages/keychain4.jpeg"],
+    options: [
+      {
+        id: "set",
+        label: "Choose your set",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Star only", value: "Star only", price: 70 },
+          { label: "Moon only", value: "Moon only", price: 70 },
+          { label: "Star + Moon set", value: "Star + Moon set", price: 120 },
+        ],
+      },
+      {
+        id: "finish",
+        label: "Finish",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Standard finish", value: "Standard finish", price: 0 },
+          {
+            label: "Premium gold-tone finish",
+            value: "Premium gold-tone finish",
+            price: 20,
+          },
+        ],
+      },
+    ],
   },
-
   {
     id: 7,
     name: "Bow Keychain",
@@ -74,19 +258,29 @@ const products = [
     price: 50,
     image: "/myimages/keychain5.jpeg",
     images: ["/myimages/keychain5.jpeg"],
+    options: [
+      {
+        id: "size",
+        label: "Bow size",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Small", value: "Small", price: 50 },
+          { label: "Large", value: "Large", price: 70 },
+        ],
+      },
+      {
+        id: "finish",
+        label: "Keyring finish",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Silver-tone ring", value: "Silver-tone ring", price: 0 },
+          { label: "Gold-tone ring", value: "Gold-tone ring", price: 10 },
+        ],
+      },
+    ],
   },
-
-  // {
-  //   id: 8,
-  //   name: "Handmade Flower Bouquet",
-  //   category: "Flower Bouquets",
-  //   tag: "Flower Bouquet",
-  //   description: "A colorful bouquet made with care.",
-  //   price: 399,
-  //   image: "/myimages/flower1.jpeg",
-  //   images: ["/myimages/flower1.jpeg"],
-  // },
-
   {
     id: 9,
     name: "Handmade Wrist Bracelet",
@@ -96,8 +290,45 @@ const products = [
     price: 199,
     image: "/myimages/wrist_art1.jpeg",
     images: ["/myimages/wrist_art1.jpeg", "/myimages/wrist_art.jpeg"],
+    options: [
+      {
+        id: "size",
+        label: "Bracelet size",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Small", value: "Small", price: 199 },
+          { label: "Medium", value: "Medium", price: 219 },
+          { label: "Large", value: "Large", price: 239 },
+        ],
+      },
+      {
+        id: "beads",
+        label: "Bead style",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Classic beads", value: "Classic beads", price: 0 },
+          { label: "Pearl beads", value: "Pearl beads", price: 30 },
+          { label: "Colorful beads", value: "Colorful beads", price: 15 },
+        ],
+      },
+      {
+        id: "personalization",
+        label: "Personalization",
+        type: "select",
+        required: true,
+        choices: [
+          {
+            label: "No personalization",
+            value: "No personalization",
+            price: 0,
+          },
+          { label: "Add initial charm", value: "Add initial charm", price: 25 },
+        ],
+      },
+    ],
   },
-
   {
     id: 10,
     name: "Crochet Wrist Bracelet",
@@ -107,16 +338,73 @@ const products = [
     price: 249,
     image: "/myimages/wrist_band.jpeg",
     images: ["/myimages/wrist_band.jpeg"],
+    options: [
+      {
+        id: "size",
+        label: "Bracelet size",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Medium", value: "Medium", price: 249 },
+          { label: "Large", value: "Large", price: 279 },
+        ],
+      },
+      {
+        id: "color",
+        label: "Yarn color",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Cream", value: "Cream", price: 0 },
+          { label: "Sage green", value: "Sage green", price: 0 },
+          { label: "Pink", value: "Pink", price: 0 },
+          { label: "Custom color", value: "Custom color", price: 20 },
+        ],
+      },
+      {
+        id: "charm",
+        label: "Add a charm",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "No charm", value: "No charm", price: 0 },
+          { label: "Heart charm", value: "Heart charm", price: 25 },
+          { label: "Flower charm", value: "Flower charm", price: 30 },
+        ],
+      },
+    ],
   },
   {
     id: 11,
     name: "Strawberry Clips",
     category: "Hair Accessories",
     tag: "Hair Accessories",
-    description: "A comfortable handmade wrist bracelet.",
+    description: "Cute handmade strawberry hair clips.",
     price: 60,
     image: "/myimages/hair1.jpeg",
     images: ["/myimages/hair1.jpeg"],
+    options: [
+      {
+        id: "pack",
+        label: "Pack size",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Single clip", value: "Single clip", price: 60 },
+          { label: "Pair of clips", value: "Pair of clips", price: 100 },
+        ],
+      },
+      {
+        id: "clipType",
+        label: "Clip type",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Alligator clip", value: "Alligator clip", price: 0 },
+          { label: "Snap clip", value: "Snap clip", price: 5 },
+        ],
+      },
+    ],
   },
 ];
 
