@@ -721,10 +721,10 @@ const CartPage = () => {
                     <div className="wishlist-image">
                       <img src={product.image} alt={product.name} />
 
-                      <span className="saved-badge">
+                      {/* <span className="saved-badge">
                         <FontAwesomeIcon icon={faHeart} />
                         Saved
-                      </span>
+                      </span> */}
 
                       <button
                         type="button"
