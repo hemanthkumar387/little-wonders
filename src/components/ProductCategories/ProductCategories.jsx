@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useMemo } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 
 import products from "../../data/products";
 
@@ -15,7 +15,7 @@ import {
   faArrowRight,
   faBagShopping,
   faTag,
-  faScissors
+  faScissors,
   // faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -48,22 +48,27 @@ const categories = [
 ];
 
 const ProductCategory = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All Products");
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [sortOption, setSortOption] = useState("latest");
+  const categoryFromUrl = searchParams.get("category");
+
+  const selectedCategory =
+    categories.find((category) => category.name === categoryFromUrl)?.name ||
+    "All Products";
+
+  const handleCategoryChange = (categoryName) => {
+    if (categoryName === "All Products") {
+      setSearchParams({});
+    } else {
+      setSearchParams({ category: categoryName });
+    }
+  };
 
   const filteredProducts = useMemo(() => {
-    let result =
-      selectedCategory === "All Products"
-        ? [...products]
-        : products.filter((product) => product.category === selectedCategory);
-
-    if (sortOption === "az") {
-      result.sort((a, b) => a.name.localeCompare(b.name));
-    }
-
-    return result;
-  }, [selectedCategory, sortOption]);
+    return selectedCategory === "All Products"
+      ? [...products]
+      : products.filter((product) => product.category === selectedCategory);
+  }, [selectedCategory]);
 
   return (
     <main className="products-page">
@@ -129,7 +134,15 @@ const ProductCategory = () => {
                 type="button"
                 key={category.name}
                 className={`product-category-card ${isActive ? "active" : ""}`}
-                onClick={() => setSelectedCategory(category.name)}
+                onClick={() => {
+                  handleCategoryChange(category.name);
+
+                  if (category.name === "All Products") {
+                    setSearchParams({});
+                  } else {
+                    setSearchParams({ category: category.name });
+                  }
+                }}
               >
                 <div className="product-category-icon">
                   <FontAwesomeIcon icon={category.icon} />
@@ -167,22 +180,6 @@ const ProductCategory = () => {
             </div>
 
             <p className="products-selected-category">{selectedCategory}</p>
-          </div>
-
-          {/* SORT */}
-
-          <div className="products-sort">
-            <span>Sort by</span>
-
-            <select
-              value={sortOption}
-              onChange={(event) => setSortOption(event.target.value)}
-              aria-label="Sort products"
-            >
-              <option value="latest">Latest First</option>
-
-              <option value="az">A - Z</option>
-            </select>
           </div>
         </div>
 
@@ -256,7 +253,10 @@ const ProductCategory = () => {
 
             <button
               type="button"
-              onClick={() => setSelectedCategory("All Products")}
+              onClick={() => {
+                handleCategoryChange("All Products");
+                setSearchParams({});
+              }}
             >
               View All Products
             </button>

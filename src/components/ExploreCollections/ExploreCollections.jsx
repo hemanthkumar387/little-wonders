@@ -6,25 +6,29 @@ import "./ExploreCollections.css";
 
 const collections = [
   {
-    title: "Wool & Yarn",
+    title: "Fashion Accessories",
+    category: "Fashion Accessories",
     description: "Cozy creations for everyday moments.",
     image: "/images/wool-yarn.png",
     color: "peach",
   },
   {
     title: "Wrist Bands",
+    category: "Wrist Bracelets",
     description: "Handcrafted bands for every style.",
     image: "/images/wrist-bands.png",
     color: "sage",
   },
   {
     title: "Keychains",
+    category: "Keychains",
     description: "Little handmade charms to carry.",
     image: "/images/keychain.png",
     color: "sand",
   },
   {
     title: "Bouquets",
+    category: "Flower Bouquets",
     description: "Beautiful flowers, made to last.",
     image: "/images/Bouquet.png",
     color: "terracotta",
@@ -114,9 +118,8 @@ const ExploreCollections = () => {
 
                 <p>{collection.description}</p>
               </div>
-
               <Link
-                to="/products"
+                to={`/products?category=${encodeURIComponent(collection.category)}`}
                 className="collection-arrow"
                 aria-label={`Explore ${collection.title}`}
               >
