@@ -29,8 +29,7 @@ const Footer = () => {
             for a warmer, kinder world.
           </p>
 
-          <div className="footer-socials">
-            {/* Instagram */}
+          {/* <div className="footer-socials">
             <Link to="https://www.instagram.com/littlewonders_04?stkn=djBpeXgxOG1qYXht" aria-label="Instagram" className="social-icon">
               <svg
                 viewBox="0 0 24 24"
@@ -52,7 +51,6 @@ const Footer = () => {
               </svg>
             </Link>
 
-            {/* WhatsApp */}
             <Link to="#" aria-label="WhatsApp" className="social-icon">
               <svg
                 viewBox="0 0 24 24"
@@ -66,22 +64,30 @@ const Footer = () => {
               </svg>
             </Link>
 
-            {/* YouTube */}
-            <Link to="#" aria-label="YouTube" className="social-icon">
+            <Link to="https://www.youtube.com/@Hasini29-s9" aria-label="YouTube" className="social-icon">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8Z" />
 
                 <path d="M9.7 15.8 15.8 12 9.7 8.2v7.6Z" fill="#fbf4e9" />
               </svg>
             </Link>
-          </div>
+          </div> */}
         </div>
 
         {/* Explore */}
-        <div className="footer-column">
+        <div className="footer-column footer-explore">
           <h3>Explore</h3>
 
           <Link to="/products">All Products</Link>
+          <Link to="/products?category=Flower%20Bouquets">Flower Bouquets</Link>
+          <Link to="/products?category=Fashion%20Accessories">
+            Fashion Accessories
+          </Link>
+          <Link to="/products?category=Keychains">Keychains</Link>
+          <Link to="/products?category=Wrist%20Bracelets">Wrist Bracelets</Link>
+          <Link to="/products?category=Hair%20Accessories">
+            Hair Accessories
+          </Link>
         </div>
 
         {/* About */}
@@ -90,14 +96,13 @@ const Footer = () => {
 
           <Link to="/about">Our Story</Link>
         </div>
-
         {/* Connect */}
         <div className="footer-column">
           <h3>Connect</h3>
 
           <Link to="https://ig.me/m/littlewonders_04">Instagram</Link>
           <Link to="https://wa.me/+919398723651?text=Hi">WhatsApp</Link>
-          <Link to="#">Email</Link>
+          <Link to="https://mail.google.com/mail/?view=cm&fs=1&to=littlewonders0426@gmail.com" target="_blank">Email</Link>
         </div>
       </div>
 

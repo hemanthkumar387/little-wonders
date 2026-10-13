@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 import products from "../../data/products";
@@ -69,6 +69,13 @@ const ProductCategory = () => {
       ? [...products]
       : products.filter((product) => product.category === selectedCategory);
   }, [selectedCategory]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [searchParams]);
 
   return (
     <main className="products-page">

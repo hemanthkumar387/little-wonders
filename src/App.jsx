@@ -7,6 +7,7 @@ import AboutPage from "./components/AboutPage/AboutPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import CartPage from "./components/Cart/Cart";
 import ContactPage from "./components/ContactPage/ContactPage";
+import FloatingSocials from "./components/FloatingSocials/FloatingSocials";
 import Footer from "./components/Footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -48,6 +49,7 @@ function App() {
         </main>
 
         <Footer />
+        <FloatingSocials />
       </div>
     </BrowserRouter>
   );
