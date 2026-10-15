@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faEnvelope,
   faMessage,
@@ -14,6 +16,7 @@ import {
   faLeaf,
   faHeadset,
 } from "@fortawesome/free-solid-svg-icons";
+
 import "./ContactPage.css";
 
 const faqs = [
@@ -61,6 +64,7 @@ const faqs = [
 
 const initialForm = {
   name: "",
+  phone: "",
   email: "",
   category: "",
   subject: "",
@@ -69,8 +73,11 @@ const initialForm = {
 
 const ContactPage = () => {
   const [formData, setFormData] = useState(initialForm);
+
   const [openFaq, setOpenFaq] = useState(0);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [formStatus, setFormStatus] = useState({
     type: "",
     message: "",
@@ -84,7 +91,10 @@ const ContactPage = () => {
       [name]: value,
     }));
 
-    setFormStatus({ type: "", message: "" });
+    setFormStatus({
+      type: "",
+      message: "",
+    });
   };
 
   const handleSubmit = async (event) => {
@@ -92,16 +102,10 @@ const ContactPage = () => {
 
     if (isSubmitting) return;
 
-    const { name, email, category, subject, message } = formData;
+    const { name, phone, email, category, subject, message } = formData;
 
     // Validate required fields
-    if (
-      !name.trim() ||
-      !email.trim() ||
-      !category ||
-      !subject.trim() ||
-      !message.trim()
-    ) {
+    if (!name.trim() || !phone.trim() || !category || !message.trim()) {
       setFormStatus({
         type: "error",
         message: "Please complete all required fields.",
@@ -109,25 +113,48 @@ const ContactPage = () => {
       return;
     }
 
-    // Validate email address
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Validate Indian mobile number
+    const phonePattern = /^[6-9]\d{9}$/;
 
-    if (!emailPattern.test(email.trim())) {
+    if (!phonePattern.test(phone.trim())) {
       setFormStatus({
         type: "error",
-        message: "Please enter a valid email address.",
+        message: "Please enter a valid 10-digit Indian mobile number.",
+      });
+      return;
+    }
+
+    // Validate email only when provided
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (email.trim() && !emailPattern.test(email.trim())) {
+      setFormStatus({
+        type: "error",
+        message: "Please enter a valid email address or leave it empty.",
+      });
+      return;
+    }
+
+    if (name.trim().length > 100 || message.trim().length > 1500) {
+      setFormStatus({
+        type: "error",
+        message: "Your name or message exceeds the allowed length.",
       });
       return;
     }
 
     setIsSubmitting(true);
+
     setFormStatus({
       type: "info",
-      message: "Sending your message...",
+      message: "Saving your message...",
     });
 
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_URL.replace(/\/$/, "");
+      const apiBaseUrl = (import.meta.env.VITE_API_URL || "").replace(
+        /\/$/,
+        "",
+      );
 
       const response = await fetch(`${apiBaseUrl}/api/contact`, {
         method: "POST",
@@ -136,8 +163,9 @@ const ContactPage = () => {
         },
         body: JSON.stringify({
           name: name.trim(),
+          phone: phone.trim(),
           email: email.trim(),
-          subject: `[${category}] ${subject.trim()}`,
+          subject: `[${category}] ${subject.trim() || category}`,
           message: message.trim(),
         }),
       });
@@ -146,17 +174,15 @@ const ContactPage = () => {
 
       if (!response.ok || !result.success) {
         throw new Error(
-          result.message || "Unable to send your message. Please try again.",
+          result.message || "Unable to save your message. Please try again.",
         );
       }
 
-      // Show success only after the backend confirms delivery.
       setFormStatus({
         type: "success",
-        message: result.message || "Your message has been sent successfully!",
+        message: result.message || "Your message has been saved successfully!",
       });
 
-      // Clear the form after a successful submission.
       setFormData(initialForm);
     } catch (error) {
       console.error("Contact form submission failed:", error);
@@ -165,7 +191,7 @@ const ContactPage = () => {
         type: "error",
         message:
           error.message ||
-          "Unable to send your message. Please check your connection and try again.",
+          "Unable to save your message. Please check your connection and try again.",
       });
     } finally {
       setIsSubmitting(false);
@@ -173,8 +199,14 @@ const ContactPage = () => {
   };
 
   const handleReset = () => {
+    if (isSubmitting) return;
+
     setFormData(initialForm);
-    setFormStatus({ type: "", message: "" });
+
+    setFormStatus({
+      type: "",
+      message: "",
+    });
   };
 
   return (
@@ -182,11 +214,12 @@ const ContactPage = () => {
       {/* Hero section */}
       <section className="contact-hero">
         <div className="contact-hero-orbit contact-orbit-one" />
+
         <div className="contact-hero-orbit contact-orbit-two" />
 
         <div className="contact-hero-content">
           <span className="contact-eyebrow">
-            <FontAwesomeIcon icon={faLeaf} />A LITTLE NOTE GOES A LONG WAY
+            <FontAwesomeIcon icon={faLeaf} /> A LITTLE NOTE GOES A LONG WAY
           </span>
 
           <h1>
@@ -222,9 +255,11 @@ const ContactPage = () => {
       <section className="contact-main-section" id="contact-form">
         <div className="contact-section-heading">
           <span className="contact-eyebrow">HERE TO MAKE THINGS EASIER</span>
+
           <h2>
             How can we <span>help?</span>
           </h2>
+
           <p>
             Tell us a little about what you need. We'll help you find the right
             next step.
@@ -242,6 +277,7 @@ const ContactPage = () => {
               <span className="contact-info-overline">
                 THE LITTLEWONDERS TEAM
               </span>
+
               <h3>
                 A friendly ear, <span>always.</span>
               </h3>
@@ -258,6 +294,7 @@ const ContactPage = () => {
               <div className="contact-info-item-icon">
                 <FontAwesomeIcon icon={faEnvelope} />
               </div>
+
               <div>
                 <h4>General enquiries</h4>
                 <p>Questions, ideas, and everything in between.</p>
@@ -268,6 +305,7 @@ const ContactPage = () => {
               <div className="contact-info-item-icon">
                 <FontAwesomeIcon icon={faBoxOpen} />
               </div>
+
               <div>
                 <h4>Order assistance</h4>
                 <p>Include your order number for quicker reference.</p>
@@ -278,6 +316,7 @@ const ContactPage = () => {
               <div className="contact-info-item-icon">
                 <FontAwesomeIcon icon={faClock} />
               </div>
+
               <div>
                 <h4>We're listening</h4>
                 <p>
@@ -288,6 +327,7 @@ const ContactPage = () => {
 
             <div className="contact-handmade-note">
               <FontAwesomeIcon icon={faHeart} />
+
               <p>
                 Every message matters. Thank you for supporting our little
                 handmade world.
@@ -299,13 +339,15 @@ const ContactPage = () => {
             </span>
           </aside>
 
-          {/* Form */}
+          {/* Contact form */}
           <div className="contact-form-panel">
             <div className="contact-form-heading">
               <span className="contact-form-kicker">WRITE TO US</span>
+
               <h3>
                 Drop us a <span>little note.</span>
               </h3>
+
               <p>Fields marked with * are required.</p>
             </div>
 
@@ -313,6 +355,7 @@ const ContactPage = () => {
               <div className="contact-form-row">
                 <div className="contact-field">
                   <label htmlFor="contact-name">Your name *</label>
+
                   <input
                     id="contact-name"
                     type="text"
@@ -321,27 +364,50 @@ const ContactPage = () => {
                     value={formData.name}
                     onChange={handleChange}
                     autoComplete="name"
+                    maxLength={100}
                     required
                   />
                 </div>
 
                 <div className="contact-field">
-                  <label htmlFor="contact-email">Email address *</label>
+                  <label htmlFor="contact-phone">Phone number *</label>
+
                   <input
-                    id="contact-email"
-                    type="email"
-                    name="email"
-                    placeholder="you@example.com"
-                    value={formData.email}
+                    id="contact-phone"
+                    type="tel"
+                    name="phone"
+                    placeholder="Enter your 10-digit mobile number"
+                    value={formData.phone}
                     onChange={handleChange}
-                    autoComplete="email"
+                    autoComplete="tel"
+                    inputMode="numeric"
+                    maxLength={10}
+                    pattern="[6-9][0-9]{9}"
                     required
                   />
                 </div>
               </div>
 
               <div className="contact-field">
+                <label htmlFor="contact-email">
+                  Email address <span>(Optional)</span>
+                </label>
+
+                <input
+                  id="contact-email"
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  autoComplete="email"
+                  maxLength={254}
+                />
+              </div>
+
+              <div className="contact-field">
                 <label htmlFor="contact-category">How can we help? *</label>
+
                 <select
                   id="contact-category"
                   name="category"
@@ -352,31 +418,21 @@ const ContactPage = () => {
                   <option value="" disabled>
                     Select a topic
                   </option>
+
                   <option value="Order Support">Order support</option>
                   <option value="Product Enquiry">Product enquiry</option>
                   <option value="Customisation">Customisation request</option>
                   <option value="Delivery Issue">Delivery issue</option>
                   <option value="Damaged Product">Damaged product</option>
                   <option value="Payment Issue">Payment issue</option>
+
                   <option value="Cancellation or Return">
                     Cancellation or return
                   </option>
+
                   <option value="Website Issue">Website issue</option>
                   <option value="Other">Something else</option>
                 </select>
-              </div>
-
-              <div className="contact-field">
-                <label htmlFor="contact-subject">Subject *</label>
-                <input
-                  id="contact-subject"
-                  type="text"
-                  name="subject"
-                  placeholder="What is your message about?"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                />
               </div>
 
               <div className="contact-field">
@@ -389,7 +445,7 @@ const ContactPage = () => {
                   id="contact-message"
                   name="message"
                   rows="5"
-                  maxLength="1500"
+                  maxLength={1500}
                   placeholder="Tell us what happened or how we can help..."
                   value={formData.message}
                   onChange={handleChange}
@@ -410,9 +466,15 @@ const ContactPage = () => {
                   {formStatus.type === "info" && (
                     <FontAwesomeIcon icon={faMessage} />
                   )}
+
                   {formStatus.type === "error" && (
                     <FontAwesomeIcon icon={faCircleCheck} />
                   )}
+
+                  {formStatus.type === "success" && (
+                    <FontAwesomeIcon icon={faCircleCheck} />
+                  )}
+
                   <span>{formStatus.message}</span>
                 </div>
               )}
@@ -423,16 +485,18 @@ const ContactPage = () => {
                   className="contact-submit-button"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Sending..." : "Send your message"}
+                  {isSubmitting ? "Saving..." : "Send your message"}
 
                   <FontAwesomeIcon
                     icon={isSubmitting ? faClock : faPaperPlane}
                   />
                 </button>
+
                 <button
                   type="button"
                   className="contact-reset-button"
                   onClick={handleReset}
+                  disabled={isSubmitting}
                 >
                   Clear fields
                 </button>
@@ -453,9 +517,11 @@ const ContactPage = () => {
           <span className="contact-eyebrow">
             THE LITTLE THINGS YOU MAY WONDER
           </span>
+
           <h2>
             Good questions. <span>Helpful answers.</span>
           </h2>
+
           <p>
             A little clarity goes a long way. Open a question to find out more.
           </p>
@@ -465,6 +531,7 @@ const ContactPage = () => {
           <div className="contact-faq-list">
             {faqs.map((faq, index) => {
               const isOpen = openFaq === index;
+
               const answerId = `contact-faq-answer-${index}`;
 
               return (
@@ -535,7 +602,9 @@ const ContactPage = () => {
       {/* Closing banner */}
       <section className="contact-bottom-banner">
         <span className="contact-bottom-heart">♡</span>
+
         <h2>Thoughtfully made. Happily connected.</h2>
+
         <p>Thank you for being a part of our LittleWonders journey.</p>
       </section>
     </main>

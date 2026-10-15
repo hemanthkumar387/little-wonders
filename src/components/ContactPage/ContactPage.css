@@ -1248,3 +1248,11 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+.contact-field-help {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #88786c;
+}

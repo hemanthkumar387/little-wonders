@@ -217,7 +217,7 @@ const CartPage = () => {
     setOrderStatus({
       type: "info",
 
-      message: "Sending your order request...",
+      message: "Saving your order request...",
     });
 
     try {
@@ -265,7 +265,7 @@ const CartPage = () => {
         type: "success",
 
         message:
-          "Thank you for choosing LittleWonders! Your order request has been sent successfully. We'll get in touch with you soon to confirm the details.",
+          "Thank you for choosing LittleWonders! Your order request has been saved successfully. We'll get in touch with you soon to confirm the details.",
       });
 
       // Clear the cart only after the server confirms the request was sent.
@@ -450,6 +450,7 @@ const CartPage = () => {
     if (!showCheckout) return;
 
     const originalOverflow = document.body.style.overflow;
+
     document.body.style.overflow = "hidden";
 
     return () => {
@@ -528,7 +529,9 @@ const CartPage = () => {
 
                           <div className="cart-variant-details">
                             {/* <span className="cart-variant-heading">
+
                               Your selection
+
                             </span> */}
 
                             <div className="cart-variant-chips">
@@ -606,6 +609,7 @@ const CartPage = () => {
 
                         <span className="cart-product-price">
                           {formatPrice(getItemTotal(product))}
+
                           <span className="cart-item-price-label">
                             Item total
                           </span>
@@ -722,8 +726,11 @@ const CartPage = () => {
                       <img src={product.image} alt={product.name} />
 
                       {/* <span className="saved-badge">
+
                         <FontAwesomeIcon icon={faHeart} />
+
                         Saved
+
                       </span> */}
 
                       <button
@@ -965,6 +972,7 @@ const CartPage = () => {
                       {totalItems} {totalItems === 1 ? "item" : "items"}
                     </span>
                   </div>
+
                   <div className="checkout-order-items">
                     {cartItems.map((item) => (
                       <div
@@ -995,11 +1003,13 @@ const CartPage = () => {
                       </div>
                     ))}
                   </div>
+
                   <div className="checkout-order-total">
                     <span>Total</span>
 
                     <strong>{formatPrice(totalAmount)}</strong>
                   </div>
+
                   <p className="checkout-total-note">
                     Note: Your order request does not require payment at this
                     stage. We’ll contact you to confirm product availability,
