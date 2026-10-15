@@ -9,7 +9,7 @@ import CartPage from "./components/Cart/Cart";
 import ContactPage from "./components/ContactPage/ContactPage";
 import FloatingSocials from "./components/FloatingSocials/FloatingSocials";
 import Footer from "./components/Footer/Footer";
-import AdminDashboard from "./admin/AdminDashboard";
+// import AdminDashboard from "./admin/AdminDashboard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -47,7 +47,7 @@ function App() {
 
             <Route path="/contact" element={<ContactPage />} />
 
-            <Route path="/admin" element={<AdminDashboard />} />
+            {/* <Route path="/admin" element={<AdminDashboard />} /> */}
           </Routes>
         </main>
 

@@ -38,7 +38,7 @@ const categories = [
     icon: faKey,
   },
   {
-    name: "Wrist Bracelets",
+    name: "Bracelets",
     icon: faGem,
   },
   {

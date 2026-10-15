@@ -15,9 +15,9 @@ const products = [
         type: "select",
         required: true,
         choices: [
-          { label: "Small", value: "Small", price: 100 },
-          { label: "Medium", value: "Medium", price: 180 },
-          { label: "Large", value: "Large", price: 280 },
+          { label: "Small", value: "Small", price: 99 },
+          { label: "Medium", value: "Medium", price: 149 },
+          { label: "Large", value: "Large", price: 199 },
         ],
       },
       {
@@ -26,8 +26,8 @@ const products = [
         type: "select",
         required: true,
         choices: [
-          { label: "Classic wrapping", value: "Classic wrapping", price: 0 },
-          { label: "Premium wrapping", value: "Premium wrapping", price: 40 },
+          { label: "Single wrapping", value: "Single wrapping", price: 0 },
+          { label: "Double wrapping", value: "Double wrapping", price: 40 },
           {
             label: "Premium wrapping + message card",
             value: "Premium wrapping + message card",
@@ -283,11 +283,11 @@ const products = [
   },
   {
     id: 9,
-    name: "Handmade Wrist Bracelet",
-    category: "Wrist Bracelets",
-    tag: "Wrist Bracelet",
+    name: "Flower Bracelet",
+    category: "Bracelets",
+    tag: "Bracelet",
     description: "A simple handmade bracelet for everyday wear.",
-    price: 199,
+    price: 30,
     image: "/myimages/wrist_art1.jpeg",
     images: ["/myimages/wrist_art1.jpeg", "/myimages/wrist_art.jpeg"],
     options: [
@@ -297,81 +297,81 @@ const products = [
         type: "select",
         required: true,
         choices: [
-          { label: "Small", value: "Small", price: 199 },
-          { label: "Medium", value: "Medium", price: 219 },
-          { label: "Large", value: "Large", price: 239 },
+          { label: "Small", value: "Small", price: 10 },
+          { label: "Medium", value: "Medium", price: 20 },
+          { label: "Large", value: "Large", price: 30 },
         ],
       },
-      {
-        id: "beads",
-        label: "Bead style",
-        type: "select",
-        required: true,
-        choices: [
-          { label: "Classic beads", value: "Classic beads", price: 0 },
-          { label: "Pearl beads", value: "Pearl beads", price: 30 },
-          { label: "Colorful beads", value: "Colorful beads", price: 15 },
-        ],
-      },
-      {
-        id: "personalization",
-        label: "Personalization",
-        type: "select",
-        required: true,
-        choices: [
-          {
-            label: "No personalization",
-            value: "No personalization",
-            price: 0,
-          },
-          { label: "Add initial charm", value: "Add initial charm", price: 25 },
-        ],
-      },
+      // {
+      //   id: "beads",
+      //   label: "Bead style",
+      //   type: "select",
+      //   required: true,
+      //   choices: [
+      //     { label: "Classic beads", value: "Classic beads", price: 0 },
+      //     { label: "Pearl beads", value: "Pearl beads", price: 30 },
+      //     { label: "Colorful beads", value: "Colorful beads", price: 15 },
+      //   ],
+      // },
+      // {
+      //   id: "personalization",
+      //   label: "Personalization",
+      //   type: "select",
+      //   required: true,
+      //   choices: [
+      //     {
+      //       label: "No personalization",
+      //       value: "No personalization",
+      //       price: 0,
+      //     },
+      //     { label: "Add initial charm", value: "Add initial charm", price: 25 },
+      //   ],
+      // },
     ],
   },
   {
     id: 10,
-    name: "Crochet Wrist Bracelet",
-    category: "Wrist Bracelets",
-    tag: "Wrist Bracelet",
+    name: "Heart Bracelet",
+    category: "Bracelets",
+    tag: "Bracelet",
     description: "A comfortable handmade wrist bracelet.",
-    price: 249,
+    price: 79,
     image: "/myimages/wrist_band.jpeg",
     images: ["/myimages/wrist_band.jpeg"],
     options: [
-      {
-        id: "size",
-        label: "Bracelet size",
-        type: "select",
-        required: true,
-        choices: [
-          { label: "Medium", value: "Medium", price: 249 },
-          { label: "Large", value: "Large", price: 279 },
-        ],
-      },
-      {
-        id: "color",
-        label: "Yarn color",
-        type: "select",
-        required: true,
-        choices: [
-          { label: "Cream", value: "Cream", price: 0 },
-          { label: "Sage green", value: "Sage green", price: 0 },
-          { label: "Pink", value: "Pink", price: 0 },
-          { label: "Custom color", value: "Custom color", price: 20 },
-        ],
-      },
-      {
-        id: "charm",
-        label: "Add a charm",
-        type: "select",
-        required: true,
-        choices: [
-          { label: "No charm", value: "No charm", price: 0 },
-          { label: "Heart charm", value: "Heart charm", price: 25 },
-          { label: "Flower charm", value: "Flower charm", price: 30 },
-        ],
-      },
+      // {
+      //   id: "size",
+      //   label: "Bracelet size",
+      //   type: "select",
+      //   required: true,
+      //   choices: [
+      //     { label: "Medium", value: "Medium", price: 249 },
+      //     { label: "Large", value: "Large", price: 279 },
+      //   ],
+      // },
+      // {
+      //   id: "color",
+      //   label: "Yarn color",
+      //   type: "select",
+      //   required: true,
+      //   choices: [
+      //     { label: "Cream", value: "Cream", price: 0 },
+      //     { label: "Sage green", value: "Sage green", price: 0 },
+      //     { label: "Pink", value: "Pink", price: 0 },
+      //     { label: "Custom color", value: "Custom color", price: 20 },
+      //   ],
+      // },
+      // {
+      //   id: "charm",
+      //   label: "Add a charm",
+      //   type: "select",
+      //   required: true,
+      //   choices: [
+      //     { label: "No charm", value: "No charm", price: 0 },
+      //     { label: "Heart charm", value: "Heart charm", price: 25 },
+      //     { label: "Flower charm", value: "Flower charm", price: 30 },
+      //   ],
+      // },
     ],
   },
   {
@@ -390,8 +390,8 @@ const products = [
         type: "select",
         required: true,
         choices: [
-          { label: "Single clip", value: "Single clip", price: 60 },
-          { label: "Pair of clips", value: "Pair of clips", price: 100 },
+          { label: "Single clip", value: "Single clip", price: 30 },
+          { label: "Pair of clips", value: "Pair of clips", price: 60 },
         ],
       },
       {
