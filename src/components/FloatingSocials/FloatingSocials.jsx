@@ -75,7 +75,7 @@ const FloatingSocials = () => {
 
         {/* YouTube */}
         <a
-          href="https://www.youtube.com/@Hasini29-s9"
+          href="https://www.youtube.com/@LITTLEWONDERS_04"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Visit our YouTube channel"

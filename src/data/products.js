@@ -35,22 +35,22 @@ const products = [
           },
         ],
       },
-      {
-        id: "flowerColor",
-        label: "Flower color",
-        type: "select",
-        required: true,
-        choices: [
-          { label: "Mixed colors", value: "Mixed colors", price: 0 },
-          { label: "Pink theme", value: "Pink theme", price: 10 },
-          { label: "Yellow theme", value: "Yellow theme", price: 10 },
-          {
-            label: "Custom color theme",
-            value: "Custom color theme",
-            price: 25,
-          },
-        ],
-      },
+      // {
+      //   id: "flowerColor",
+      //   label: "Flower color",
+      //   type: "select",
+      //   required: true,
+      //   choices: [
+      //     { label: "Mixed colors", value: "Mixed colors", price: 0 },
+      //     { label: "Pink theme", value: "Pink theme", price: 10 },
+      //     { label: "Yellow theme", value: "Yellow theme", price: 10 },
+      //     {
+      //       label: "Custom color theme",
+      //       value: "Custom color theme",
+      //       price: 25,
+      //     },
+      //   ],
+      // },
     ],
   },
   {
