@@ -61,7 +61,7 @@ const FloatingSocials = () => {
 
         {/* WhatsApp */}
         <a
-          href="https://wa.me/919398723651?text=Hi"
+          href="https://whatsapp.com/channel/0029Vb8VozhKAwEtDiHzRG3b"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Chat with us on WhatsApp"
