@@ -5,7 +5,7 @@ const products = [
     category: "Flower Bouquets",
     tag: "Flower Bouquet",
     description: "A beautiful handmade flower bouquet.",
-    price: 100,
+    price: 99,
     image: "/myimages/flower.jpeg",
     images: ["/myimages/flower.jpeg", "/myimages/flower3.jpeg"],
     options: [
