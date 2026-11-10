@@ -96,6 +96,7 @@ const CartPage = () => {
   const [showCheckout, setShowCheckout] = useState(false);
 
   const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
+  const [countdown, setCountdown] = useState(20);
 
   const [orderStatus, setOrderStatus] = useState({
     type: "",
@@ -213,18 +214,18 @@ const CartPage = () => {
     }));
 
     setIsSubmittingOrder(true);
+    setCountdown(20);
+    setOrderStatus({ type: "", message: "" });
 
-    setOrderStatus({
-      type: "info",
-
-      message: "Saving your order request...",
-    });
+    const controller = new AbortController();
+    const requestTimeout = window.setTimeout(() => controller.abort(), 20000);
 
     try {
       const apiBaseUrl = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
       const response = await fetch(`${apiBaseUrl}/api/checkout`, {
         method: "POST",
+        signal: controller.signal,
 
         headers: {
           "Content-Type": "application/json",
@@ -296,15 +297,26 @@ const CartPage = () => {
 
       setOrderStatus({
         type: "error",
-
         message:
-          error.message ||
-          "Something went wrong. Please try again in a moment.",
+          error.name === "AbortError"
+            ? "We couldn’t complete your request within 20 seconds. Please check your connection and try again."
+            : error.message || "Something went wrong. Please try again in a moment.",
       });
     } finally {
+      window.clearTimeout(requestTimeout);
       setIsSubmittingOrder(false);
     }
   };
+
+  useEffect(() => {
+    if (!isSubmittingOrder) return;
+
+    const intervalId = window.setInterval(() => {
+      setCountdown((current) => Math.max(0, current - 1));
+    }, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, [isSubmittingOrder]);
 
   useEffect(() => {
     const syncCartAndWishlist = () => {
@@ -1017,7 +1029,21 @@ const CartPage = () => {
                   </p>
                 </div>
 
-                {orderStatus.message && (
+                {isSubmittingOrder && (
+                  <div className="checkout-loading-panel" role="status" aria-live="polite">
+                    <div className="checkout-loading-spinner" aria-hidden="true" />
+                    <div className="checkout-loading-copy">
+                      <strong>Sending your order request...</strong>
+                      <span>Please keep this window open while we process your request.</span>
+                    </div>
+                    <div className="checkout-countdown" aria-label={`${countdown} seconds remaining`}>
+                      <strong>{String(countdown).padStart(2, "0")}</strong>
+                      <span>SEC</span>
+                    </div>
+                  </div>
+                )}
+
+                {orderStatus.message && !isSubmittingOrder && (
                   <div
                     className={`checkout-status ${orderStatus.type}`}
                     role="status"
@@ -1043,7 +1069,7 @@ const CartPage = () => {
                     disabled={isSubmittingOrder || cartItems.length === 0}
                   >
                     {isSubmittingOrder
-                      ? "Sending request..."
+                      ? `Sending... ${countdown}s`
                       : "Submit order request"}
 
                     <FontAwesomeIcon icon={faArrowRight} />
