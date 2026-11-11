@@ -97,6 +97,7 @@ const CartPage = () => {
 
   const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
   const [countdown, setCountdown] = useState(30);
+  const [submittedOrder, setSubmittedOrder] = useState(null);
 
   const [orderStatus, setOrderStatus] = useState({
     type: "",
@@ -262,11 +263,27 @@ const CartPage = () => {
         );
       }
 
+      // Keep a snapshot for the confirmation screen before clearing the cart/form.
+      setSubmittedOrder({
+        customer: {
+          name: name.trim(),
+          phone: phone.trim(),
+          email: email.trim(),
+          address: address.trim(),
+          city: city.trim(),
+          pincode: pincode.trim(),
+          notes: notes.trim(),
+        },
+        items: orderItems,
+        total: totalAmount,
+        totalItems: orderItems.reduce((sum, item) => sum + item.quantity, 0),
+        submittedAt: new Date(),
+      });
+
       setOrderStatus({
         type: "success",
-
         message:
-          "Thank you for choosing LittleWonders! Your order request has been saved successfully. We'll get in touch with you soon to confirm the details.",
+          "Thank you for choosing LittleWonders! We've received your order request. Our team will contact you shortly to confirm availability, delivery details, and the final order amount.",
       });
 
       // Clear the cart only after the server confirms the request was sent.
@@ -801,13 +818,6 @@ const CartPage = () => {
             <div className="checkout-modal-header">
               <div>
                 <span className="checkout-eyebrow">LITTLEWONDERS</span>
-
-                <h2 id="checkout-modal-title">Let's get your details.</h2>
-
-                <p>
-                  Share your delivery information and we'll get in touch to
-                  confirm your order.
-                </p>
               </div>
 
               <button
@@ -822,22 +832,59 @@ const CartPage = () => {
             </div>
 
             {orderStatus.type === "success" ? (
-              <div className="checkout-success">
+              <div className="checkout-success checkout-order-confirmation">
                 <div className="checkout-success-icon">
                   <FontAwesomeIcon icon={faHeart} />
                 </div>
 
-                <h3>Thank you for your order request!</h3>
+                <span className="order-confirmation-eyebrow">LITTLEWONDERS</span>
+                <h3>Thank you, {submittedOrder?.customer.name || "for your order"}!</h3>
+                <p className="order-confirmation-message">
+                  Your order request has been received successfully. We’ll contact you shortly
+                  to confirm product availability, delivery details, and the final amount.
+                </p>
 
-                <p>{orderStatus.message}</p>
+                {submittedOrder && (
+                  <div className="order-confirmation-details">
+                    <div className="order-confirmation-heading">
+                      <h4>Your order summary</h4>
+                      <span>{submittedOrder.totalItems} {submittedOrder.totalItems === 1 ? "item" : "items"}</span>
+                    </div>
+
+                    <div className="order-confirmation-items">
+                      {submittedOrder.items.map((item, index) => (
+                        <div className="order-confirmation-item" key={`${item.productId}-${item.variantKey}-${index}`}>
+                          <div className="order-confirmation-item-info">
+                            <strong>{item.name}</strong>
+                            {(item.variantLabel || item.optionSummary) && (
+                              <span>{item.variantLabel || item.optionSummary}</span>
+                            )}
+                            <small>Qty: {item.quantity}</small>
+                          </div>
+                          <strong>{formatPrice(item.subtotal)}</strong>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="order-confirmation-total">
+                      <span>Order total</span>
+                      <strong>{formatPrice(submittedOrder.total)}</strong>
+                    </div>
+                  </div>
+                )}
+
+                <p className="order-confirmation-followup">
+                  <strong>What happens next?</strong> Our team will get in touch with you soon.
+                  Your order is not confirmed until we contact you.
+                </p>
 
                 <button
                   type="button"
                   className="checkout-submit-button"
                   onClick={() => {
                     setShowCheckout(false);
-
                     setOrderStatus({ type: "", message: "" });
+                    setSubmittedOrder(null);
                   }}
                 >
                   Continue shopping

@@ -2309,7 +2309,7 @@
 }
 
 .checkout-success p {
-  max-width: 480px;
+  /* max-width: 480px; */
 
   margin: 0 0 24px;
 
@@ -2769,5 +2769,177 @@
 
   .checkout-processing-popup h2 {
     font-size: 20px;
+  }
+}
+
+
+.order-confirmation-eyebrow {
+  display: block;
+  margin: 12px 0 8px;
+  color: #a47b60;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.order-confirmation-message {
+  max-width: 620px;
+  margin: 10px auto 24px;
+  color: #777;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.order-confirmation-details {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto 20px;
+  padding: 20px;
+  border: 1px solid #e9e4d9;
+  border-radius: 12px;
+  background: #fffdf9;
+  text-align: left;
+}
+
+.order-confirmation-heading,
+.order-confirmation-item,
+.order-confirmation-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.order-confirmation-heading h4,
+.order-confirmation-customer h4 {
+  margin: 0;
+  color: #394b36;
+  font-size: 15px;
+}
+
+.order-confirmation-heading span {
+  color: #888;
+  font-size: 12px;
+}
+
+.order-confirmation-items {
+  margin-top: 15px;
+}
+
+.order-confirmation-item {
+  padding: 13px 0;
+  border-bottom: 1px solid #eeeae2;
+}
+
+.order-confirmation-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.order-confirmation-item-info strong,
+.order-confirmation-item > strong {
+  color: #39342f;
+  font-size: 13px;
+}
+
+.order-confirmation-item-info span,
+.order-confirmation-item-info small {
+  color: #888;
+  font-size: 11px;
+}
+
+.order-confirmation-total {
+  padding: 17px 0;
+  color: #394b36;
+  font-size: 14px;
+}
+
+.order-confirmation-total strong {
+  color: #71856b;
+  font-size: 19px;
+}
+
+.order-confirmation-customer {
+  padding-top: 16px;
+  border-top: 1px solid #e9e4d9;
+}
+
+.order-confirmation-customer h4 {
+  margin-bottom: 12px;
+}
+
+.order-confirmation-customer p {
+  margin: 6px 0;
+  color: #777;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.order-confirmation-customer p strong {
+  color: #39342f;
+}
+
+
+.order-confirmation-followup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 100%;
+  margin: 22px auto;
+  padding: 20px 22px 20px 62px;
+  border: 1px solid #e6e9dc;
+  border-left: 4px solid #829477;
+  border-radius: 12px;
+  background: linear-gradient(120deg, #f5f7ef, #fbfaf5);
+  color: #77766e;
+  font-size: 13px;
+  line-height: 1.8;
+  text-align: left;
+}
+
+.order-confirmation-followup::before {
+  content: "✓";
+  position: absolute;
+  top: 21px;
+  left: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  background: #e4eadc;
+  color: #62765b;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.order-confirmation-followup strong {
+  display: block;
+  margin: 0;
+  color: #394b36;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+}
+
+@media (max-width: 600px) {
+  .order-confirmation-followup {
+    padding: 17px 15px 17px 52px;
+    gap: 7px;
+    font-size: 12px;
+  }
+
+  .order-confirmation-followup::before {
+    left: 13px;
+    top: 18px;
+    width: 27px;
+    height: 27px;
+  }
+
+  .order-confirmation-followup strong {
+    font-size: 13px;
   }
 }

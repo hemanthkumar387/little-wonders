@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./FloatingSocials.css";
 
 const FloatingSocials = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className={`floating-socials ${isOpen ? "open" : ""}`}>

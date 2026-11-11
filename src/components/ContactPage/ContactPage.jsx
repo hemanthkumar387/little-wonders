@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
   faEnvelope,
-  faMessage,
+  // faMessage,
   faBoxOpen,
   faHeart,
   faArrowRight,
@@ -146,8 +146,8 @@ const ContactPage = () => {
     setIsSubmitting(true);
 
     setFormStatus({
-      type: "info",
-      message: "Saving your message...",
+      type: "",
+      message: "",
     });
 
     try {
@@ -180,7 +180,7 @@ const ContactPage = () => {
 
       setFormStatus({
         type: "success",
-        message: result.message || "Your message has been saved successfully!",
+        message: "Thank you for reaching out to LittleWonders!",
       });
 
       setFormData(initialForm);
@@ -463,18 +463,9 @@ const ContactPage = () => {
                   role="status"
                   aria-live="polite"
                 >
-                  {formStatus.type === "info" && (
-                    <FontAwesomeIcon icon={faMessage} />
-                  )}
-
                   {formStatus.type === "error" && (
                     <FontAwesomeIcon icon={faCircleCheck} />
                   )}
-
-                  {formStatus.type === "success" && (
-                    <FontAwesomeIcon icon={faCircleCheck} />
-                  )}
-
                   <span>{formStatus.message}</span>
                 </div>
               )}
@@ -485,7 +476,7 @@ const ContactPage = () => {
                   className="contact-submit-button"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Saving..." : "Send your message"}
+                  {isSubmitting ? "Sending..." : "Send your message"}
 
                   <FontAwesomeIcon
                     icon={isSubmitting ? faClock : faPaperPlane}
@@ -510,6 +501,68 @@ const ContactPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Contact form submission popup */}
+      {(isSubmitting || formStatus.type === "success") && (
+        <div className="contact-submit-modal-backdrop">
+          <section
+            className="contact-submit-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-live="polite"
+            aria-labelledby="contact-submit-modal-title"
+          >
+            {isSubmitting ? (
+              <>
+                <div className="contact-submit-loader" aria-hidden="true" />
+                <span className="contact-submit-modal-eyebrow">
+                  LITTLEWONDERS
+                </span>
+                <h2 id="contact-submit-modal-title">Sending your message...</h2>
+                <p>
+                  Thank you for reaching out. We're sending your message to our
+                  team. Please wait a moment.
+                </p>
+                <div className="contact-submit-loading-line">
+                  <span />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="contact-submit-success-icon">
+                  <FontAwesomeIcon icon={faCircleCheck} />
+                </div>
+                <span className="contact-submit-modal-eyebrow">
+                  LITTLEWONDERS
+                </span>
+                <h2 id="contact-submit-modal-title">
+                  Thank you for reaching out!
+                </h2>
+                <p>
+                  Your message has been sent successfully. Our team will review
+                  your enquiry and get in touch with you as soon as possible.
+                </p>
+                <div className="contact-submit-next-step">
+                  <strong>What happens next?</strong>
+                  <span>
+                    We'll contact you using the phone number or email address
+                    you provided. Thank you for your patience and for choosing
+                    LittleWonders.
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  className="contact-submit-modal-button"
+                  onClick={() => setFormStatus({ type: "", message: "" })}
+                >
+                  Back
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
+              </>
+            )}
+          </section>
+        </div>
+      )}
 
       {/* FAQ section */}
       <section className="contact-faq-section" id="contact-faq">
