@@ -573,7 +573,7 @@ const ContactPage = () => {
                   className="contact-submit-modal-button"
                   onClick={() => setFormStatus({ type: "", message: "" })}
                 >
-                  Back to contact page
+                  Back
                   <FontAwesomeIcon icon={faArrowRight} />
                 </button>
               </>
