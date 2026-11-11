@@ -2574,7 +2574,6 @@
   font-size: 12px;
 }
 
-
 /* Checkout loading animation */
 .checkout-loading-panel {
   display: flex;
@@ -2652,5 +2651,123 @@
 
   .checkout-loading-copy span {
     font-size: 11px;
+  }
+}
+
+/* Separate order processing popup */
+.checkout-processing-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(30, 35, 28, 0.58);
+  backdrop-filter: blur(5px);
+}
+
+.checkout-processing-popup {
+  width: 100%;
+  max-width: 420px;
+  padding: 35px 28px;
+  border-radius: 18px;
+  background: #fffdf9;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  animation: processingPopupIn 0.3s ease;
+}
+
+@keyframes processingPopupIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.checkout-processing-spinner {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 20px;
+  border: 4px solid #e6eadf;
+  border-top-color: #71856b;
+  border-right-color: #71856b;
+  border-radius: 50%;
+  animation: processingSpin 0.8s linear infinite;
+}
+
+@keyframes processingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.checkout-processing-eyebrow {
+  color: #a47b60;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.checkout-processing-popup h2 {
+  margin: 12px 0 8px;
+  color: #394b36;
+  font-size: 22px;
+}
+
+.checkout-processing-popup p {
+  margin: 0 auto 22px;
+  max-width: 320px;
+  color: #777;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.checkout-processing-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+
+.checkout-processing-timer strong {
+  color: #71856b;
+  font-size: 38px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.checkout-processing-timer span {
+  color: #999;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+}
+
+.checkout-processing-track {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #e9e9e2;
+}
+
+.checkout-processing-progress {
+  height: 100%;
+  border-radius: 10px;
+  background: #71856b;
+  transition: width 1s linear;
+}
+
+@media (max-width: 480px) {
+  .checkout-processing-popup {
+    padding: 28px 20px;
+  }
+
+  .checkout-processing-popup h2 {
+    font-size: 20px;
   }
 }
