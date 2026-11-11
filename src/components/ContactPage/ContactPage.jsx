@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -78,6 +78,8 @@ const ContactPage = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [countdown, setCountdown] = useState(30);
+
   const [formStatus, setFormStatus] = useState({
     type: "",
     message: "",
@@ -144,11 +146,15 @@ const ContactPage = () => {
     }
 
     setIsSubmitting(true);
+    setCountdown(30);
 
     setFormStatus({
       type: "",
       message: "",
     });
+
+    const controller = new AbortController();
+    const requestTimeout = window.setTimeout(() => controller.abort(), 30000);
 
     try {
       const apiBaseUrl = (import.meta.env.VITE_API_URL || "").replace(
@@ -158,6 +164,7 @@ const ContactPage = () => {
 
       const response = await fetch(`${apiBaseUrl}/api/contact`, {
         method: "POST",
+        signal: controller.signal,
         headers: {
           "Content-Type": "application/json",
         },
@@ -190,13 +197,26 @@ const ContactPage = () => {
       setFormStatus({
         type: "error",
         message:
-          error.message ||
-          "Unable to save your message. Please check your connection and try again.",
+          error.name === "AbortError"
+            ? "We couldn't send your message within 30 seconds. Please check your connection and try again."
+            : error.message ||
+              "Unable to send your message. Please check your connection and try again.",
       });
     } finally {
+      window.clearTimeout(requestTimeout);
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (!isSubmitting) return;
+
+    const intervalId = window.setInterval(() => {
+      setCountdown((current) => Math.max(0, current - 1));
+    }, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, [isSubmitting]);
 
   const handleReset = () => {
     if (isSubmitting) return;
@@ -466,6 +486,7 @@ const ContactPage = () => {
                   {formStatus.type === "error" && (
                     <FontAwesomeIcon icon={faCircleCheck} />
                   )}
+
                   <span>{formStatus.message}</span>
                 </div>
               )}
@@ -515,16 +536,18 @@ const ContactPage = () => {
             {isSubmitting ? (
               <>
                 <div className="contact-submit-loader" aria-hidden="true" />
-                <span className="contact-submit-modal-eyebrow">
-                  LITTLEWONDERS
-                </span>
+                <span className="contact-submit-modal-eyebrow">LITTLEWONDERS</span>
                 <h2 id="contact-submit-modal-title">Sending your message...</h2>
                 <p>
-                  Thank you for reaching out. We're sending your message to our
-                  team. Please wait a moment.
+                  Thank you for reaching out. We're sending your message to our team.
+                  Please wait a moment.
                 </p>
+                <div className="contact-submit-countdown">
+                  <strong>{String(countdown).padStart(2, "0")}</strong>
+                  <span>SECONDS REMAINING</span>
+                </div>
                 <div className="contact-submit-loading-line">
-                  <span />
+                  <span style={{ width: `${((30 - countdown) / 30) * 100}%` }} />
                 </div>
               </>
             ) : (
@@ -532,22 +555,17 @@ const ContactPage = () => {
                 <div className="contact-submit-success-icon">
                   <FontAwesomeIcon icon={faCircleCheck} />
                 </div>
-                <span className="contact-submit-modal-eyebrow">
-                  LITTLEWONDERS
-                </span>
-                <h2 id="contact-submit-modal-title">
-                  Thank you for reaching out!
-                </h2>
+                <span className="contact-submit-modal-eyebrow">LITTLEWONDERS</span>
+                <h2 id="contact-submit-modal-title">Thank you for reaching out!</h2>
                 <p>
-                  Your message has been sent successfully. Our team will review
-                  your enquiry and get in touch with you as soon as possible.
+                  Your message has been sent successfully. Our team will review your
+                  enquiry and get in touch with you as soon as possible.
                 </p>
                 <div className="contact-submit-next-step">
                   <strong>What happens next?</strong>
                   <span>
-                    We'll contact you using the phone number or email address
-                    you provided. Thank you for your patience and for choosing
-                    LittleWonders.
+                    We'll contact you using the phone number or email address you
+                    provided. Thank you for your patience and for choosing LittleWonders.
                   </span>
                 </div>
                 <button
@@ -555,7 +573,7 @@ const ContactPage = () => {
                   className="contact-submit-modal-button"
                   onClick={() => setFormStatus({ type: "", message: "" })}
                 >
-                  Back
+                  Back to contact page
                   <FontAwesomeIcon icon={faArrowRight} />
                 </button>
               </>
