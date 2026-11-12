@@ -84,7 +84,7 @@ const Footer = () => {
             Fashion Accessories
           </Link>
           <Link to="/products?category=Keychains">Keychains</Link>
-          <Link to="/products?category=Wrist%20Bracelets">Wrist Bracelets</Link>
+          <Link to="/products?category=Wrist%20Bracelets">Bracelets</Link>
           <Link to="/products?category=Hair%20Accessories">
             Hair Accessories
           </Link>
