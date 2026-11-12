@@ -35,6 +35,17 @@ const products = [
           },
         ],
       },
+      {
+        id: "color",
+        label: "Color",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Red", value: "red" },
+          { label: "Pink", value: "pink" },
+          { label: "Yellow", value: "yellow" },
+        ],
+      },
       // {
       //   id: "flowerColor",
       //   label: "Flower color",
@@ -86,6 +97,17 @@ const products = [
             value: "Long adjustable strap",
             price: 50,
           },
+        ],
+      },
+      {
+        id: "color",
+        label: "Color",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Black", value: "black" },
+          { label: "Dark Cream", value: "dark cream" },
+          { label: "Light Cream", value: "light cream" },
         ],
       },
       // {
@@ -210,6 +232,18 @@ const products = [
           { label: "Gold-tone ring", value: "Gold-tone ring", price: 10 },
         ],
       },
+      {
+        id: "color",
+        label: "Color",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Pink", value: "pink" },
+          { label: "Green", value: "green" },
+          { label: "Purple", value: "purple" },
+          { label: "Light Blue", value: "light blue" },
+        ],
+      },
     ],
   },
   {
@@ -277,6 +311,19 @@ const products = [
         choices: [
           { label: "Silver-tone ring", value: "Silver-tone ring", price: 0 },
           { label: "Gold-tone ring", value: "Gold-tone ring", price: 10 },
+        ],
+      },
+      {
+        id: "color",
+        label: "Color",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Blue", value: "blue" },
+          { label: "Yellow", value: "yellow" },
+          { label: "Red", value: "red" },
+          { label: "Light Blue", value: "light blue" },
+          { label: "Pink", value: "pink" },
         ],
       },
     ],
@@ -382,7 +429,7 @@ const products = [
     description: "Cute handmade strawberry hair clips.",
     price: 60,
     image: "/myimages/hair1.jpeg",
-    images: ["/myimages/hair1.jpeg"],
+    images: ["/myimages/hair1.jpeg", "/myimages/strawberry_clips.jpeg"],
     options: [
       {
         id: "pack",
@@ -404,7 +451,117 @@ const products = [
           { label: "Snap clip", value: "Snap clip", price: 5 },
         ],
       },
+      {
+        id: "color",
+        label: "Color",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Pink", value: "pink" },
+          { label: "Blue", value: "blue" },
+          { label: "Red", value: "red" },
+          { label: "Light Blue", value: "light blue" },
+          { label: "Lavender", value: "lavender" },
+        ],
+      },
     ],
+  },
+  {
+    id: 12,
+    name: "Cherries Keychain",
+    category: "Keychains",
+    tag: "Keychain",
+    description: "",
+    price: 75,
+    image: "/myimages/Cherry_keychain.jpeg",
+    images: ["/myimages/Cherry_keychain.jpeg"],
+    // options: [
+    //   {
+    //     id: "pack",
+    //     label: "Pack size",
+    //     type: "select",
+    //     required: true,
+    //     choices: [
+    //       { label: "Single clip", value: "Single clip", price: 30 },
+    //       { label: "Pair of clips", value: "Pair of clips", price: 60 },
+    //     ],
+    //   },
+    //   {
+    //     id: "clipType",
+    //     label: "Clip type",
+    //     type: "select",
+    //     required: true,
+    //     choices: [
+    //       { label: "Alligator clip", value: "Alligator clip", price: 0 },
+    //       { label: "Snap clip", value: "Snap clip", price: 5 },
+    //     ],
+    //   },
+    // ],
+  },
+  {
+    id: 13,
+    name: "Cherries Bracelet",
+    category: "Bracelets",
+    tag: "Bracelet",
+    description: "A bracelet for everyday wear.",
+    price: 115,
+    image: "/myimages/Cherry_Bracelet.jpeg",
+    images: ["/myimages/Cherry_Bracelet.jpeg"],
+    // options: [
+    //   {
+    //     id: "size",
+    //     label: "Bracelet size",
+    //     type: "select",
+    //     required: true,
+    //     choices: [
+    //       { label: "Small", value: "Small", price: 10 },
+    //       { label: "Medium", value: "Medium", price: 20 },
+    //       { label: "Large", value: "Large", price: 30 },
+    //     ],
+    //   },
+    // ]
+  },
+  {
+    id: 14,
+    name: "Cherries Chain",
+    category: "Fashion Accessories",
+    tag: "Fashion Accessory",
+    description: "A beautiful Chain.",
+    price: 100,
+    image: "/myimages/Cherry_chain.jpeg",
+    images: ["/myimages/Cherry_chain.jpeg"],
+  },
+  {
+    id: 15,
+    name: "Coffee Mug Keychain",
+    category: "Keychains",
+    tag: "Keychain",
+    description: "",
+    price: 90,
+    image: "/myimages/coffee_mug.jpeg",
+    images: ["/myimages/coffee_mug.jpeg","/myimages/coffee_mug1.jpeg"],
+  },
+  {
+    id: 16,
+    name: "Hello Kitty Keychain",
+    category: "Keychains",
+    tag: "Keychain",
+    description: "",
+    price: 150,
+    image: "/myimages/Hello_kitty.jpeg",
+    images: ["/myimages/Hello_kitty.jpeg"],
+    options: [
+      {
+        id: "color",
+        label: "Chain Color",
+        type: "select",
+        required: true,
+        choices: [
+          { label: "Silver", value: "Silver", price: 0 },
+          { label: "Gold", value: "Gold", price: 25 },
+        ],
+      },
+    ]
   },
 ];
 

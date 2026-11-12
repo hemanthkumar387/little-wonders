@@ -310,13 +310,23 @@ const ProductDetails = () => {
                   const colorForChoice = (choice) => {
                     const text =
                       `${choice.label} ${choice.value}`.toLowerCase();
-                    if (/pink|strawberry/.test(text)) return "#df9a9b";
+                    if (/pink|strawberry/.test(text)) return "#e67dc8";
                     if (/yellow|sunshine/.test(text)) return "#f4df9b";
                     if (/sage|green|morpankh/.test(text)) return "#65998d";
+                    if (/dark cream/.test(text)) return "#c8ad83";
+                    if (/light cream/.test(text)) return "#e5ddcc";
                     if (/cream|white|classic|mixed/.test(text))
                       return "#f4e4a8";
-                    if (/blue/.test(text)) return "#729bc4";
+                    if (/sky\s*blue|light\s*blue|lightblue/.test(text))
+                      return "#87CEEB";
+                    if (/blue/.test(text)) return "#00468c";
                     if (/purple|lavender/.test(text)) return "#ad94c8";
+                    if (/silver/.test(text)) return "#C0C0C0";
+                    if (/gold/.test(text)) return "#D4AF37";
+                    if (/red/.test(text)) return "#D9534F";
+                    if (/green/.test(text)) return "#65998d";
+                    if (/black/.test(text)) return "#222222";
+                    // if (/sky blue|light blue/.test(text)) return "#87CEEB";
                     if (/custom/.test(text))
                       return "conic-gradient(#e8a0a0, #f3d982, #70a99a, #b49ad3, #e8a0a0)";
                     return "#77716d";
