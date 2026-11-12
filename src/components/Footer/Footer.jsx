@@ -90,19 +90,25 @@ const Footer = () => {
           </Link>
         </div>
 
-        {/* About */}
-        <div className="footer-column">
-          <h3>About</h3>
+        {/* About and Connect */}
+        <div className="footer-about-connect">
+          <div className="footer-column">
+            <h3>About</h3>
+            <Link to="/about">Our Story</Link>
+          </div>
 
-          <Link to="/about">Our Story</Link>
-        </div>
-        {/* Connect */}
-        <div className="footer-column">
-          <h3>Connect</h3>
-
-          <Link to="https://ig.me/m/littlewonders_04">Instagram</Link>
-          <Link to="https://wa.me/+919398723651?text=Hi">WhatsApp</Link>
-          <Link to="https://mail.google.com/mail/?view=cm&fs=1&to=littlewonders0426@gmail.com" target="_blank">Email</Link>
+          <div className="footer-column">
+            <h3>Connect</h3>
+            <Link to="https://ig.me/m/littlewonders_04">Instagram</Link>
+            <Link to="https://wa.me/+919398723651?text=Hi">WhatsApp</Link>
+            <Link
+              to="https://mail.google.com/mail/?view=cm&fs=1&to=littlewonders0426@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Email
+            </Link>
+          </div>
         </div>
       </div>
 

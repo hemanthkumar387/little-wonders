@@ -14,7 +14,7 @@ const collections = [
   },
   {
     title: "Wrist Bands",
-    category: "Wrist Bracelets",
+    category: "Bracelets",
     description: "Handcrafted bands for every style.",
     image: "/images/wrist-bands.png",
     color: "sage",
@@ -107,6 +107,10 @@ const ExploreCollections = () => {
             key={collection.title}
           >
             {/* Image */}
+            <Link
+                to={`/products?category=${encodeURIComponent(collection.category)}`}
+                aria-label={`Explore ${collection.title}`}
+              >
             <div className="collection-image">
               <img src={collection.image} alt={collection.title} />
             </div>
@@ -126,6 +130,7 @@ const ExploreCollections = () => {
                 <FontAwesomeIcon icon={faArrowRight} />
               </Link>
             </div>
+            </Link>
           </article>
         ))}
       </div>

@@ -182,3 +182,32 @@
     order: -1;
   }
 }
+
+/* About and Connect wrapper */
+.footer-about-connect {
+  display: contents;
+}
+
+/* Tablet and mobile layout */
+@media (max-width: 850px) {
+  .footer-container {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-brand {
+    grid-column: span 2;
+  }
+
+  .footer-about-connect {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 550px) {
+  .footer-about-connect {
+    gap: 20px;
+  }
+}
