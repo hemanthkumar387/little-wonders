@@ -81,9 +81,23 @@
   gap: 18px;
   width: 100%;
   overflow-x: auto;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
+  overflow-y: hidden;
   padding: 15px 2px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+}
+
+.creations-gallery:active {
+  cursor: grabbing;
+}
+
+.creations-gallery > .creation-card {
+  scroll-snap-align: start;
 }
 
 .creations-gallery::-webkit-scrollbar {
@@ -570,6 +584,26 @@
   }
 
   .creation-card {
-    flex: 0 0 185px;
+    flex: 0 0 150px;
+  }
+}
+
+/* Native smooth, infinite-scrolling creations gallery */
+.creations-arrow {
+  display: none !important;
+}
+
+.creations-gallery {
+  scroll-padding-inline: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .creations-gallery {
+    scroll-behavior: auto;
+  }
+
+  .creations-reveal,
+  .creation-card {
+    transition: none !important;
   }
 }

@@ -122,13 +122,11 @@ const ExploreCollections = () => {
 
                 <p>{collection.description}</p>
               </div>
-              <Link
-                to={`/products?category=${encodeURIComponent(collection.category)}`}
+              <div
                 className="collection-arrow"
-                aria-label={`Explore ${collection.title}`}
               >
                 <FontAwesomeIcon icon={faArrowRight} />
-              </Link>
+              </div>
             </div>
             </Link>
           </article>

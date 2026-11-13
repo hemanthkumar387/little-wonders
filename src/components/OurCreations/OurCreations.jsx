@@ -2,11 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./OurCreations.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowLeft,
-  faArrowRight,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faXmark, faArrowRight, faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 
 const creations = [
   {
@@ -66,6 +62,19 @@ const OurCreations = () => {
   const [selectedCreation, setSelectedCreation] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  // Three copies create a seamless horizontal loop.
+  const loopedCreations = [...creations, ...creations, ...creations];
+  const isAdjustingScroll = useRef(false);
+
+  useEffect(() => {
+    const gallery = galleryRef.current;
+    if (!gallery) return;
+
+    requestAnimationFrame(() => {
+      gallery.scrollLeft = gallery.scrollWidth / 3;
+    });
+  }, []);
+
   useEffect(() => {
     const section = sectionRef.current;
 
@@ -78,8 +87,6 @@ const OurCreations = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("creations-item-visible");
-          } else {
-            entry.target.classList.remove("creations-item-visible");
           }
         });
       },
@@ -108,47 +115,46 @@ const OurCreations = () => {
     };
   }, []);
 
-  const scrollLeft = () => {
+  const handleGalleryScroll = () => {
     const gallery = galleryRef.current;
+    if (!gallery || isAdjustingScroll.current) return;
 
-    if (!gallery) return;
+    const oneSetWidth = gallery.scrollWidth / 3;
+    const currentPosition = gallery.scrollLeft;
 
-    const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-
-    if (gallery.scrollLeft <= 5) {
-      // Reached beginning → go to end
-      gallery.scrollTo({
-        left: maxScroll,
-        behavior: "smooth",
+    if (currentPosition < oneSetWidth * 0.5) {
+      isAdjustingScroll.current = true;
+      gallery.scrollLeft = currentPosition + oneSetWidth;
+      requestAnimationFrame(() => {
+        isAdjustingScroll.current = false;
       });
-    } else {
-      gallery.scrollBy({
-        left: -300,
-        behavior: "smooth",
+    } else if (currentPosition > oneSetWidth * 1.5) {
+      isAdjustingScroll.current = true;
+      gallery.scrollLeft = currentPosition - oneSetWidth;
+      requestAnimationFrame(() => {
+        isAdjustingScroll.current = false;
       });
     }
   };
 
-  const scrollRight = () => {
+  // Use a native non-passive wheel listener so preventDefault is supported.
+  useEffect(() => {
     const gallery = galleryRef.current;
-
     if (!gallery) return;
 
-    const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+    const handleGalleryWheel = (event) => {
+      if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+        event.preventDefault();
+        gallery.scrollLeft += event.deltaY;
+      }
+    };
 
-    if (gallery.scrollLeft >= maxScroll - 5) {
-      // Reached end → go back to beginning
-      gallery.scrollTo({
-        left: 0,
-        behavior: "smooth",
-      });
-    } else {
-      gallery.scrollBy({
-        left: 300,
-        behavior: "smooth",
-      });
-    }
-  };
+    gallery.addEventListener("wheel", handleGalleryWheel, { passive: false });
+
+    return () => {
+      gallery.removeEventListener("wheel", handleGalleryWheel);
+    };
+  }, []);
 
   const openLightbox = (creation, index) => {
     setSelectedCreation(creation);
@@ -244,54 +250,44 @@ const OurCreations = () => {
 
         {/* GALLERY */}
         <div className="creations-gallery-wrapper">
-          {/* LEFT ARROW */}
-          <button
-            type="button"
-            className="creations-arrow creations-arrow-left"
-            aria-label="Previous creations"
-            onClick={scrollLeft}
+          <div
+            className="creations-gallery"
+            ref={galleryRef}
+            onScroll={handleGalleryScroll}
+            aria-label="Our handmade creations"
           >
-            <FontAwesomeIcon icon={faArrowLeft} />
-          </button>
+            {loopedCreations.map((creation, loopIndex) => {
+              const originalIndex = loopIndex % creations.length;
 
-          <div className="creations-gallery" ref={galleryRef}>
-            {creations.map((creation, index) => (
-              <div
-                className="creation-card creations-reveal"
-                key={creation.id}
-                onClick={() => openLightbox(creation, index)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    openLightbox(creation, index);
-                  }
-                }}
-              >
-                <div className="creation-image-wrapper">
-                  <img
-                    src={creation.image}
-                    alt={creation.title}
-                    className="creation-image"
-                  />
-
-                  <div className="creation-overlay">
-                    <span>{creation.title}</span>
+              return (
+                <div
+                  className="creation-card creations-reveal"
+                  key={`${creation.id}-${loopIndex}`}
+                  onClick={() => openLightbox(creation, originalIndex)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      openLightbox(creation, originalIndex);
+                    }
+                  }}
+                >
+                  <div className="creation-image-wrapper">
+                    <img
+                      src={creation.image}
+                      alt={creation.title}
+                      className="creation-image"
+                      loading="lazy"
+                    />
+                    <div className="creation-overlay">
+                      <span>{creation.title}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-
-          {/* RIGHT ARROW */}
-          <button
-            type="button"
-            className="creations-arrow creations-arrow-right"
-            aria-label="Next creations"
-            onClick={scrollRight}
-          >
-            <FontAwesomeIcon icon={faArrowRight} />
-          </button>
         </div>
       </div>
       {selectedCreation && (
