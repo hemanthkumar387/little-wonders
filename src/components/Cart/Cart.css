@@ -2943,3 +2943,47 @@
     font-size: 13px;
   }
 }
+
+/* Keep the checkout header and close button visible while the form scrolls */
+.checkout-modal {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.checkout-modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  flex: 0 0 auto;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(233, 238, 223, 0.9),
+      transparent 45%
+    ),
+    #fffaf3;
+}
+
+.checkout-form,
+.checkout-order-confirmation {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.checkout-close-button {
+  position: absolute;
+  z-index: 6;
+}
+
+@media (max-width: 600px) {
+  .checkout-modal {
+    max-height: calc(100vh - 24px);
+  }
+
+  .checkout-modal-header {
+    flex-shrink: 0;
+  }
+}

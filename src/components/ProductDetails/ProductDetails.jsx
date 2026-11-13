@@ -112,7 +112,7 @@ const ProductDetails = () => {
             onClick={() => navigate(-1)}
           >
             <FontAwesomeIcon icon={faArrowLeft} />
-            Back to Products
+            Back
           </button>
         </div>
       </section>
@@ -239,7 +239,7 @@ const ProductDetails = () => {
           onClick={() => navigate(-1)}
         >
           <FontAwesomeIcon icon={faArrowLeft} />
-          Back to Products
+          Back
         </button>
 
         <div className="product-details-layout">
