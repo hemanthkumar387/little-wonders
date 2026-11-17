@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import "./OurCreations.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faArrowRight, faArrowLeft} from "@fortawesome/free-solid-svg-icons";
+import {
+  faXmark,
+  faArrowRight,
+  faArrowLeft,
+} from "@fortawesome/free-solid-svg-icons";
 
 const creations = [
   {
@@ -33,7 +37,7 @@ const creations = [
   {
     id: 6,
     image: "myimages/wrist_art.jpeg",
-    title: "Wrist art",
+    title: "Wrist Art",
   },
   {
     id: 7,
@@ -57,24 +61,138 @@ const OurCreations = () => {
   const sectionRef = useRef(null);
 
   const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
+  const isAdjustingScroll = useRef(false);
+  const scrollFrame = useRef(null);
 
   const [selectedCreation, setSelectedCreation] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Three copies create a seamless horizontal loop.
+  // Three sets provide enough buffer on both sides.
   const loopedCreations = [...creations, ...creations, ...creations];
-  const isAdjustingScroll = useRef(false);
 
-  useEffect(() => {
+  // Get the width of one complete set, including gaps.
+  const getSetWidth = useCallback(() => {
     const gallery = galleryRef.current;
-    if (!gallery) return;
 
-    requestAnimationFrame(() => {
-      gallery.scrollLeft = gallery.scrollWidth / 3;
-    });
+    if (!gallery) return 0;
+
+    const firstCard = gallery.querySelector(".creation-card");
+
+    if (!firstCard) return 0;
+
+    const styles = window.getComputedStyle(gallery);
+    const gap = parseFloat(styles.columnGap) || 0;
+
+    return (firstCard.offsetWidth + gap) * creations.length;
   }, []);
 
+  // Initialize at the middle set.
+  useEffect(() => {
+    const gallery = galleryRef.current;
+
+    if (!gallery) return;
+
+    let frame;
+
+    const initializeGallery = () => {
+      const setWidth = getSetWidth();
+
+      if (setWidth > 0) {
+        gallery.scrollLeft = setWidth;
+      }
+    };
+
+    frame = requestAnimationFrame(initializeGallery);
+
+    return () => cancelAnimationFrame(frame);
+  }, [getSetWidth]);
+
+  // Keep the scroll position inside the middle set.
+  const handleGalleryScroll = useCallback(() => {
+    const gallery = galleryRef.current;
+
+    if (!gallery || isAdjustingScroll.current) return;
+
+    if (scrollFrame.current) {
+      cancelAnimationFrame(scrollFrame.current);
+    }
+
+    scrollFrame.current = requestAnimationFrame(() => {
+      const setWidth = getSetWidth();
+
+      if (!setWidth) return;
+
+      const currentPosition = gallery.scrollLeft;
+
+      isAdjustingScroll.current = true;
+
+      // Move forward when approaching the third set.
+      if (currentPosition >= setWidth * 1.8) {
+        gallery.scrollLeft = currentPosition - setWidth;
+      }
+
+      // Move backward when approaching the first set.
+      else if (currentPosition <= setWidth * 0.2) {
+        gallery.scrollLeft = currentPosition + setWidth;
+      }
+
+      requestAnimationFrame(() => {
+        isAdjustingScroll.current = false;
+      });
+    });
+  }, [getSetWidth]);
+
+  // Mouse wheel: vertical wheel movement scrolls horizontally.
+  useEffect(() => {
+    const gallery = galleryRef.current;
+
+    if (!gallery) return;
+
+    const handleWheel = (event) => {
+      if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+        event.preventDefault();
+        gallery.scrollBy({
+          left: event.deltaY,
+          behavior: "auto",
+        });
+      }
+    };
+
+    gallery.addEventListener("wheel", handleWheel, {
+      passive: false,
+    });
+
+    return () => {
+      gallery.removeEventListener("wheel", handleWheel);
+
+      if (scrollFrame.current) {
+        cancelAnimationFrame(scrollFrame.current);
+      }
+    };
+  }, []);
+
+  // Recalculate the middle position after resizing.
+  useEffect(() => {
+    const gallery = galleryRef.current;
+
+    if (!gallery) return;
+
+    const handleResize = () => {
+      const setWidth = getSetWidth();
+
+      if (setWidth > 0) {
+        gallery.scrollLeft = setWidth;
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [getSetWidth]);
+
+  // Scroll reveal animation.
   useEffect(() => {
     const section = sectionRef.current;
 
@@ -91,8 +209,8 @@ const OurCreations = () => {
         });
       },
       {
-        threshold: 0.15,
-        rootMargin: "0px 0px -30px 0px",
+        threshold: 0.1,
+        rootMargin: "0px 0px -20px 0px",
       },
     );
 
@@ -101,59 +219,30 @@ const OurCreations = () => {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        setSelectedCreation(null);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+  // Lightbox navigation.
+  const closeLightbox = useCallback(() => {
+    setSelectedCreation(null);
   }, []);
 
-  const handleGalleryScroll = () => {
-    const gallery = galleryRef.current;
-    if (!gallery || isAdjustingScroll.current) return;
+  const showPrevious = useCallback(() => {
+    setSelectedIndex((currentIndex) => {
+      const previousIndex =
+        (currentIndex - 1 + creations.length) % creations.length;
 
-    const oneSetWidth = gallery.scrollWidth / 3;
-    const currentPosition = gallery.scrollLeft;
+      setSelectedCreation(creations[previousIndex]);
 
-    if (currentPosition < oneSetWidth * 0.5) {
-      isAdjustingScroll.current = true;
-      gallery.scrollLeft = currentPosition + oneSetWidth;
-      requestAnimationFrame(() => {
-        isAdjustingScroll.current = false;
-      });
-    } else if (currentPosition > oneSetWidth * 1.5) {
-      isAdjustingScroll.current = true;
-      gallery.scrollLeft = currentPosition - oneSetWidth;
-      requestAnimationFrame(() => {
-        isAdjustingScroll.current = false;
-      });
-    }
-  };
+      return previousIndex;
+    });
+  }, []);
 
-  // Use a native non-passive wheel listener so preventDefault is supported.
-  useEffect(() => {
-    const gallery = galleryRef.current;
-    if (!gallery) return;
+  const showNext = useCallback(() => {
+    setSelectedIndex((currentIndex) => {
+      const nextIndex = (currentIndex + 1) % creations.length;
 
-    const handleGalleryWheel = (event) => {
-      if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
-        event.preventDefault();
-        gallery.scrollLeft += event.deltaY;
-      }
-    };
+      setSelectedCreation(creations[nextIndex]);
 
-    gallery.addEventListener("wheel", handleGalleryWheel, { passive: false });
-
-    return () => {
-      gallery.removeEventListener("wheel", handleGalleryWheel);
-    };
+      return nextIndex;
+    });
   }, []);
 
   const openLightbox = (creation, index) => {
@@ -161,41 +250,14 @@ const OurCreations = () => {
     setSelectedIndex(index);
   };
 
-  const closeLightbox = () => {
-    setSelectedCreation(null);
-  };
-
-  const showPrevious = () => {
-    const previousIndex =
-      selectedIndex === 0 ? creations.length - 1 : selectedIndex - 1;
-
-    setSelectedIndex(previousIndex);
-    setSelectedCreation(creations[previousIndex]);
-  };
-
-  const showNext = () => {
-    const nextIndex =
-      selectedIndex === creations.length - 1 ? 0 : selectedIndex + 1;
-
-    setSelectedIndex(nextIndex);
-    setSelectedCreation(creations[nextIndex]);
-  };
-
+  // Keyboard controls.
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (event) => {
       if (!selectedCreation) return;
 
-      if (e.key === "Escape") {
-        closeLightbox();
-      }
-
-      if (e.key === "ArrowLeft") {
-        showPrevious();
-      }
-
-      if (e.key === "ArrowRight") {
-        showNext();
-      }
+      if (event.key === "Escape") closeLightbox();
+      if (event.key === "ArrowLeft") showPrevious();
+      if (event.key === "ArrowRight") showNext();
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -203,32 +265,29 @@ const OurCreations = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedCreation, selectedIndex]);
+  }, [selectedCreation, closeLightbox, showPrevious, showNext]);
 
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
+  // Touch/swipe controls for lightbox.
+  const handleTouchStart = (event) => {
+    touchStartX.current = event.touches[0].clientX;
   };
 
-  const handleTouchEnd = (e) => {
-    touchEndX.current = e.changedTouches[0].clientX;
+  const handleTouchEnd = (event) => {
+    const touchEndX = event.changedTouches[0].clientX;
 
-    const swipeDistance = touchStartX.current - touchEndX.current;
+    const swipeDistance = touchStartX.current - touchEndX;
 
-    // Minimum distance required for a swipe
     if (Math.abs(swipeDistance) < 50) return;
 
     if (swipeDistance > 0) {
-      // Swipe left → next image
       showNext();
     } else {
-      // Swipe right → previous image
       showPrevious();
     }
   };
 
   return (
     <section ref={sectionRef} className="our-creations-section">
-      {/* Decorative background */}
       <div className="creations-bg-circle creations-bg-circle-left"></div>
       <div className="creations-bg-circle creations-bg-circle-right"></div>
 
@@ -248,7 +307,7 @@ const OurCreations = () => {
           </p>
         </div>
 
-        {/* GALLERY */}
+        {/* INFINITE GALLERY */}
         <div className="creations-gallery-wrapper">
           <div
             className="creations-gallery"
@@ -266,9 +325,9 @@ const OurCreations = () => {
                   onClick={() => openLightbox(creation, originalIndex)}
                   role="button"
                   tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
                       openLightbox(creation, originalIndex);
                     }
                   }}
@@ -280,6 +339,7 @@ const OurCreations = () => {
                       className="creation-image"
                       loading="lazy"
                     />
+
                     <div className="creation-overlay">
                       <span>{creation.title}</span>
                     </div>
@@ -290,13 +350,10 @@ const OurCreations = () => {
           </div>
         </div>
       </div>
+
+      {/* FULLSCREEN LIGHTBOX */}
       {selectedCreation && (
-        <div
-          className="creation-lightbox"
-          onClick={closeLightbox}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
+        <div className="creation-lightbox" onClick={closeLightbox}>
           {/* CLOSE */}
           <button
             type="button"
@@ -312,8 +369,8 @@ const OurCreations = () => {
             type="button"
             className="creation-lightbox-nav creation-lightbox-prev"
             aria-label="Previous image"
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={(event) => {
+              event.stopPropagation();
               showPrevious();
             }}
           >
@@ -323,7 +380,7 @@ const OurCreations = () => {
           {/* MAIN IMAGE */}
           <div
             className="creation-lightbox-main"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
@@ -331,6 +388,7 @@ const OurCreations = () => {
               src={selectedCreation.image}
               alt={selectedCreation.title}
               className="creation-lightbox-image"
+              draggable="false"
             />
 
             <p className="creation-lightbox-title">{selectedCreation.title}</p>
@@ -341,8 +399,8 @@ const OurCreations = () => {
             type="button"
             className="creation-lightbox-nav creation-lightbox-next"
             aria-label="Next image"
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={(event) => {
+              event.stopPropagation();
               showNext();
             }}
           >
@@ -352,7 +410,7 @@ const OurCreations = () => {
           {/* THUMBNAILS */}
           <div
             className="creation-lightbox-thumbnails"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
           >
             {creations.map((creation, index) => (
               <button

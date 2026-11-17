@@ -1,3 +1,7 @@
+/* =========================================
+   OUR CREATIONS SECTION
+========================================= */
+
 .our-creations-section {
   position: relative;
   width: 100%;
@@ -38,6 +42,10 @@
   padding: 0 55px;
 }
 
+/* =========================================
+   HEADER
+========================================= */
+
 .our-creations-header {
   text-align: center;
   margin-bottom: 28px;
@@ -71,6 +79,10 @@
   line-height: 1.5;
 }
 
+/* =========================================
+   INFINITE GALLERY
+========================================= */
+
 .creations-gallery-wrapper {
   position: relative;
   width: 100%;
@@ -85,23 +97,22 @@
   padding: 15px 2px;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  scroll-behavior: smooth;
-  scroll-snap-type: x proximity;
+
+  /* Important for seamless repositioning */
+  scroll-behavior: auto;
+  scroll-snap-type: none;
   overscroll-behavior-x: contain;
+
   cursor: grab;
   -webkit-overflow-scrolling: touch;
 }
 
-.creations-gallery:active {
-  cursor: grabbing;
-}
-
-.creations-gallery > .creation-card {
-  scroll-snap-align: start;
-}
-
 .creations-gallery::-webkit-scrollbar {
   display: none;
+}
+
+.creations-gallery:active {
+  cursor: grabbing;
 }
 
 .creation-card {
@@ -113,7 +124,9 @@
   background: #ffffff;
   box-shadow: 0 7px 22px rgba(90, 65, 45, 0.08);
   cursor: pointer;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
 .creation-card:hover {
@@ -166,45 +179,8 @@
   font-weight: 700;
 }
 
-.creations-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 5;
-  width: 38px;
-  height: 38px;
-  border: 1px solid rgba(189, 98, 75, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 250, 243, 0.94);
-  color: #bd624b;
-  cursor: pointer;
-  box-shadow: 0 7px 18px rgba(80, 60, 45, 0.1);
-  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
-}
-
-.creations-arrow:hover {
-  background: #c96f55;
-  color: #ffffff;
-  transform: translateY(-50%) scale(1.08);
-}
-
-.creations-arrow-left {
-  left: 8px;
-}
-
-.creations-arrow-right {
-  right: 8px;
-}
-
-.creations-arrow svg {
-  font-size: 11px;
-}
-
 /* =========================================
-   FULLSCREEN CREATION VIEWER
+   FULLSCREEN LIGHTBOX
 ========================================= */
 
 .creation-lightbox {
@@ -271,7 +247,9 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.25s ease, transform 0.25s ease;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
 }
 
 .creation-lightbox-close:hover {
@@ -294,7 +272,9 @@
   justify-content: center;
   cursor: pointer;
   transform: translateY(-50%);
-  transition: background 0.25s ease, transform 0.25s ease;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
 }
 
 .creation-lightbox-nav:hover {
@@ -314,6 +294,8 @@
   transform: translateY(-50%) scale(1.08);
 }
 
+/* THUMBNAILS */
+
 .creation-lightbox-thumbnails {
   position: absolute;
   left: 50%;
@@ -323,6 +305,7 @@
   align-items: center;
   gap: 9px;
   padding: 8px 10px;
+  max-width: 90vw;
   overflow-x: auto;
   scrollbar-width: none;
   background: rgba(20, 17, 15, 0.5);
@@ -346,7 +329,10 @@
   background: transparent;
   opacity: 0.55;
   cursor: pointer;
-  transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .creation-lightbox-thumbnail img {
@@ -368,9 +354,18 @@
   box-shadow: 0 0 0 2px rgba(201, 111, 85, 0.25);
 }
 
+/* =========================================
+   ANIMATIONS
+========================================= */
+
 @keyframes creationLightboxFade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes creationImageOpen {
@@ -378,20 +373,21 @@
     opacity: 0;
     transform: scale(0.92);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
 
-/* =========================================
-   SCROLL REVEAL ANIMATION
-========================================= */
+/* SCROLL REVEAL */
 
 .creations-reveal {
   opacity: 0;
   transform: translateY(45px) scale(0.96);
-  transition: opacity 0.75s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition:
+    opacity 0.75s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .creations-reveal.creations-item-visible {
@@ -421,7 +417,10 @@
   opacity: 0;
   transform: translateY(35px) scale(0.94);
   filter: blur(3px);
-  transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.7s ease;
+  transition:
+    opacity 0.7s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.7s ease;
 }
 
 .creation-card.creations-reveal.creations-item-visible {
@@ -490,25 +489,18 @@
 
   .creations-gallery {
     gap: 12px;
-    overflow-x: auto;
     padding: 10px 15px;
   }
 
   .creation-card {
     flex: 0 0 145px;
-    scroll-snap-align: start;
     border-radius: 13px;
-  }
-
-  .creations-arrow {
-    display: none;
   }
 
   .creation-overlay {
     opacity: 1;
   }
 
-  /* Swipe navigation for fullscreen viewer */
   .creation-lightbox-main {
     width: 90vw;
     height: calc(100vh - 150px);
@@ -555,23 +547,6 @@
     height: 36px;
     font-size: 14px;
   }
-
-  .creation-card.creations-reveal {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-    filter: blur(2px);
-    transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
-  }
-
-  .creation-card.creations-reveal.creations-item-visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-
-  .creation-card.creations-reveal.creations-item-visible:hover {
-    transform: translateY(-4px) scale(1.01);
-  }
 }
 
 @media (max-width: 480px) {
@@ -588,22 +563,14 @@
   }
 }
 
-/* Native smooth, infinite-scrolling creations gallery */
-.creations-arrow {
-  display: none !important;
-}
-
-.creations-gallery {
-  scroll-padding-inline: 2px;
-}
+/* =========================================
+   ACCESSIBILITY
+========================================= */
 
 @media (prefers-reduced-motion: reduce) {
-  .creations-gallery {
-    scroll-behavior: auto;
-  }
-
   .creations-reveal,
-  .creation-card {
+  .creation-card,
+  .creation-image {
     transition: none !important;
   }
 }
