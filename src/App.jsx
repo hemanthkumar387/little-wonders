@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./Pages/HomePage/HomePage";
 import ProductsPage from "./Pages/ProductsPage/ProductsPage";
@@ -9,15 +9,23 @@ import CartPage from "./components/Cart/Cart";
 import ContactPage from "./components/ContactPage/ContactPage";
 import FloatingSocials from "./components/FloatingSocials/FloatingSocials";
 import Footer from "./components/Footer/Footer";
+
+import SignupPage from "./Pages/Auth/SignupPage";
+import LoginPage from "./Pages/Auth/LoginPage";
+import ProfilePage from "./Pages/Profile/ProfilePage";
 // import AdminDashboard from "./admin/AdminDashboard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
 
-function App() {
+function AppLayout() {
+  const location = useLocation();
+
+  const isAuthPage = ["/login", "/signup"].includes(location.pathname);
+
   return (
-    <BrowserRouter>
+    <>
       <ToastContainer
         position="top-right"
         autoClose={2200}
@@ -29,7 +37,7 @@ function App() {
       />
       <ScrollToTop />
       <div className="app">
-        <Navbar />
+        {!isAuthPage && <Navbar />}
 
         <main>
           <Routes>
@@ -47,13 +55,26 @@ function App() {
 
             <Route path="/contact" element={<ContactPage />} />
 
+            <Route path="/profile" element={<ProfilePage />} />
+
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login" element={<LoginPage />} />
+
             {/* <Route path="/admin" element={<AdminDashboard />} /> */}
           </Routes>
         </main>
 
-        <Footer />
-        <FloatingSocials />
+        {!isAuthPage && <Footer />}
+        {!isAuthPage && <FloatingSocials />}
       </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppLayout />
     </BrowserRouter>
   );
 }

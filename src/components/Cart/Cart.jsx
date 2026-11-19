@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -19,6 +19,7 @@ import products from "../../data/products";
 import "./Cart.css";
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const getCartItemKey = (item) =>
     item.variantKey ||
     `${item.id ?? item.productId}-${JSON.stringify(item.selectedOptions || {})}`;
@@ -105,6 +106,16 @@ const CartPage = () => {
     message: "",
   });
 
+  const [customerAccount, setCustomerAccount] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("littleWondersCustomer") || "null");
+    } catch {
+      return null;
+    }
+  });
+
+  const getCustomerToken = () => localStorage.getItem("littleWondersCustomerToken");
+
   const [checkoutForm, setCheckoutForm] = useState({
     name: "",
 
@@ -120,6 +131,22 @@ const CartPage = () => {
 
     notes: "",
   });
+
+  useEffect(() => {
+    const syncCustomer = () => {
+      try {
+        setCustomerAccount(JSON.parse(localStorage.getItem("littleWondersCustomer") || "null"));
+      } catch {
+        setCustomerAccount(null);
+      }
+    };
+    window.addEventListener("storage", syncCustomer);
+    window.addEventListener("customerAuthChanged", syncCustomer);
+    return () => {
+      window.removeEventListener("storage", syncCustomer);
+      window.removeEventListener("customerAuthChanged", syncCustomer);
+    };
+  }, []);
 
   const handleCheckoutChange = (event) => {
     const { name, value } = event.target;
@@ -146,51 +173,22 @@ const CartPage = () => {
       return;
     }
 
-    const { name, phone, email, address, city, pincode, notes } = checkoutForm;
-
-    if (
-      !name.trim() ||
-      !phone.trim() ||
-      !address.trim() ||
-      !city.trim() ||
-      !pincode.trim()
-    ) {
-      setOrderStatus({
-        type: "error",
-
-        message: "Please complete all required fields.",
-      });
-
+    const token = getCustomerToken();
+    if (!token) {
+      setShowCheckout(false);
+      navigate(`/signup?redirect=${encodeURIComponent("/cart")}`);
       return;
     }
 
-    if (!/^[0-9]{10}$/.test(phone.trim())) {
-      setOrderStatus({
-        type: "error",
+    const { address, city, pincode, notes } = checkoutForm;
 
-        message: "Please enter a valid 10-digit phone number.",
-      });
-
+    if (!address.trim() || !city.trim() || !pincode.trim()) {
+      setOrderStatus({ type: "error", message: "Please complete all required delivery fields." });
       return;
     }
 
     if (!/^[0-9]{6}$/.test(pincode.trim())) {
-      setOrderStatus({
-        type: "error",
-
-        message: "Please enter a valid 6-digit PIN code.",
-      });
-
-      return;
-    }
-
-    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setOrderStatus({
-        type: "error",
-
-        message: "Please enter a valid email address.",
-      });
-
+      setOrderStatus({ type: "error", message: "Please enter a valid 6-digit PIN code." });
       return;
     }
 
@@ -230,16 +228,11 @@ const CartPage = () => {
 
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
 
         body: JSON.stringify({
           customer: {
-            name: name.trim(),
-
-            phone: phone.trim(),
-
-            email: email.trim(),
-
             address: address.trim(),
 
             city: city.trim(),
@@ -266,9 +259,9 @@ const CartPage = () => {
       // Keep a snapshot for the confirmation screen before clearing the cart/form.
       setSubmittedOrder({
         customer: {
-          name: name.trim(),
-          phone: phone.trim(),
-          email: email.trim(),
+          name: customerAccount?.name || "Customer",
+          phone: customerAccount?.phone || "",
+          email: customerAccount?.email || "",
           address: address.trim(),
           city: city.trim(),
           pincode: pincode.trim(),
@@ -689,7 +682,10 @@ const CartPage = () => {
                   className="checkout-button"
                   onClick={() => {
                     setOrderStatus({ type: "", message: "" });
-
+                    if (!getCustomerToken()) {
+                      navigate(`/signup?redirect=${encodeURIComponent("/cart")}`);
+                      return;
+                    }
                     setShowCheckout(true);
                   }}
                 >
@@ -895,58 +891,21 @@ const CartPage = () => {
               <form className="checkout-form" onSubmit={handleCheckoutSubmit}>
                 <div className="checkout-form-section-title">
                   <span>01</span>
-                  Your contact details
+                  Your account details
                 </div>
 
                 <div className="checkout-form-grid">
                   <div className="checkout-field">
-                    <label htmlFor="checkout-name">Full name *</label>
-
-                    <input
-                      id="checkout-name"
-                      name="name"
-                      value={checkoutForm.name}
-                      onChange={handleCheckoutChange}
-                      placeholder="Enter your full name"
-                      autoComplete="name"
-                      maxLength={100}
-                      required
-                    />
+                    <label>Full name</label>
+                    <input value={customerAccount?.name || "Signed-in customer"} readOnly />
                   </div>
-
                   <div className="checkout-field">
-                    <label htmlFor="checkout-phone">Phone number *</label>
-
-                    <input
-                      id="checkout-phone"
-                      name="phone"
-                      type="tel"
-                      value={checkoutForm.phone}
-                      onChange={handleCheckoutChange}
-                      placeholder="10-digit mobile number"
-                      autoComplete="tel"
-                      inputMode="numeric"
-                      pattern="[0-9]{10}"
-                      maxLength={10}
-                      required
-                    />
+                    <label>Phone number</label>
+                    <input value={customerAccount?.phone || ""} readOnly />
                   </div>
-
                   <div className="checkout-field checkout-field-full">
-                    <label htmlFor="checkout-email">
-                      Email address <span>(optional)</span>
-                    </label>
-
-                    <input
-                      id="checkout-email"
-                      name="email"
-                      type="email"
-                      value={checkoutForm.email}
-                      onChange={handleCheckoutChange}
-                      placeholder="you@example.com"
-                      autoComplete="email"
-                      maxLength={254}
-                    />
+                    <label>Email address</label>
+                    <input value={customerAccount?.email || ""} readOnly />
                   </div>
                 </div>
 

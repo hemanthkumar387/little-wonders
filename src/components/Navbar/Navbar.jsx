@@ -1,13 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCartShopping,
+  faCircleUser,
+} from "@fortawesome/free-solid-svg-icons";
 import "./Navbar.css";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const mobileMenuRef = useRef(null);
   const menuToggleRef = useRef(null);
+
+  const isCustomerLoggedIn = Boolean(
+    localStorage.getItem("littleWondersCustomerToken"),
+  );
 
   // Get the total quantity of items in the cart
   const getCartCount = () => {
@@ -124,6 +131,13 @@ const Navbar = () => {
           </nav>
         </div>
 
+        {isCustomerLoggedIn && (
+          <Link to="/profile" className="profile-link" aria-label="My Profile">
+            <FontAwesomeIcon icon={faCircleUser} />
+            <span>Profile</span>
+          </Link>
+        )}
+
         {/* Cart stays beside the hamburger on mobile */}
         <NavLink
           to="/cart"
@@ -185,6 +199,16 @@ const Navbar = () => {
         <NavLink to="/contact" className={mobileLinkClass} onClick={closeMenu}>
           Contact
         </NavLink>
+
+        {isCustomerLoggedIn && (
+          <NavLink
+            to="/profile"
+            className={mobileLinkClass}
+            onClick={closeMenu}
+          >
+            My Profile
+          </NavLink>
+        )}
       </nav>
     </header>
   );

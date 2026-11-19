@@ -290,8 +290,8 @@ const products = [
     tag: "Keychain",
     description: "A delicate handmade bow keychain.",
     price: 50,
-    image: "/myimages/keychain5.jpeg",
-    images: ["/myimages/keychain5.jpeg"],
+    image: "/myimages/Bow2.jpeg",
+    images: ["/myimages/Bow2.jpeg","/myimages/Bow3.jpeg"],
     options: [
       {
         id: "size",
@@ -319,8 +319,8 @@ const products = [
         type: "select",
         required: true,
         choices: [
-          { label: "Blue", value: "blue" },
           { label: "Yellow", value: "yellow" },
+          { label: "Blue", value: "blue" },
           { label: "Red", value: "red" },
           { label: "Light Blue", value: "light blue" },
           { label: "Pink", value: "pink" },
@@ -562,6 +562,16 @@ const products = [
         ],
       },
     ]
+  },
+  {
+    id: 17,
+    name: "Doremon Keychain",
+    category: "Keychains",
+    tag: "Keychain",
+    description: "",
+    price: 200,
+    image: "/myimages/Doremon.jpeg",
+    images: ["/myimages/Doremon.jpeg","/myimages/Doremon1.jpeg","/myimages/Doremon2.jpeg","/myimages/Doremon3.jpeg"],
   },
 ];
 
