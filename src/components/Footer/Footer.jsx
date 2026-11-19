@@ -99,15 +99,15 @@ const Footer = () => {
 
           <div className="footer-column">
             <h3>Connect</h3>
-            <Link to="https://ig.me/m/littlewonders_04">Instagram</Link>
-            <Link to="https://wa.me/+919398723651?text=Hi">WhatsApp</Link>
-            <Link
+            <a to="https://ig.me/m/littlewonders_04">Instagram</a>
+            <a to="https://wa.me/+919398723651?text=Hi">WhatsApp</a>
+            <a
               to="https://mail.google.com/mail/?view=cm&fs=1&to=littlewonders0426@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
             >
               Email
-            </Link>
+            </a>
           </div>
         </div>
       </div>
