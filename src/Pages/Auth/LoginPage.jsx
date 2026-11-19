@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import "./AuthPages.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -42,12 +44,20 @@ export default function LoginPage() {
       });
       const result = await response.json();
 
-      if (!response.ok || !result.success || !result.token || !result.customer) {
+      if (
+        !response.ok ||
+        !result.success ||
+        !result.token ||
+        !result.customer
+      ) {
         throw new Error(result.message || "Invalid email or password.");
       }
 
       localStorage.setItem("littleWondersCustomerToken", result.token);
-      localStorage.setItem("littleWondersCustomer", JSON.stringify(result.customer));
+      localStorage.setItem(
+        "littleWondersCustomer",
+        JSON.stringify(result.customer),
+      );
       window.dispatchEvent(new Event("customerAuthChanged"));
       toast.success("Welcome back to LittleWonders!");
       navigate(getRedirectPath(searchParams), { replace: true });
@@ -60,16 +70,16 @@ export default function LoginPage() {
 
   return (
     <section className="lw-auth-page">
-      <div className="lw-auth-decoration lw-auth-decoration-one" aria-hidden="true" />
-      <div className="lw-auth-decoration lw-auth-decoration-two" aria-hidden="true" />
+      <div
+        className="lw-auth-decoration lw-auth-decoration-one"
+        aria-hidden="true"
+      />
+      <div
+        className="lw-auth-decoration lw-auth-decoration-two"
+        aria-hidden="true"
+      />
 
       <div className="lw-auth-card lw-auth-card-login">
-        <div className="lw-auth-brand">
-          <span className="lw-auth-brand-mark">✿</span>
-          <span className="lw-auth-brand-name">LittleWonders</span>
-          <span className="lw-auth-brand-tagline">CREATE WITH LOVE</span>
-        </div>
-
         <div className="lw-auth-heading">
           <p className="lw-auth-eyebrow">WELCOME BACK</p>
           <h1>Good to see you again</h1>
@@ -103,22 +113,39 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 required
               />
-              <button type="button" className="lw-auth-show-password" onClick={() => setShowPassword((value) => !value)}>
+              <button
+                type="button"
+                className="lw-auth-show-password"
+                onClick={() => setShowPassword((value) => !value)}
+              >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
           </label>
 
           <button className="lw-auth-submit" type="submit" disabled={loading}>
-            {loading ? "Logging you in..." : "Log in"}
-            {!loading && <span aria-hidden="true">→</span>}
+            {loading ? (
+              "Logging you in..."
+            ) : (
+              <>
+                Log in
+                <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" />
+              </>
+            )}
           </button>
         </form>
 
         <p className="lw-auth-switch">
-          New to LittleWonders? <Link to={`/signup${searchParams.get("redirect") ? `?redirect=${encodeURIComponent(searchParams.get("redirect"))}` : ""}`}>Create an account</Link>
+          New to LittleWonders?{" "}
+          <Link
+            to={`/signup${searchParams.get("redirect") ? `?redirect=${encodeURIComponent(searchParams.get("redirect"))}` : ""}`}
+          >
+            Create an account
+          </Link>
         </p>
-        <p className="lw-auth-note">Your next handmade favourite is just around the corner.</p>
+        <p className="lw-auth-note">
+          Your next handmade favourite is just around the corner.
+        </p>
       </div>
     </section>
   );

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import "./AuthPages.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -63,12 +65,22 @@ export default function SignupPage() {
       });
       const result = await response.json();
 
-      if (!response.ok || !result.success || !result.token || !result.customer) {
-        throw new Error(result.message || "Unable to create your account. Please try again.");
+      if (
+        !response.ok ||
+        !result.success ||
+        !result.token ||
+        !result.customer
+      ) {
+        throw new Error(
+          result.message || "Unable to create your account. Please try again.",
+        );
       }
 
       localStorage.setItem("littleWondersCustomerToken", result.token);
-      localStorage.setItem("littleWondersCustomer", JSON.stringify(result.customer));
+      localStorage.setItem(
+        "littleWondersCustomer",
+        JSON.stringify(result.customer),
+      );
       window.dispatchEvent(new Event("customerAuthChanged"));
       toast.success("Your LittleWonders account is ready!");
       navigate(getRedirectPath(searchParams), { replace: true });
@@ -81,18 +93,17 @@ export default function SignupPage() {
 
   return (
     <section className="lw-auth-page">
-      <div className="lw-auth-decoration lw-auth-decoration-one" aria-hidden="true" />
-      <div className="lw-auth-decoration lw-auth-decoration-two" aria-hidden="true" />
+      <div
+        className="lw-auth-decoration lw-auth-decoration-one"
+        aria-hidden="true"
+      />
+      <div
+        className="lw-auth-decoration lw-auth-decoration-two"
+        aria-hidden="true"
+      />
 
       <div className="lw-auth-card lw-auth-card-signup">
-        <div className="lw-auth-brand">
-          <span className="lw-auth-brand-mark">✿</span>
-          <span className="lw-auth-brand-name">LittleWonders</span>
-          <span className="lw-auth-brand-tagline">CREATE WITH LOVE</span>
-        </div>
-
         <div className="lw-auth-heading">
-          <p className="lw-auth-eyebrow">A LITTLE HELLO, A LOT OF LOVE</p>
           <h1>Create your account</h1>
           <p>Join our little community and make every order special.</p>
         </div>
@@ -154,7 +165,11 @@ export default function SignupPage() {
                 minLength={8}
                 required
               />
-              <button type="button" className="lw-auth-show-password" onClick={() => setShowPassword((value) => !value)}>
+              <button
+                type="button"
+                className="lw-auth-show-password"
+                onClick={() => setShowPassword((value) => !value)}
+              >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
@@ -174,15 +189,28 @@ export default function SignupPage() {
           </label>
 
           <button className="lw-auth-submit" type="submit" disabled={loading}>
-            {loading ? "Creating your account..." : "Create account"}
-            {!loading && <span aria-hidden="true">→</span>}
+            {loading ? (
+              "Creating your account..."
+            ) : (
+              <>
+                Create account
+                <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" />
+              </>
+            )}
           </button>
         </form>
 
         <p className="lw-auth-switch">
-          Already part of LittleWonders? <Link to={`/login${searchParams.get("redirect") ? `?redirect=${encodeURIComponent(searchParams.get("redirect"))}` : ""}`}>Log in</Link>
+          Already part of LittleWonders?{" "}
+          <Link
+            to={`/login${searchParams.get("redirect") ? `?redirect=${encodeURIComponent(searchParams.get("redirect"))}` : ""}`}
+          >
+            Log in
+          </Link>
         </p>
-        <p className="lw-auth-note">Made with care, just like everything at LittleWonders.</p>
+        <p className="lw-auth-note">
+          Made with care, just like everything at LittleWonders.
+        </p>
       </div>
     </section>
   );
