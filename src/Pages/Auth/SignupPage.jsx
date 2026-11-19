@@ -25,6 +25,7 @@ export default function SignupPage() {
     confirmPassword: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
@@ -182,15 +183,26 @@ export default function SignupPage() {
 
           <label className="lw-auth-field">
             <span>Confirm password</span>
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Enter your password again"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              autoComplete="new-password"
-              required
-            />
+
+            <div className="lw-auth-password-wrap">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Enter your password again"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                autoComplete="new-password"
+                required
+              />
+
+              <button
+                type="button"
+                className="lw-auth-show-password"
+                onClick={() => setShowConfirmPassword((value) => !value)}
+              >
+                {showConfirmPassword ? "Hide" : "Show"}
+              </button>
+            </div>
           </label>
 
           <button className="lw-auth-submit" type="submit" disabled={loading}>
