@@ -99,10 +99,10 @@ const Footer = () => {
 
           <div className="footer-column">
             <h3>Connect</h3>
-            <a to="https://ig.me/m/littlewonders_04">Instagram</a>
-            <a to="https://wa.me/+919398723651?text=Hi">WhatsApp</a>
+            <a href="https://ig.me/m/littlewonders_04">Instagram</a>
+            <a href="https://wa.me/+919398723651?text=Hi">WhatsApp</a>
             <a
-              to="https://mail.google.com/mail/?view=cm&fs=1&to=littlewonders0426@gmail.com"
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=littlewonders0426@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
             >
