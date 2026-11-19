@@ -39,7 +39,7 @@ export default function SignupPage() {
     const email = form.email.trim().toLowerCase();
     const phone = form.phone.trim();
 
-    if (!name || !email || !phone || !form.password) {
+    if (!name || !phone || !form.password) {
       toast.error("Please fill in all required fields.");
       return;
     }
@@ -47,6 +47,12 @@ export default function SignupPage() {
       toast.error("Enter a valid 10-digit Indian mobile number.");
       return;
     }
+
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error("Enter a valid email address.");
+      return;
+    }
+
     if (form.password.length < 8) {
       toast.error("Password must be at least 8 characters.");
       return;
@@ -124,7 +130,7 @@ export default function SignupPage() {
           </label>
 
           <label className="lw-auth-field">
-            <span>Email address</span>
+            <span>Email address (Optional)</span>
             <input
               type="email"
               name="email"
@@ -133,7 +139,6 @@ export default function SignupPage() {
               onChange={handleChange}
               autoComplete="email"
               maxLength={254}
-              required
             />
           </label>
 
