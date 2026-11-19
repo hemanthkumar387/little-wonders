@@ -9,7 +9,6 @@ import {
   faChevronUp,
   faCircleUser,
   faLocationDot,
-  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./ProfilePage.css";
@@ -226,15 +225,6 @@ const ProfilePage = () => {
               Manage your details and keep track of your orders.
             </p>
           </div>
-
-          <button
-            type="button"
-            className="profile-logout-button"
-            onClick={logout}
-          >
-            <FontAwesomeIcon icon={faRightFromBracket} />
-            Logout
-          </button>
         </div>
 
         <div className="profile-content">

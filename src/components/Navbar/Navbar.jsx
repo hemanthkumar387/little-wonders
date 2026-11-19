@@ -1,20 +1,29 @@
+
 import { useEffect, useRef, useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCartShopping,
   faCircleUser,
+  faChevronDown,
+  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 import "./Navbar.css";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+
+  const [isCustomerLoggedIn, setIsCustomerLoggedIn] = useState(() =>
+    Boolean(localStorage.getItem("littleWondersCustomerToken"))
+  );
+
   const mobileMenuRef = useRef(null);
   const menuToggleRef = useRef(null);
+  const accountRef = useRef(null);
 
-  const isCustomerLoggedIn = Boolean(
-    localStorage.getItem("littleWondersCustomerToken"),
-  );
+  const navigate = useNavigate();
 
   // Get the total quantity of items in the cart
   const getCartCount = () => {
@@ -29,7 +38,7 @@ const Navbar = () => {
 
       return cartItems.reduce(
         (total, item) => total + (Number(item.quantity) || 1),
-        0,
+        0
       );
     } catch (error) {
       console.error("Failed to load cart count:", error);
@@ -39,14 +48,22 @@ const Navbar = () => {
 
   const [cartCount, setCartCount] = useState(getCartCount);
 
-  // Lock background scrolling while the mobile menu is open
+  // Keep login status updated throughout the application
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    const updateAuthStatus = () => {
+      setIsCustomerLoggedIn(
+        Boolean(localStorage.getItem("littleWondersCustomerToken"))
+      );
+    };
+
+    window.addEventListener("customerAuthChanged", updateAuthStatus);
+    window.addEventListener("storage", updateAuthStatus);
 
     return () => {
-      document.body.style.overflow = "";
+      window.removeEventListener("customerAuthChanged", updateAuthStatus);
+      window.removeEventListener("storage", updateAuthStatus);
     };
-  }, [menuOpen]);
+  }, []);
 
   // Update the cart count when cart data changes
   useEffect(() => {
@@ -63,19 +80,100 @@ const Navbar = () => {
     };
   }, []);
 
-  // Close the menu and return focus to the hamburger button
+  // Lock background scrolling while the mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  // Automatically close mobile menu when switching to tablet/desktop
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 769px)");
+
+    const handleViewportChange = (event) => {
+      if (event.matches) {
+        setMenuOpen(false);
+        setAccountOpen(false);
+        document.body.style.overflow = "";
+      }
+    };
+
+    if (mediaQuery.matches) {
+      setMenuOpen(false);
+      setAccountOpen(false);
+    }
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleViewportChange);
+    } else {
+      mediaQuery.addListener(handleViewportChange);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", handleViewportChange);
+      } else {
+        mediaQuery.removeListener(handleViewportChange);
+      }
+
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  // Close the mobile menu
   const closeMenu = () => {
     setMenuOpen(false);
     menuToggleRef.current?.focus();
   };
 
-  // Close the menu when Escape is pressed
+  // Logout customer
+  const handleLogout = () => {
+    localStorage.removeItem("littleWondersCustomerToken");
+    localStorage.removeItem("littleWondersCustomer");
+
+    setIsCustomerLoggedIn(false);
+    setAccountOpen(false);
+    setMenuOpen(false);
+
+    window.dispatchEvent(new Event("customerAuthChanged"));
+
+    toast.success("You have been logged out successfully.");
+
+    navigate("/");
+  };
+
+  // Close account dropdown when clicking outside
   useEffect(() => {
-    if (!menuOpen) return;
+    const handleOutsideClick = (event) => {
+      if (
+        accountRef.current &&
+        !accountRef.current.contains(event.target)
+      ) {
+        setAccountOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  // Close menus when Escape is pressed
+  useEffect(() => {
+    if (!menuOpen && !accountOpen) return;
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        closeMenu();
+        setAccountOpen(false);
+
+        if (menuOpen) {
+          closeMenu();
+        }
       }
     };
 
@@ -84,7 +182,7 @@ const Navbar = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [menuOpen]);
+  }, [menuOpen, accountOpen]);
 
   // Shared navigation link styling
   const desktopLinkClass = ({ isActive }) =>
@@ -131,17 +229,65 @@ const Navbar = () => {
           </nav>
         </div>
 
-        {isCustomerLoggedIn && (
-          <Link to="/profile" className="profile-link" aria-label="My Profile">
-            <FontAwesomeIcon icon={faCircleUser} />
-            <span>Profile</span>
-          </Link>
-        )}
+        {/* Customer login / account */}
+        <div className="navbar-account" ref={accountRef}>
+          {!isCustomerLoggedIn ? (
+            <Link to="/login" className="navbar-login">
+              <FontAwesomeIcon icon={faCircleUser} />
+              <span>Login</span>
+            </Link>
+          ) : (
+            <div className="account-dropdown-wrapper">
+              <button
+                type="button"
+                className={`navbar-account-button ${
+                  accountOpen ? "account-button-open" : ""
+                }`}
+                onClick={() => setAccountOpen((previous) => !previous)}
+                aria-expanded={accountOpen}
+                aria-haspopup="true"
+              >
+                <FontAwesomeIcon icon={faCircleUser} />
+                <span>My Account</span>
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  className={`account-chevron ${
+                    accountOpen ? "account-chevron-open" : ""
+                  }`}
+                />
+              </button>
 
-        {/* Cart stays beside the hamburger on mobile */}
+              {accountOpen && (
+                <div className="account-dropdown">
+                  <Link
+                    to="/profile"
+                    className="account-dropdown-link"
+                    onClick={() => setAccountOpen(false)}
+                  >
+                    <FontAwesomeIcon icon={faCircleUser} />
+                    <span>My Profile / Orders</span>
+                  </Link>
+
+                  <button
+                    type="button"
+                    className="account-dropdown-logout"
+                    onClick={handleLogout}
+                  >
+                    <FontAwesomeIcon icon={faRightFromBracket} />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Shopping cart */}
         <NavLink
           to="/cart"
-          className={({ isActive }) => `cart-link ${isActive ? "active" : ""}`}
+          className={({ isActive }) =>
+            `cart-link ${isActive ? "active" : ""}`
+          }
           aria-label={`Shopping cart with ${cartCount} items`}
         >
           <FontAwesomeIcon icon={faCartShopping} />
@@ -163,6 +309,7 @@ const Navbar = () => {
               closeMenu();
             } else {
               setMenuOpen(true);
+              setAccountOpen(false);
             }
           }}
           aria-label={menuOpen ? "Close navigation" : "Open navigation"}
@@ -200,13 +347,33 @@ const Navbar = () => {
           Contact
         </NavLink>
 
-        {isCustomerLoggedIn && (
+        {isCustomerLoggedIn ? (
+          <>
+            <NavLink
+              to="/profile"
+              className={mobileLinkClass}
+              onClick={closeMenu}
+            >
+              My Profile / Orders
+            </NavLink>
+
+            <button
+              type="button"
+              className="mobile-logout-button"
+              onClick={handleLogout}
+            >
+              <FontAwesomeIcon icon={faRightFromBracket} />
+              Logout
+            </button>
+          </>
+        ) : (
           <NavLink
-            to="/profile"
-            className={mobileLinkClass}
+            to="/login"
+            className={`${mobileLinkClass} mobile-login-link`}
             onClick={closeMenu}
           >
-            My Profile
+            <FontAwesomeIcon icon={faCircleUser} />
+            Login
           </NavLink>
         )}
       </nav>
