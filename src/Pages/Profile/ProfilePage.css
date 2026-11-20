@@ -1,6 +1,6 @@
 .profile-page {
   min-height: 80vh;
-  padding: 55px 20px 80px;
+  padding: 80px 20px 80px;
   background: #fbf6ef;
   color: #403c38;
 }
@@ -473,7 +473,7 @@
 
 @media (max-width: 700px) {
   .profile-page {
-    padding: 35px 15px 55px;
+    padding: 80px 15px 55px;
   }
 
   .profile-heading {

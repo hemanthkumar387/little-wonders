@@ -1028,3 +1028,39 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* Stack the introduction and review form in one column */
+.lw-review-form-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+}
+
+/* Share your experience section */
+.lw-review-form-intro {
+  width: 100%;
+  max-width: 760px;
+  text-align: center;
+}
+
+/* Review form */
+.lw-review-form {
+  width: 100%;
+  max-width: 760px;
+  box-sizing: border-box;
+}
+
+/* Keep the layout responsive */
+@media (max-width: 768px) {
+  .lw-review-form-section {
+    gap: 20px;
+  }
+
+  .lw-review-form-intro,
+  .lw-review-form {
+    width: 100%;
+  }
+}

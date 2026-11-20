@@ -13,11 +13,22 @@ import "./Review.css";
 const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
 
 const products = [
-  "Flower Bouquets",
-  "Fashion Accessories",
-  "Keychains",
-  "Wrist Bracelets",
-  "Hair Accessories",
+  "Flower Bouquet",
+  "Handmade Bunny Bag",
+  "Morpankh Keychain",
+  "Sunshine Keychain",
+  "Ribbon Bow Keychain",
+  "Star & Moon Keychains",
+  "Bow Keychain",
+  "Flower Bracelet",
+  "Heart Bracelet",
+  "Strawberry Clips",
+  "Cherries Keychain",
+  "Cherries Bracelet",
+  "Cherries Chain",
+  "Coffee Mug Keychain",
+  "Hello Kitty Keychain",
+  "Doremon Keychain",
   "Other",
 ];
 

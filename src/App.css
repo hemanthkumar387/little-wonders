@@ -32,3 +32,29 @@ a {
   overflow-x: hidden;
 }
 
+/* Page loading indicator */
+.page-loader {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  color: #bd684f;
+  font-size: 14px;
+}
+
+.page-loader-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #f0dfd4;
+  border-top-color: #bd684f;
+  border-radius: 50%;
+  animation: pageLoaderSpin 0.8s linear infinite;
+}
+
+@keyframes pageLoaderSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}

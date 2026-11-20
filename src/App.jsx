@@ -1,23 +1,41 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+
+import { lazy, Suspense } from "react";
+
 import Navbar from "./components/Navbar/Navbar";
-import HomePage from "./Pages/HomePage/HomePage";
-import ProductsPage from "./Pages/ProductsPage/ProductsPage";
-import ProductDetails from "./components/ProductDetails/ProductDetails";
-import AboutPage from "./components/AboutPage/AboutPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
-import CartPage from "./components/Cart/Cart";
-import ContactPage from "./components/ContactPage/ContactPage";
 import FloatingSocials from "./components/FloatingSocials/FloatingSocials";
 import Footer from "./components/Footer/Footer";
-import Review from "./components/Review/Review";
-import SignupPage from "./Pages/Auth/SignupPage";
-import LoginPage from "./Pages/Auth/LoginPage";
-import ProfilePage from "./Pages/Profile/ProfilePage";
-// import AdminDashboard from "./admin/AdminDashboard";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
+
+// Lazy-loaded pages and components
+const HomePage = lazy(() => import("./Pages/HomePage/HomePage"));
+const ProductsPage = lazy(() => import("./Pages/ProductsPage/ProductsPage"));
+const ProductDetails = lazy(
+  () => import("./components/ProductDetails/ProductDetails"),
+);
+const AboutPage = lazy(() => import("./components/AboutPage/AboutPage"));
+const CartPage = lazy(() => import("./components/Cart/Cart"));
+const ContactPage = lazy(() => import("./components/ContactPage/ContactPage"));
+const Review = lazy(() => import("./components/Review/Review"));
+const SignupPage = lazy(() => import("./Pages/Auth/SignupPage"));
+const LoginPage = lazy(() => import("./Pages/Auth/LoginPage"));
+const ProfilePage = lazy(() => import("./Pages/Profile/ProfilePage"));
+const NotFound = lazy(() => import("./Pages/NotFound/NotFound"));
+
+// Loading component
+function PageLoader() {
+  return (
+    <div className="page-loader">
+      <div className="page-loader-spinner"></div>
+      <p>Loading LittleWonders...</p>
+    </div>
+  );
+}
 
 function AppLayout() {
   const location = useLocation();
@@ -35,33 +53,39 @@ function AppLayout() {
         pauseOnHover
         draggable
       />
+
       <ScrollToTop />
+
       <div className="app">
         {!isAuthPage && <Navbar />}
 
         <main>
-          <Routes>
-            {/* HOME */}
-            <Route path="/" element={<HomePage />} />
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              {/* HOME */}
+              <Route path="/" element={<HomePage />} />
 
-            {/* PRODUCTS */}
-            <Route path="/products" element={<ProductsPage />} />
+              {/* PRODUCTS */}
+              <Route path="/products" element={<ProductsPage />} />
+              <Route path="/products/:id" element={<ProductDetails />} />
 
-            <Route path="/products/:id" element={<ProductDetails />} />
+              {/* OTHER PAGES */}
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/reviews" element={<Review />} />
 
-            <Route path="/about" element={<AboutPage />} />
+              {/* AUTH */}
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              {/* 404 - PAGE NOT FOUND */}
+              <Route path="*" element={<NotFound />} />
 
-            <Route path="/cart" element={<CartPage />} />
-
-            <Route path="/contact" element={<ContactPage />} />
-
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/reviews" element={<Review />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/login" element={<LoginPage />} />
-
-            {/* <Route path="/admin" element={<AdminDashboard />} /> */}
-          </Routes>
+              {/* ADMIN */}
+              {/* <Route path="/admin" element={<AdminDashboard />} /> */}
+            </Routes>
+          </Suspense>
         </main>
 
         {!isAuthPage && <Footer />}
