@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,7 +15,7 @@ const Navbar = () => {
   const [accountOpen, setAccountOpen] = useState(false);
 
   const [isCustomerLoggedIn, setIsCustomerLoggedIn] = useState(() =>
-    Boolean(localStorage.getItem("littleWondersCustomerToken"))
+    Boolean(localStorage.getItem("littleWondersCustomerToken")),
   );
 
   const mobileMenuRef = useRef(null);
@@ -38,7 +37,7 @@ const Navbar = () => {
 
       return cartItems.reduce(
         (total, item) => total + (Number(item.quantity) || 1),
-        0
+        0,
       );
     } catch (error) {
       console.error("Failed to load cart count:", error);
@@ -52,7 +51,7 @@ const Navbar = () => {
   useEffect(() => {
     const updateAuthStatus = () => {
       setIsCustomerLoggedIn(
-        Boolean(localStorage.getItem("littleWondersCustomerToken"))
+        Boolean(localStorage.getItem("littleWondersCustomerToken")),
       );
     };
 
@@ -148,10 +147,7 @@ const Navbar = () => {
   // Close account dropdown when clicking outside
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (
-        accountRef.current &&
-        !accountRef.current.contains(event.target)
-      ) {
+      if (accountRef.current && !accountRef.current.contains(event.target)) {
         setAccountOpen(false);
       }
     };
@@ -223,6 +219,10 @@ const Navbar = () => {
               Products
             </NavLink>
 
+            <NavLink to="/reviews" className={desktopLinkClass}>
+              Reviews
+            </NavLink>
+
             <NavLink to="/contact" className={desktopLinkClass}>
               Contact
             </NavLink>
@@ -285,9 +285,7 @@ const Navbar = () => {
         {/* Shopping cart */}
         <NavLink
           to="/cart"
-          className={({ isActive }) =>
-            `cart-link ${isActive ? "active" : ""}`
-          }
+          className={({ isActive }) => `cart-link ${isActive ? "active" : ""}`}
           aria-label={`Shopping cart with ${cartCount} items`}
         >
           <FontAwesomeIcon icon={faCartShopping} />
@@ -341,6 +339,10 @@ const Navbar = () => {
 
         <NavLink to="/products" className={mobileLinkClass} onClick={closeMenu}>
           Products
+        </NavLink>
+
+        <NavLink to="/reviews" className={mobileLinkClass} onClick={closeMenu}>
+          Reviews
         </NavLink>
 
         <NavLink to="/contact" className={mobileLinkClass} onClick={closeMenu}>

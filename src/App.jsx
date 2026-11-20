@@ -9,7 +9,7 @@ import CartPage from "./components/Cart/Cart";
 import ContactPage from "./components/ContactPage/ContactPage";
 import FloatingSocials from "./components/FloatingSocials/FloatingSocials";
 import Footer from "./components/Footer/Footer";
-
+import Review from "./components/Review/Review";
 import SignupPage from "./Pages/Auth/SignupPage";
 import LoginPage from "./Pages/Auth/LoginPage";
 import ProfilePage from "./Pages/Profile/ProfilePage";
@@ -56,7 +56,7 @@ function AppLayout() {
             <Route path="/contact" element={<ContactPage />} />
 
             <Route path="/profile" element={<ProfilePage />} />
-
+            <Route path="/reviews" element={<Review />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
 
