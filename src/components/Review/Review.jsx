@@ -1,3 +1,4 @@
+
 import { useEffect, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,6 +11,8 @@ import { toast } from "react-toastify";
 import "./Review.css";
 
 const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+
+const REVIEW_CACHE_KEY = "littleWondersReviews";
 
 const products = [
   "Flower Bouquet",
@@ -30,6 +33,34 @@ const products = [
   "Doremon Keychain",
   "Other",
 ];
+
+// Read cached reviews from the current browser tab session.
+const getCachedReviews = () => {
+  try {
+    const cached = sessionStorage.getItem(REVIEW_CACHE_KEY);
+
+    if (!cached) return null;
+
+    const parsed = JSON.parse(cached);
+
+    return Array.isArray(parsed) ? parsed : null;
+  } catch (error) {
+    console.error("Unable to read cached reviews:", error);
+    return null;
+  }
+};
+
+// Save approved reviews to the current browser tab session.
+const cacheReviews = (reviews) => {
+  try {
+    sessionStorage.setItem(
+      REVIEW_CACHE_KEY,
+      JSON.stringify(reviews),
+    );
+  } catch (error) {
+    console.error("Unable to cache reviews:", error);
+  }
+};
 
 const StarRating = ({ rating, size = "normal" }) => (
   <div
@@ -72,12 +103,22 @@ const ReviewPageLoader = () => (
 );
 
 export default function Review() {
-  const [reviews, setReviews] = useState([]);
+  // Read the cache only once when the component is first mounted.
+  const [cachedReviews] = useState(() => getCachedReviews());
+
+  const [reviews, setReviews] = useState(
+    () => cachedReviews || [],
+  );
+
   const [activeFilter, setActiveFilter] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [submitting, setSubmitting] = useState(false);
-  const [loadingReviews, setLoadingReviews] = useState(true);
+
+  // Show the loader only when there is no cached data.
+  const [loadingReviews, setLoadingReviews] = useState(
+    () => cachedReviews === null,
+  );
 
   const [form, setForm] = useState({
     name: "",
@@ -85,14 +126,23 @@ export default function Review() {
     message: "",
   });
 
-  // Fetch reviews from backend when the page loads.
-  // Only approved reviews are displayed publicly.
+  // Fetch reviews from backend.
+  // Cached reviews remain visible while fresh data is fetched.
   useEffect(() => {
+    let isMounted = true;
+
     const fetchReviews = async () => {
       if (!API_URL) {
         console.error("VITE_API_URL is not configured.");
-        toast.error("Backend API URL is not configured.");
-        setLoadingReviews(false);
+
+        if (isMounted) {
+          if (!getCachedReviews()) {
+            toast.error("Backend API URL is not configured.");
+          }
+
+          setLoadingReviews(false);
+        }
+
         return;
       }
 
@@ -113,26 +163,45 @@ export default function Review() {
           throw new Error("Invalid reviews response from server.");
         }
 
-        const approved = fetchedReviews.filter(isApproved).map((review) => ({
-          ...review,
-          id: review.id || review._id,
-          date: formatReviewDate(review.date || review.createdAt),
-        }));
+        const approved = fetchedReviews
+          .filter(isApproved)
+          .map((review) => ({
+            ...review,
+            id: review.id || review._id,
+            date: formatReviewDate(
+              review.date || review.createdAt,
+            ),
+          }));
+
+        if (!isMounted) return;
 
         setReviews(approved);
+        cacheReviews(approved);
       } catch (error) {
         console.error("Error fetching reviews:", error);
-        toast.error("Unable to load customer reviews.");
+
+        if (isMounted && !getCachedReviews()) {
+          toast.error("Unable to load customer reviews.");
+        }
       } finally {
-        setLoadingReviews(false);
+        if (isMounted) {
+          setLoadingReviews(false);
+        }
       }
     };
 
     fetchReviews();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Only approved reviews are used throughout the public page.
-  const approvedReviews = useMemo(() => reviews.filter(isApproved), [reviews]);
+  const approvedReviews = useMemo(
+    () => reviews.filter(isApproved),
+    [reviews],
+  );
 
   const totalReviews = approvedReviews.length;
 
@@ -178,7 +247,9 @@ export default function Review() {
     const message = form.message.trim();
 
     if (!name || !form.product || !message || !selectedRating) {
-      toast.error("Please complete all review fields and select a rating.");
+      toast.error(
+        "Please complete all review fields and select a rating.",
+      );
       return;
     }
 
@@ -188,7 +259,9 @@ export default function Review() {
     }
 
     if (message.length < 10) {
-      toast.error("Please write at least 10 characters in your review.");
+      toast.error(
+        "Please write at least 10 characters in your review.",
+      );
       return;
     }
 
@@ -223,7 +296,9 @@ export default function Review() {
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok || result.success === false) {
-        throw new Error(result.message || "Unable to submit your review.");
+        throw new Error(
+          result.message || "Unable to submit your review.",
+        );
       }
 
       const savedReview =
@@ -241,7 +316,13 @@ export default function Review() {
       // Add immediately only if the backend explicitly marks it Approved.
       // Normally, new reviews should have Pending status.
       if (isApproved(newReview)) {
-        setReviews((current) => [newReview, ...current]);
+        setReviews((current) => {
+          const updatedReviews = [newReview, ...current];
+
+          cacheReviews(updatedReviews);
+
+          return updatedReviews;
+        });
       }
 
       setForm({
@@ -260,12 +341,16 @@ export default function Review() {
       );
     } catch (error) {
       console.error("Review submission error:", error);
-      toast.error(error.message || "Unable to submit your review.");
+
+      toast.error(
+        error.message || "Unable to submit your review.",
+      );
     } finally {
       setSubmitting(false);
     }
   };
 
+  // Show the full-page loader only on the first visit without cached reviews.
   if (loadingReviews) {
     return <ReviewPageLoader />;
   }
@@ -285,8 +370,8 @@ export default function Review() {
         </h1>
 
         <p>
-          Every little creation has a story. Discover what our lovely customers
-          have to say about their LittleWonders experience.
+          Every little creation has a story. Discover what our lovely
+          customers have to say about their LittleWonders experience.
         </p>
 
         <div className="lw-review-heading-decoration">
@@ -300,7 +385,10 @@ export default function Review() {
       <section className="lw-review-summary">
         <div className="lw-review-summary-main">
           <div className="lw-review-summary-title">
-            <span className="lw-review-section-label">THE LOVE WE RECEIVE</span>
+            <span className="lw-review-section-label">
+              THE LOVE WE RECEIVE
+            </span>
+
             <h2>Customer happiness</h2>
           </div>
 
@@ -308,9 +396,15 @@ export default function Review() {
             {totalReviews > 0 ? (
               <>
                 <strong>{averageRating}</strong>
+
                 <div>
-                  <StarRating rating={Math.round(Number(averageRating))} />
-                  <span>Out of 5 based on {totalReviews} reviews</span>
+                  <StarRating
+                    rating={Math.round(Number(averageRating))}
+                  />
+
+                  <span>
+                    Out of 5 based on {totalReviews} reviews
+                  </span>
                 </div>
               </>
             ) : (
@@ -326,7 +420,9 @@ export default function Review() {
 
         <div className="lw-review-rating-breakdown">
           {ratingCounts.map(({ rating, count }) => {
-            const percentage = totalReviews ? (count / totalReviews) * 100 : 0;
+            const percentage = totalReviews
+              ? (count / totalReviews) * 100
+              : 0;
 
             return (
               <div className="lw-rating-row" key={rating}>
@@ -363,10 +459,14 @@ export default function Review() {
 
             <h2>Words from our customers</h2>
 
-            <p>Little moments of happiness shared by our community.</p>
+            <p>
+              Little moments of happiness shared by our community.
+            </p>
           </div>
 
-          <div className="lw-review-list-count">{totalReviews} reviews</div>
+          <div className="lw-review-list-count">
+            {totalReviews} reviews
+          </div>
         </div>
 
         {/* Review filters */}
@@ -391,11 +491,7 @@ export default function Review() {
         </div>
 
         {/* Approved review cards only */}
-        {loadingReviews ? (
-          <div className="lw-review-empty">
-            <p>Loading customer reviews...</p>
-          </div>
-        ) : filteredReviews.length > 0 ? (
+        {filteredReviews.length > 0 ? (
           <div className="lw-review-grid">
             {filteredReviews.map((review) => (
               <article className="lw-review-card" key={review.id}>
@@ -417,7 +513,9 @@ export default function Review() {
 
                 <StarRating rating={Number(review.rating)} />
 
-                <p className="lw-review-message">{review.message}</p>
+                <p className="lw-review-message">
+                  {review.message}
+                </p>
 
                 <div className="lw-review-product">
                   <span>PRODUCT</span>
@@ -443,7 +541,10 @@ export default function Review() {
             </p>
 
             {activeFilter !== 0 && (
-              <button type="button" onClick={() => setActiveFilter(0)}>
+              <button
+                type="button"
+                onClick={() => setActiveFilter(0)}
+              >
                 View all reviews
               </button>
             )}
@@ -452,24 +553,36 @@ export default function Review() {
       </section>
 
       {/* Review form */}
-      <section className="lw-review-form-section" id="write-review">
+      <section
+        className="lw-review-form-section"
+        id="write-review"
+      >
         <div className="lw-review-form-intro">
-          <span className="lw-review-section-label">YOUR WORDS MATTER</span>
+          <span className="lw-review-section-label">
+            YOUR WORDS MATTER
+          </span>
 
           <h2>Share your experience</h2>
 
           <p>
-            Have you received something from LittleWonders? We'd love to know
-            what you think. Your feedback helps our little business grow.
+            Have you received something from LittleWonders? We'd love
+            to know what you think. Your feedback helps our little
+            business grow.
           </p>
 
           <div className="lw-review-form-note">
             <FontAwesomeIcon icon={faHeart} />
-            <span>Thank you for supporting handmade creations.</span>
+
+            <span>
+              Thank you for supporting handmade creations.
+            </span>
           </div>
         </div>
 
-        <form className="lw-review-form" onSubmit={handleSubmit}>
+        <form
+          className="lw-review-form"
+          onSubmit={handleSubmit}
+        >
           <div className="lw-review-form-title">
             <h3>Write a review</h3>
             <span>Fields marked * are required</span>
@@ -586,7 +699,8 @@ export default function Review() {
           </button>
 
           <p className="lw-review-privacy-note">
-            Your review will be checked by our team before appearing publicly.
+            Your review will be checked by our team before appearing
+            publicly.
           </p>
         </form>
       </section>
