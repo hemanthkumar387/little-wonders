@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -64,6 +63,14 @@ const formatReviewDate = (date) => {
 const isApproved = (review) =>
   String(review.status || "").toLowerCase() === "approved";
 
+const ReviewPageLoader = () => (
+  <div className="lw-review-page-loader">
+    <div className="lw-review-loader-spinner"></div>
+    <h3>Loading LittleWonders...</h3>
+    <p>Gathering lovely customer experiences for you.</p>
+  </div>
+);
+
 export default function Review() {
   const [reviews, setReviews] = useState([]);
   const [activeFilter, setActiveFilter] = useState(0);
@@ -106,13 +113,11 @@ export default function Review() {
           throw new Error("Invalid reviews response from server.");
         }
 
-        const approved = fetchedReviews
-          .filter(isApproved)
-          .map((review) => ({
-            ...review,
-            id: review.id || review._id,
-            date: formatReviewDate(review.date || review.createdAt),
-          }));
+        const approved = fetchedReviews.filter(isApproved).map((review) => ({
+          ...review,
+          id: review.id || review._id,
+          date: formatReviewDate(review.date || review.createdAt),
+        }));
 
         setReviews(approved);
       } catch (error) {
@@ -127,10 +132,7 @@ export default function Review() {
   }, []);
 
   // Only approved reviews are used throughout the public page.
-  const approvedReviews = useMemo(
-    () => reviews.filter(isApproved),
-    [reviews],
-  );
+  const approvedReviews = useMemo(() => reviews.filter(isApproved), [reviews]);
 
   const totalReviews = approvedReviews.length;
 
@@ -141,7 +143,7 @@ export default function Review() {
           0,
         ) / totalReviews
       ).toFixed(1)
-    : "0.0";
+    : null;
 
   const ratingCounts = useMemo(() => {
     return [5, 4, 3, 2, 1].map((rating) => ({
@@ -264,6 +266,10 @@ export default function Review() {
     }
   };
 
+  if (loadingReviews) {
+    return <ReviewPageLoader />;
+  }
+
   return (
     <main className="lw-review-page">
       {/* Page heading */}
@@ -294,19 +300,25 @@ export default function Review() {
       <section className="lw-review-summary">
         <div className="lw-review-summary-main">
           <div className="lw-review-summary-title">
-            <span className="lw-review-section-label">
-              THE LOVE WE RECEIVE
-            </span>
+            <span className="lw-review-section-label">THE LOVE WE RECEIVE</span>
             <h2>Customer happiness</h2>
           </div>
 
           <div className="lw-review-average">
-            <strong>{averageRating}</strong>
-
-            <div>
-              <StarRating rating={Math.round(Number(averageRating))} />
-              <span>Out of 5 based on {totalReviews} reviews</span>
-            </div>
+            {totalReviews > 0 ? (
+              <>
+                <strong>{averageRating}</strong>
+                <div>
+                  <StarRating rating={Math.round(Number(averageRating))} />
+                  <span>Out of 5 based on {totalReviews} reviews</span>
+                </div>
+              </>
+            ) : (
+              <div className="lw-review-no-rating">
+                <strong>—</strong>
+                <span>No ratings yet</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -314,9 +326,7 @@ export default function Review() {
 
         <div className="lw-review-rating-breakdown">
           {ratingCounts.map(({ rating, count }) => {
-            const percentage = totalReviews
-              ? (count / totalReviews) * 100
-              : 0;
+            const percentage = totalReviews ? (count / totalReviews) * 100 : 0;
 
             return (
               <div className="lw-rating-row" key={rating}>
@@ -353,14 +363,10 @@ export default function Review() {
 
             <h2>Words from our customers</h2>
 
-            <p>
-              Little moments of happiness shared by our community.
-            </p>
+            <p>Little moments of happiness shared by our community.</p>
           </div>
 
-          <div className="lw-review-list-count">
-            {totalReviews} reviews
-          </div>
+          <div className="lw-review-list-count">{totalReviews} reviews</div>
         </div>
 
         {/* Review filters */}
@@ -448,9 +454,7 @@ export default function Review() {
       {/* Review form */}
       <section className="lw-review-form-section" id="write-review">
         <div className="lw-review-form-intro">
-          <span className="lw-review-section-label">
-            YOUR WORDS MATTER
-          </span>
+          <span className="lw-review-section-label">YOUR WORDS MATTER</span>
 
           <h2>Share your experience</h2>
 
@@ -461,9 +465,7 @@ export default function Review() {
 
           <div className="lw-review-form-note">
             <FontAwesomeIcon icon={faHeart} />
-            <span>
-              Thank you for supporting handmade creations.
-            </span>
+            <span>Thank you for supporting handmade creations.</span>
           </div>
         </div>
 

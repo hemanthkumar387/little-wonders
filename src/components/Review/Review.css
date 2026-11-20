@@ -1064,3 +1064,45 @@
     width: 100%;
   }
 }
+
+/* Full page loading screen */
+.lw-review-page-loader {
+  min-height: 70vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  background: #fbf7f1;
+}
+
+.lw-review-loader-spinner {
+  width: 42px;
+  height: 42px;
+  border: 4px solid #f0dfd4;
+  border-top-color: #bd684f;
+  border-radius: 50%;
+  animation: lwReviewSpin 0.8s linear infinite;
+}
+
+.lw-review-page-loader h3 {
+  margin: 20px 0 8px;
+  color: #493d35;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.lw-review-page-loader p {
+  margin: 0;
+  color: #89796e;
+  font-size: 14px;
+}
+
+@keyframes lwReviewSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
