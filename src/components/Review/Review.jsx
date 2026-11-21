@@ -97,7 +97,7 @@ const isApproved = (review) =>
 const ReviewPageLoader = () => (
   <div className="lw-review-page-loader">
     <div className="lw-review-loader-spinner"></div>
-    <h3>Loading LittleWonders...</h3>
+    {/* <h3>Loading LittleWonders...</h3> */}
     <p>Gathering lovely customer experiences for you.</p>
   </div>
 );

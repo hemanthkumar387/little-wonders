@@ -1,11 +1,12 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 import Navbar from "./components/Navbar/Navbar";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import FloatingSocials from "./components/FloatingSocials/FloatingSocials";
 import Footer from "./components/Footer/Footer";
+import Review from "./components/Review/Review";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,7 +22,6 @@ const ProductDetails = lazy(
 const AboutPage = lazy(() => import("./components/AboutPage/AboutPage"));
 const CartPage = lazy(() => import("./components/Cart/Cart"));
 const ContactPage = lazy(() => import("./components/ContactPage/ContactPage"));
-const Review = lazy(() => import("./components/Review/Review"));
 const SignupPage = lazy(() => import("./Pages/Auth/SignupPage"));
 const LoginPage = lazy(() => import("./Pages/Auth/LoginPage"));
 const ProfilePage = lazy(() => import("./Pages/Profile/ProfilePage"));
@@ -79,6 +79,7 @@ function AppLayout() {
               {/* AUTH */}
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/login" element={<LoginPage />} />
+
               {/* 404 - PAGE NOT FOUND */}
               <Route path="*" element={<NotFound />} />
 
