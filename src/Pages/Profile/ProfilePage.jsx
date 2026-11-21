@@ -9,6 +9,11 @@ import {
   faChevronUp,
   faCircleUser,
   faLocationDot,
+  faWallet,
+  faCheckCircle,
+  faClock,
+  faHourglassHalf,
+  faRefresh,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./ProfilePage.css";
@@ -23,16 +28,13 @@ const getStoredCustomer = () => {
   }
 };
 
-// Safely parse API responses
 const parseResponse = async (response) => {
   const text = await response.text();
 
   try {
     return text ? JSON.parse(text) : {};
   } catch {
-    throw new Error(
-      "Invalid server response. Please check your backend API and try again."
-    );
+    throw new Error("Invalid server response. Please try again.");
   }
 };
 
@@ -54,10 +56,9 @@ const formatDate = (date) => {
 
 const formatMoney = (amount) => {
   const value = Number(amount);
-
-  return `₹${(
-    Number.isFinite(value) ? value : 0
-  ).toLocaleString("en-IN")}`;
+  return `₹${(Number.isFinite(value) ? value : 0).toLocaleString("en-IN", {
+    maximumFractionDigits: 2,
+  })}`;
 };
 
 const getOrderItems = (order) => {
@@ -73,19 +74,68 @@ const getItemName = (item) =>
   item.product?.name ||
   "Product";
 
-const getItemQuantity = (item) =>
-  Number(item.quantity || item.qty || 1);
+const getItemQuantity = (item) => Number(item.quantity || item.qty || 1);
 
 const getItemPrice = (item) =>
   Number(item.price || item.unitPrice || item.product?.price || 0);
 
 const getOrderTotal = (order) =>
-  order.totalAmount ??
-  order.total ??
-  order.grandTotal ??
-  order.amount ??
-  order.finalAmount ??
-  0;
+  Number(
+    order.totalAmount ??
+      order.total ??
+      order.grandTotal ??
+      order.amount ??
+      order.finalAmount ??
+      0,
+  );
+
+const getPaymentDetails = (order) => {
+  const total = getOrderTotal(order);
+  const paid = Math.min(total, Math.max(0, Number(order.amountPaid) || 0));
+
+  let status = order.paymentStatus || "Unpaid";
+
+  // Keep older orders and inconsistent legacy data safe to display.
+  if (paid <= 0) {
+    status = "Unpaid";
+  } else if (total > 0 && paid >= total) {
+    status = "Paid";
+  } else {
+    status = "Partially Paid";
+  }
+
+  return {
+    status,
+    paid,
+    remaining: Math.max(0, total - paid),
+    percentage: total > 0 ? Math.min(100, (paid / total) * 100) : 0,
+  };
+};
+
+const getPaymentStyle = (status) => {
+  switch (status) {
+    case "Paid":
+      return {
+        className: "paid",
+        icon: faCheckCircle,
+        label: "Paid",
+      };
+
+    case "Partially Paid":
+      return {
+        className: "partial",
+        icon: faHourglassHalf,
+        label: "Partially Paid",
+      };
+
+    default:
+      return {
+        className: "unpaid",
+        icon: faClock,
+        label: "Unpaid",
+      };
+  }
+};
 
 const getOrderStatus = (status) => {
   const normalized = String(status || "Pending").toLowerCase();
@@ -111,6 +161,7 @@ const ProfilePage = () => {
   const [customer, setCustomer] = useState(getStoredCustomer);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [expandedOrder, setExpandedOrder] = useState(null);
 
   const token = localStorage.getItem("littleWondersCustomerToken");
@@ -125,91 +176,134 @@ const ProfilePage = () => {
     navigate("/");
   }, [navigate]);
 
-  useEffect(() => {
+  const fetchOrders = useCallback(
+    async (showLoader = false) => {
+      if (!token) return;
+
+      if (showLoader) {
+        setRefreshing(true);
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/api/customer/orders`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 401) {
+          logout();
+          return;
+        }
+
+        const result = await parseResponse(response);
+
+        if (!response.ok) {
+          throw new Error(result.message || "Unable to load your orders.");
+        }
+
+        const customerOrders = Array.isArray(result)
+          ? result
+          : result.orders || result.data || [];
+
+        setOrders(Array.isArray(customerOrders) ? customerOrders : []);
+      } catch (error) {
+        console.error("Order refresh error:", error);
+        if (showLoader) {
+          toast.error(error.message || "Unable to refresh your orders.");
+        }
+      } finally {
+        setRefreshing(false);
+      }
+    },
+    [token, logout],
+  );
+
+  const fetchProfileData = useCallback(async () => {
     if (!token) {
       navigate("/login?redirect=%2Fprofile", { replace: true });
       return;
     }
 
-    const fetchProfileData = async () => {
-      setLoading(true);
+    setLoading(true);
 
-      try {
-        const headers = {
+    try {
+      const response = await fetch(`${API_URL}/api/customer/me`, {
+        headers: {
           Authorization: `Bearer ${token}`,
-        };
+        },
+      });
 
-        const [profileResponse, ordersResponse] = await Promise.all([
-          fetch(`${API_URL}/api/customer/me`, { headers }),
-          fetch(`${API_URL}/api/customer/orders`, { headers }),
-        ]);
+      if (response.status === 401) {
+        logout();
+        return;
+      }
 
-        if (
-          profileResponse.status === 401 ||
-          ordersResponse.status === 401
-        ) {
-          logout();
-          return;
-        }
+      const result = await parseResponse(response);
 
-        const [profileResult, ordersResult] = await Promise.all([
-          parseResponse(profileResponse),
-          parseResponse(ordersResponse),
-        ]);
+      if (!response.ok) {
+        throw new Error(result.message || "Unable to load your profile.");
+      }
 
-        if (!profileResponse.ok) {
-          throw new Error(
-            profileResult.message || "Unable to load your profile."
-          );
-        }
+      const updatedCustomer = result.customer || result.data || result;
 
-        if (!ordersResponse.ok) {
-          throw new Error(
-            ordersResult.message || "Unable to load your orders."
-          );
-        }
+      setCustomer(updatedCustomer);
 
-        const updatedCustomer =
-          profileResult.customer ||
-          profileResult.data ||
-          profileResult;
+      localStorage.setItem(
+        "littleWondersCustomer",
+        JSON.stringify(updatedCustomer),
+      );
 
-        setCustomer(updatedCustomer);
+      await fetchOrders();
+    } catch (error) {
+      console.error("Profile loading error:", error);
+      toast.error(error.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  }, [token, navigate, logout, fetchOrders]);
 
-        localStorage.setItem(
-          "littleWondersCustomer",
-          JSON.stringify(updatedCustomer)
-        );
+  useEffect(() => {
+    void fetchProfileData();
+  }, [fetchProfileData]);
 
-        const customerOrders = Array.isArray(ordersResult)
-          ? ordersResult
-          : ordersResult.orders || ordersResult.data || [];
+  // Refresh orders periodically and when the customer returns to the page.
+  useEffect(() => {
+    if (!token) return undefined;
 
-        setOrders(
-          Array.isArray(customerOrders) ? customerOrders : []
-        );
-      } catch (error) {
-        console.error("Profile loading error:", error);
-        toast.error(error.message || "Something went wrong.");
-      } finally {
-        setLoading(false);
+    const interval = window.setInterval(() => {
+      void fetchOrders();
+    }, 30000);
+
+    const handleFocus = () => {
+      void fetchOrders();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        void fetchOrders();
       }
     };
 
-    fetchProfileData();
-  }, [token, navigate, logout]);
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.clearInterval(interval);
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [token, fetchOrders]);
 
   const toggleOrder = (orderId) => {
-    setExpandedOrder((current) =>
-      current === orderId ? null : orderId
-    );
+    setExpandedOrder((current) => (current === orderId ? null : orderId));
   };
 
   if (loading) {
     return (
       <div className="profile-loading">
         <div className="profile-loader"></div>
-        <p>Loading your profile...</p>
+        <p>Preparing your LittleWonders account...</p>
       </div>
     );
   }
@@ -217,18 +311,21 @@ const ProfilePage = () => {
   return (
     <section className="profile-page">
       <div className="profile-container">
+        {/* Page heading */}
         <div className="profile-heading">
           <div>
-            <span className="profile-eyebrow">LITTLEWONDERS</span>
+            <span className="profile-eyebrow">LITTLEWONDERS · YOUR SPACE</span>
             <h1>My Account</h1>
-            <p>
-              Manage your details and keep track of your orders.
-            </p>
+            <p>A little place to manage your details and follow your orders.</p>
+          </div>
+
+          <div className="profile-heading-decoration">
+            <FontAwesomeIcon icon={faCircleUser} />
           </div>
         </div>
 
         <div className="profile-content">
-          {/* Customer details */}
+          {/* Personal details */}
           <div className="profile-details-card">
             <div className="profile-card-heading">
               <div className="profile-icon">
@@ -244,23 +341,17 @@ const ProfilePage = () => {
             <div className="profile-information">
               <div className="profile-info-item">
                 <span>Full Name</span>
-                <strong>
-                  {customer?.name || "Not available"}
-                </strong>
+                <strong>{customer?.name || "Not available"}</strong>
               </div>
 
               <div className="profile-info-item">
                 <span>Email Address</span>
-                <strong>
-                  {customer?.email || "Not available"}
-                </strong>
+                <strong>{customer?.email || "Not available"}</strong>
               </div>
 
               <div className="profile-info-item">
                 <span>Mobile Number</span>
-                <strong>
-                  {customer?.phone || "Not available"}
-                </strong>
+                <strong>{customer?.phone || "Not available"}</strong>
               </div>
             </div>
           </div>
@@ -269,16 +360,27 @@ const ProfilePage = () => {
           <div className="profile-orders-section">
             <div className="profile-orders-heading">
               <div>
+                <span className="profile-section-eyebrow">YOUR PURCHASES</span>
                 <h2>My Orders</h2>
-                <p>
-                  All your LittleWonders purchases in one place.
-                </p>
+                <p>Every little creation you've ordered, all in one place.</p>
               </div>
 
-              <span className="profile-order-count">
-                {orders.length}{" "}
-                {orders.length === 1 ? "Order" : "Orders"}
-              </span>
+              <div className="profile-order-heading-actions">
+                <button
+                  type="button"
+                  className="profile-refresh-button"
+                  onClick={() => fetchOrders(true)}
+                  disabled={refreshing}
+                  aria-label="Refresh orders"
+                >
+                  <FontAwesomeIcon icon={faRefresh} spin={refreshing} />
+                  <span>{refreshing ? "Refreshing" : "Refresh"}</span>
+                </button>
+
+                <span className="profile-order-count">
+                  {orders.length} {orders.length === 1 ? "Order" : "Orders"}
+                </span>
+              </div>
             </div>
 
             {orders.length === 0 ? (
@@ -290,14 +392,11 @@ const ProfilePage = () => {
                 <h3>No orders yet</h3>
 
                 <p>
-                  Your handmade favourites are waiting for you.
-                  Explore our collection and place your first order!
+                  Your handmade favourites are waiting for you. Explore our
+                  collection and place your first order!
                 </p>
 
-                <Link
-                  to="/products"
-                  className="profile-shop-button"
-                >
+                <Link to="/products" className="profile-shop-button">
                   Explore Products
                 </Link>
               </div>
@@ -308,15 +407,12 @@ const ProfilePage = () => {
                   const items = getOrderItems(order);
                   const status = getOrderStatus(order.status);
                   const isExpanded = expandedOrder === orderId;
-
-                  // Your backend stores address and notes inside customer
+                  const payment = getPaymentDetails(order);
+                  const paymentStyle = getPaymentStyle(payment.status);
                   const orderCustomer = order.customer || {};
 
                   return (
-                    <div
-                      className="profile-order-card"
-                      key={orderId}
-                    >
+                    <div className="profile-order-card" key={orderId}>
                       <button
                         type="button"
                         className="profile-order-summary"
@@ -332,10 +428,10 @@ const ProfilePage = () => {
                             <h3>
                               Order #
                               {String(
-                                order.orderNumber ||
-                                  order._id ||
-                                  index + 1
-                              ).slice(-8)}
+                                order.orderNumber || order._id || index + 1,
+                              )
+                                .slice(-8)
+                                .toUpperCase()}
                             </h3>
 
                             <span className="profile-order-date">
@@ -343,35 +439,46 @@ const ProfilePage = () => {
                               {formatDate(
                                 order.createdAt ||
                                   order.orderDate ||
-                                  order.date
+                                  order.date,
                               )}
                             </span>
                           </div>
                         </div>
 
                         <div className="profile-order-right">
-                          <strong>
+                          <strong className="profile-order-price">
                             {formatMoney(getOrderTotal(order))}
                           </strong>
 
-                          <span className={`profile-status ${status}`}>
-                            {order.status || "Pending"}
-                          </span>
+                          <div className="profile-order-badges">
+                            <span className={`profile-status ${status}`}>
+                              {order.status || "Pending"}
+                            </span>
+
+                            <span
+                              className={`profile-payment-badge ${paymentStyle.className}`}
+                            >
+                              <FontAwesomeIcon icon={paymentStyle.icon} />
+                              {paymentStyle.label}
+                            </span>
+                          </div>
 
                           <FontAwesomeIcon
                             className="profile-order-chevron"
-                            icon={
-                              isExpanded
-                                ? faChevronUp
-                                : faChevronDown
-                            }
+                            icon={isExpanded ? faChevronUp : faChevronDown}
                           />
                         </div>
                       </button>
 
                       {isExpanded && (
                         <div className="profile-order-details">
-                          <h4>Order Items</h4>
+                          <div className="profile-details-title">
+                            <h4>Order Items</h4>
+                            <span>
+                              {items.length}{" "}
+                              {items.length === 1 ? "Item" : "Items"}
+                            </span>
+                          </div>
 
                           <div className="profile-order-items">
                             {items.length === 0 ? (
@@ -380,26 +487,24 @@ const ProfilePage = () => {
                               items.map((item, itemIndex) => (
                                 <div
                                   className="profile-order-item"
-                                  key={
-                                    item._id ||
-                                    item.id ||
-                                    itemIndex
-                                  }
+                                  key={item._id || item.id || itemIndex}
                                 >
                                   <div>
-                                    <strong>
-                                      {getItemName(item)}
-                                    </strong>
-
-                                    <span>
-                                      Qty: {getItemQuantity(item)}
-                                    </span>
+                                    <strong>{getItemName(item)}</strong>
+                                    <span>Qty: {getItemQuantity(item)}</span>
+                                    {item.optionSummary && (
+                                      <small>{item.optionSummary}</small>
+                                    )}
+                                    {item.variantLabel && (
+                                      <small>{item.variantLabel}</small>
+                                    )}
                                   </div>
 
                                   <strong>
                                     {formatMoney(
-                                      getItemPrice(item) *
-                                        getItemQuantity(item)
+                                      Number(item.subtotal) ||
+                                        getItemPrice(item) *
+                                          getItemQuantity(item),
                                     )}
                                   </strong>
                                 </div>
@@ -407,20 +512,71 @@ const ProfilePage = () => {
                             )}
                           </div>
 
+                          {/* Payment breakdown */}
+                          <div className="profile-payment-card">
+                            <div className="profile-payment-heading">
+                              <div className="profile-payment-icon">
+                                <FontAwesomeIcon icon={faWallet} />
+                              </div>
+
+                              <div>
+                                <h4>Payment Summary</h4>
+                                <p>Your latest payment information</p>
+                              </div>
+
+                              <span
+                                className={`profile-payment-badge ${paymentStyle.className}`}
+                              >
+                                <FontAwesomeIcon icon={paymentStyle.icon} />
+                                {paymentStyle.label}
+                              </span>
+                            </div>
+
+                            <div className="profile-payment-progress">
+                              <div className="profile-payment-progress-track">
+                                <div
+                                  className={`profile-payment-progress-fill ${paymentStyle.className}`}
+                                  style={{ width: `${payment.percentage}%` }}
+                                />
+                              </div>
+                              <span>
+                                {Math.round(payment.percentage)}% paid
+                              </span>
+                            </div>
+
+                            <div className="profile-payment-amounts">
+                              <div>
+                                <span>Order Total</span>
+                                <strong>
+                                  {formatMoney(getOrderTotal(order))}
+                                </strong>
+                              </div>
+
+                              <div>
+                                <span>Amount Paid</span>
+                                <strong className="profile-paid-amount">
+                                  {formatMoney(payment.paid)}
+                                </strong>
+                              </div>
+
+                              <div>
+                                <span>Remaining</span>
+                                <strong className="profile-remaining-amount">
+                                  {formatMoney(payment.remaining)}
+                                </strong>
+                              </div>
+                            </div>
+                          </div>
+
                           <div className="profile-order-total">
                             <span>Total Amount</span>
-
-                            <strong>
-                              {formatMoney(getOrderTotal(order))}
-                            </strong>
+                            <strong>{formatMoney(getOrderTotal(order))}</strong>
                           </div>
 
                           {orderCustomer.address && (
                             <div className="profile-delivery-address">
                               <h4>
-                                <FontAwesomeIcon
-                                  icon={faLocationDot}
-                                />
+                                <FontAwesomeIcon icon={faLocationDot} />
                                 Delivery Address
                               </h4>
 
