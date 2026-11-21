@@ -1106,3 +1106,26 @@
     transform: rotate(360deg);
   }
 }
+
+.lw-review-view-toggle {
+  display: flex;
+  justify-content: center;
+  margin-top: 35px;
+}
+
+.lw-review-view-toggle button {
+  padding: 12px 30px;
+  border: 1px solid #c96f55;
+  border-radius: 30px;
+  background: transparent;
+  color: #c96f55;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lw-review-view-toggle button:hover {
+  background: #c96f55;
+  color: #fff;
+}

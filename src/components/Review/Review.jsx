@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -53,10 +52,7 @@ const getCachedReviews = () => {
 // Save approved reviews to the current browser tab session.
 const cacheReviews = (reviews) => {
   try {
-    sessionStorage.setItem(
-      REVIEW_CACHE_KEY,
-      JSON.stringify(reviews),
-    );
+    sessionStorage.setItem(REVIEW_CACHE_KEY, JSON.stringify(reviews));
   } catch (error) {
     console.error("Unable to cache reviews:", error);
   }
@@ -97,7 +93,6 @@ const isApproved = (review) =>
 const ReviewPageLoader = () => (
   <div className="lw-review-page-loader">
     <div className="lw-review-loader-spinner"></div>
-    {/* <h3>Loading LittleWonders...</h3> */}
     <p>Gathering lovely customer experiences for you.</p>
   </div>
 );
@@ -106,14 +101,15 @@ export default function Review() {
   // Read the cache only once when the component is first mounted.
   const [cachedReviews] = useState(() => getCachedReviews());
 
-  const [reviews, setReviews] = useState(
-    () => cachedReviews || [],
-  );
+  const [reviews, setReviews] = useState(() => cachedReviews || []);
 
   const [activeFilter, setActiveFilter] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+
+  // Controls whether all matching reviews are displayed.
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   // Show the loader only when there is no cached data.
   const [loadingReviews, setLoadingReviews] = useState(
@@ -136,7 +132,7 @@ export default function Review() {
         console.error("VITE_API_URL is not configured.");
 
         if (isMounted) {
-          if (!getCachedReviews()) {
+          if (getCachedReviews() === null) {
             toast.error("Backend API URL is not configured.");
           }
 
@@ -163,15 +159,11 @@ export default function Review() {
           throw new Error("Invalid reviews response from server.");
         }
 
-        const approved = fetchedReviews
-          .filter(isApproved)
-          .map((review) => ({
-            ...review,
-            id: review.id || review._id,
-            date: formatReviewDate(
-              review.date || review.createdAt,
-            ),
-          }));
+        const approved = fetchedReviews.filter(isApproved).map((review) => ({
+          ...review,
+          id: review.id || review._id,
+          date: formatReviewDate(review.date || review.createdAt),
+        }));
 
         if (!isMounted) return;
 
@@ -180,7 +172,7 @@ export default function Review() {
       } catch (error) {
         console.error("Error fetching reviews:", error);
 
-        if (isMounted && !getCachedReviews()) {
+        if (isMounted && getCachedReviews() === null) {
           toast.error("Unable to load customer reviews.");
         }
       } finally {
@@ -198,10 +190,7 @@ export default function Review() {
   }, []);
 
   // Only approved reviews are used throughout the public page.
-  const approvedReviews = useMemo(
-    () => reviews.filter(isApproved),
-    [reviews],
-  );
+  const approvedReviews = useMemo(() => reviews.filter(isApproved), [reviews]);
 
   const totalReviews = approvedReviews.length;
 
@@ -230,6 +219,11 @@ export default function Review() {
           (review) => Number(review.rating) === activeFilter,
         );
 
+  // Show only 6 reviews unless View all is selected.
+  const visibleReviews = showAllReviews
+    ? filteredReviews
+    : filteredReviews.slice(0, 6);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -247,9 +241,7 @@ export default function Review() {
     const message = form.message.trim();
 
     if (!name || !form.product || !message || !selectedRating) {
-      toast.error(
-        "Please complete all review fields and select a rating.",
-      );
+      toast.error("Please complete all review fields and select a rating.");
       return;
     }
 
@@ -259,9 +251,7 @@ export default function Review() {
     }
 
     if (message.length < 10) {
-      toast.error(
-        "Please write at least 10 characters in your review.",
-      );
+      toast.error("Please write at least 10 characters in your review.");
       return;
     }
 
@@ -296,9 +286,7 @@ export default function Review() {
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok || result.success === false) {
-        throw new Error(
-          result.message || "Unable to submit your review.",
-        );
+        throw new Error(result.message || "Unable to submit your review.");
       }
 
       const savedReview =
@@ -334,6 +322,7 @@ export default function Review() {
       setSelectedRating(0);
       setHoverRating(0);
       setActiveFilter(0);
+      setShowAllReviews(false);
 
       toast.success(
         result.message ||
@@ -342,9 +331,7 @@ export default function Review() {
     } catch (error) {
       console.error("Review submission error:", error);
 
-      toast.error(
-        error.message || "Unable to submit your review.",
-      );
+      toast.error(error.message || "Unable to submit your review.");
     } finally {
       setSubmitting(false);
     }
@@ -370,8 +357,8 @@ export default function Review() {
         </h1>
 
         <p>
-          Every little creation has a story. Discover what our lovely
-          customers have to say about their LittleWonders experience.
+          Every little creation has a story. Discover what our lovely customers
+          have to say about their LittleWonders experience.
         </p>
 
         <div className="lw-review-heading-decoration">
@@ -385,9 +372,7 @@ export default function Review() {
       <section className="lw-review-summary">
         <div className="lw-review-summary-main">
           <div className="lw-review-summary-title">
-            <span className="lw-review-section-label">
-              THE LOVE WE RECEIVE
-            </span>
+            <span className="lw-review-section-label">THE LOVE WE RECEIVE</span>
 
             <h2>Customer happiness</h2>
           </div>
@@ -398,13 +383,9 @@ export default function Review() {
                 <strong>{averageRating}</strong>
 
                 <div>
-                  <StarRating
-                    rating={Math.round(Number(averageRating))}
-                  />
+                  <StarRating rating={Math.round(Number(averageRating))} />
 
-                  <span>
-                    Out of 5 based on {totalReviews} reviews
-                  </span>
+                  <span>Out of 5 based on {totalReviews} reviews</span>
                 </div>
               </>
             ) : (
@@ -420,9 +401,7 @@ export default function Review() {
 
         <div className="lw-review-rating-breakdown">
           {ratingCounts.map(({ rating, count }) => {
-            const percentage = totalReviews
-              ? (count / totalReviews) * 100
-              : 0;
+            const percentage = totalReviews ? (count / totalReviews) * 100 : 0;
 
             return (
               <div className="lw-rating-row" key={rating}>
@@ -459,14 +438,10 @@ export default function Review() {
 
             <h2>Words from our customers</h2>
 
-            <p>
-              Little moments of happiness shared by our community.
-            </p>
+            <p>Little moments of happiness shared by our community.</p>
           </div>
 
-          <div className="lw-review-list-count">
-            {totalReviews} reviews
-          </div>
+          <div className="lw-review-list-count">{totalReviews} reviews</div>
         </div>
 
         {/* Review filters */}
@@ -476,7 +451,10 @@ export default function Review() {
               key={rating}
               type="button"
               className={activeFilter === rating ? "active" : ""}
-              onClick={() => setActiveFilter(rating)}
+              onClick={() => {
+                setActiveFilter(rating);
+                setShowAllReviews(false);
+              }}
             >
               {rating === 0 ? (
                 "All reviews"
@@ -492,38 +470,50 @@ export default function Review() {
 
         {/* Approved review cards only */}
         {filteredReviews.length > 0 ? (
-          <div className="lw-review-grid">
-            {filteredReviews.map((review) => (
-              <article className="lw-review-card" key={review.id}>
-                <div className="lw-review-card-top">
-                  <div className="lw-review-avatar">
-                    {review.name?.charAt(0).toUpperCase() || "C"}
+          <>
+            <div className="lw-review-grid">
+              {visibleReviews.map((review) => (
+                <article className="lw-review-card" key={review.id}>
+                  <div className="lw-review-card-top">
+                    <div className="lw-review-avatar">
+                      {review.name?.charAt(0).toUpperCase() || "C"}
+                    </div>
+
+                    <div className="lw-review-customer">
+                      <h3>{review.name}</h3>
+                      <span>{review.date}</span>
+                    </div>
+
+                    <FontAwesomeIcon
+                      icon={faQuoteLeft}
+                      className="lw-review-quote"
+                    />
                   </div>
 
-                  <div className="lw-review-customer">
-                    <h3>{review.name}</h3>
-                    <span>{review.date}</span>
+                  <StarRating rating={Number(review.rating)} />
+
+                  <p className="lw-review-message">{review.message}</p>
+
+                  <div className="lw-review-product">
+                    <span>PRODUCT</span>
+                    <strong>{review.product}</strong>
                   </div>
+                </article>
+              ))}
+            </div>
 
-                  <FontAwesomeIcon
-                    icon={faQuoteLeft}
-                    className="lw-review-quote"
-                  />
-                </div>
-
-                <StarRating rating={Number(review.rating)} />
-
-                <p className="lw-review-message">
-                  {review.message}
-                </p>
-
-                <div className="lw-review-product">
-                  <span>PRODUCT</span>
-                  <strong>{review.product}</strong>
-                </div>
-              </article>
-            ))}
-          </div>
+            {/* View all / View less */}
+            {filteredReviews.length > 6 && (
+              <div className="lw-review-view-toggle">
+                <button
+                  type="button"
+                  onClick={() => setShowAllReviews((previous) => !previous)}
+                >
+                  {showAllReviews ? "View less" : "View all reviews"}
+                </button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="lw-review-empty">
             <FontAwesomeIcon icon={faStar} />
@@ -543,7 +533,10 @@ export default function Review() {
             {activeFilter !== 0 && (
               <button
                 type="button"
-                onClick={() => setActiveFilter(0)}
+                onClick={() => {
+                  setActiveFilter(0);
+                  setShowAllReviews(false);
+                }}
               >
                 View all reviews
               </button>
@@ -553,36 +546,25 @@ export default function Review() {
       </section>
 
       {/* Review form */}
-      <section
-        className="lw-review-form-section"
-        id="write-review"
-      >
+      <section className="lw-review-form-section" id="write-review">
         <div className="lw-review-form-intro">
-          <span className="lw-review-section-label">
-            YOUR WORDS MATTER
-          </span>
+          <span className="lw-review-section-label">YOUR WORDS MATTER</span>
 
           <h2>Share your experience</h2>
 
           <p>
-            Have you received something from LittleWonders? We'd love
-            to know what you think. Your feedback helps our little
-            business grow.
+            Have you received something from LittleWonders? We'd love to know
+            what you think. Your feedback helps our little business grow.
           </p>
 
           <div className="lw-review-form-note">
             <FontAwesomeIcon icon={faHeart} />
 
-            <span>
-              Thank you for supporting handmade creations.
-            </span>
+            <span>Thank you for supporting handmade creations.</span>
           </div>
         </div>
 
-        <form
-          className="lw-review-form"
-          onSubmit={handleSubmit}
-        >
+        <form className="lw-review-form" onSubmit={handleSubmit}>
           <div className="lw-review-form-title">
             <h3>Write a review</h3>
             <span>Fields marked * are required</span>
@@ -699,8 +681,7 @@ export default function Review() {
           </button>
 
           <p className="lw-review-privacy-note">
-            Your review will be checked by our team before appearing
-            publicly.
+            Your review will be checked by our team before appearing publicly.
           </p>
         </form>
       </section>
