@@ -495,9 +495,9 @@ const ProfilePage = () => {
                                     {item.optionSummary && (
                                       <small>{item.optionSummary}</small>
                                     )}
-                                    {item.variantLabel && (
+                                    {/* {item.variantLabel && (
                                       <small>{item.variantLabel}</small>
-                                    )}
+                                    )} */}
                                   </div>
 
                                   <strong>
@@ -568,10 +568,10 @@ const ProfilePage = () => {
                             </div>
                           </div>
 
-                          <div className="profile-order-total">
+                          {/* <div className="profile-order-total">
                             <span>Total Amount</span>
                             <strong>{formatMoney(getOrderTotal(order))}</strong>
-                          </div>
+                          </div> */}
 
                           {orderCustomer.address && (
                             <div className="profile-delivery-address">
