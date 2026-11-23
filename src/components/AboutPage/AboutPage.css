@@ -1,3 +1,4 @@
+
 /* =========================================
    ABOUT PAGE
 ========================================= */
@@ -8,172 +9,47 @@
   color: #211e1b;
 }
 
+.about-page * {
+  box-sizing: border-box;
+}
+
 /* =========================================
    COMMON
 ========================================= */
 
 .section-label {
   display: inline-block;
-
   color: #bd684f;
-
   font-size: 12px;
   font-weight: 700;
-
   letter-spacing: 2px;
   text-transform: uppercase;
 }
 
-/* =========================================
-   HERO
-========================================= */
-
-.about-hero {
-  position: relative;
-
-  min-height: 580px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 120px 20px 80px;
-
-  background:
-    radial-gradient(
-      circle at 20% 20%,
-      rgba(255, 255, 255, 0.6),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 80% 70%,
-      rgba(198, 110, 85, 0.08),
-      transparent 35%
-    ),
-    #f7eee2;
-}
-
-.about-hero-content {
-  position: relative;
-  z-index: 2;
-
-  max-width: 800px;
-
-  text-align: center;
-}
-
-.about-eyebrow {
-  display: inline-block;
-
-  margin-bottom: 20px;
-
-  color: #66725d;
-
-  font-size: 12px;
-  font-weight: 700;
-
-  letter-spacing: 3px;
-}
-
-.about-hero h1 {
-  margin: 0;
-
+.about-story-content h2,
+.journey-heading h2,
+.purpose-heading h2,
+.mission-container h2,
+.why-shop-heading h2,
+.community-content h2,
+.thank-you-content h2 {
+  margin: 15px 0 20px;
   color: #211e1b;
-
   font-family: Georgia, "Times New Roman", serif;
-
-  font-size: clamp(45px, 7vw, 78px);
-
-  line-height: 1.05;
+  font-size: clamp(35px, 4vw, 52px);
+  line-height: 1.15;
 }
 
-.about-hero h1 span {
-  display: block;
-
+.about-story-content h2 span,
+.journey-heading h2 span,
+.purpose-heading h2 span,
+.mission-container h2 span,
+.why-shop-heading h2 span,
+.community-content h2 span,
+.thank-you-content h2 span {
+  display: inline;
   color: #bd684f;
-
   font-style: italic;
-}
-
-.about-hero p {
-  max-width: 600px;
-
-  margin: 28px auto 0;
-
-  color: #68615b;
-
-  font-size: 17px;
-  line-height: 1.8;
-}
-
-.about-scroll-indicator {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 10px;
-
-  margin-top: 45px;
-
-  color: #66725d;
-
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.about-scroll-indicator svg {
-  animation: aboutArrowFloat 2s ease-in-out infinite;
-}
-
-@keyframes aboutArrowFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(6px);
-  }
-}
-
-/* =========================================
-   HERO DECORATIONS
-========================================= */
-
-.about-hero-decoration {
-  position: absolute;
-
-  color: #bd684f;
-
-  pointer-events: none;
-
-  user-select: none;
-}
-
-.about-leaf {
-  left: 9%;
-  top: 25%;
-
-  font-size: 80px;
-
-  color: #66725d;
-
-  transform: rotate(-25deg);
-
-  opacity: 0.14;
-}
-
-.about-heart {
-  right: 10%;
-  bottom: 23%;
-
-  font-size: 100px;
-
-  color: #bd684f;
-
-  transform: rotate(12deg);
-
-  opacity: 0.12;
 }
 
 /* =========================================
@@ -182,25 +58,20 @@
 
 .about-story {
   padding: 110px 20px;
-
   background: #fbf4e9;
 }
 
 .about-story-container {
-  width: 100%;
-  max-width: 1150px;
-
-  margin: 0 auto;
-
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
-
-  gap: 80px;
-
   align-items: center;
+  gap: 80px;
+  width: 100%;
+  max-width: 1150px;
+  margin: 0 auto;
 }
 
-/* IMAGE */
+/* Image */
 
 .about-story-image {
   position: relative;
@@ -208,75 +79,45 @@
 
 .story-image-frame {
   position: relative;
-
   padding: 14px;
-
   background: #e9eedf;
-
   border-radius: 28px;
-
   transform: rotate(-2deg);
-
   box-shadow: 0 25px 60px rgba(65, 48, 35, 0.12);
 }
 
 .story-image-frame img {
   display: block;
-
   width: 100%;
   aspect-ratio: 4 / 5;
-
   object-fit: cover;
-
   border-radius: 20px;
 }
 
 .story-image-badge {
   position: absolute;
-
   right: -25px;
   bottom: 30px;
-
   display: flex;
   align-items: center;
   gap: 8px;
-
   padding: 13px 18px;
-
-  background: #fffaf3;
-
-  border-radius: 50px;
-
   color: #66725d;
-
+  background: #fffaf3;
+  border-radius: 50px;
   font-size: 12px;
   font-weight: 700;
-
   box-shadow: 0 10px 25px rgba(50, 40, 30, 0.12);
-
-  transform: rotate(2deg);
-}
-
-.story-image-badge svg {
-  color: #bd684f;
-}
-
-/* =========================================
-   MADE WITH LOVE ANIMATION
-========================================= */
-
-.story-image-badge {
   animation: madeWithLoveFloat 3s ease-in-out infinite;
 }
 
 .story-image-badge svg {
+  color: #bd684f;
   animation: madeWithLoveHeart 1.8s ease-in-out infinite;
-  transform-origin: center;
 }
 
 @keyframes madeWithLoveFloat {
-  0%,
-  100% {
+  0%, 100% {
     transform: rotate(2deg) translateY(0);
   }
 
@@ -286,8 +127,7 @@
 }
 
 @keyframes madeWithLoveHeart {
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1);
   }
 
@@ -295,58 +135,27 @@
     transform: scale(1.18);
   }
 
-  40% {
+  40%, 80% {
     transform: scale(1);
   }
 
   60% {
     transform: scale(1.08);
   }
-
-  80% {
-    transform: scale(1);
-  }
 }
 
-/* CONTENT */
-
-.about-story-content h2,
-.journey-heading h2,
-.purpose-heading h2,
-.thank-you-content h2 {
-  margin: 15px 0 20px;
-
-  color: #211e1b;
-
-  font-family: Georgia, "Times New Roman", serif;
-
-  font-size: clamp(35px, 4vw, 52px);
-
-  line-height: 1.1;
-}
-
-.about-story-content h2 span,
-.journey-heading h2 span,
-.purpose-heading h2 span,
-.thank-you-content h2 span {
-  color: #bd684f;
-  font-style: italic;
-}
+/* Story content */
 
 .story-line {
   width: 60px;
   height: 3px;
-
   margin: 25px 0;
-
   background: #bd684f;
 }
 
 .about-story-content p {
   margin: 0 0 17px;
-
   color: #68615b;
-
   font-size: 15px;
   line-height: 1.85;
 }
@@ -359,28 +168,22 @@
   display: flex;
   align-items: flex-start;
   gap: 14px;
-
   margin-top: 28px;
   padding: 18px 20px;
-
   background: #e9eedf;
-
   border-left: 3px solid #66725d;
-
   border-radius: 0 14px 14px 0;
 }
 
 .story-highlight svg {
+  flex-shrink: 0;
   margin-top: 4px;
-
   color: #bd684f;
 }
 
 .story-highlight p {
   margin: 0;
-
   color: #596251;
-
   font-size: 14px;
   font-style: italic;
 }
@@ -391,126 +194,99 @@
 
 .about-journey {
   padding: 110px 20px;
-
   background: #e9eedf;
 }
 
 .journey-container {
   max-width: 1050px;
-
   margin: 0 auto;
 }
 
 .journey-heading {
   max-width: 650px;
-
   margin: 0 auto 70px;
-
   text-align: center;
 }
 
 .journey-heading p {
   color: #68615b;
-
   font-size: 15px;
   line-height: 1.8;
 }
 
-/* TIMELINE */
+/* Timeline */
 
 .journey-timeline {
   position: relative;
-
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-
   gap: 25px;
 }
 
 .timeline-line {
   position: absolute;
-
-  left: 16%;
-  right: 16%;
   top: 38px;
-
+  right: 16%;
+  left: 16%;
   height: 2px;
-
   background: rgba(102, 114, 93, 0.3);
 }
 
 .timeline-item {
   position: relative;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   text-align: center;
 }
 
 .timeline-dot {
   position: relative;
   z-index: 2;
-
-  width: 76px;
-  height: 76px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 50%;
-
-  background: #fffaf3;
-
+  width: 76px;
+  height: 76px;
   color: #bd684f;
-
+  background: #fffaf3;
+  border-radius: 50%;
   font-size: 22px;
-
   box-shadow: 0 8px 20px rgba(60, 50, 40, 0.1);
 }
 
 .timeline-card {
   width: 100%;
-
   margin-top: 25px;
   padding: 28px 22px;
-
-  background: rgba(255, 250, 243, 0.65);
-
+  background: rgba(255, 250, 243, 0.75);
   border: 1px solid rgba(102, 114, 93, 0.15);
-
   border-radius: 20px;
 }
 
 .timeline-year {
   color: #bd684f;
-
   font-size: 11px;
   font-weight: 800;
-
   letter-spacing: 2px;
 }
 
 .timeline-card h3 {
   margin: 10px 0;
-
   color: #211e1b;
-
   font-family: Georgia, "Times New Roman", serif;
-
   font-size: 23px;
 }
 
 .timeline-card p {
   margin: 0;
-
   color: #68615b;
-
   font-size: 13px;
-
   line-height: 1.7;
+}
+
+.timeline-card p strong {
+  color: #66725d;
 }
 
 /* =========================================
@@ -519,100 +295,70 @@
 
 .about-purpose {
   padding: 110px 20px;
-
   background: #fbf4e9;
 }
 
 .purpose-container {
   max-width: 1100px;
-
   margin: 0 auto;
 }
 
 .purpose-heading {
   max-width: 700px;
-
   margin: 0 auto 60px;
-
   text-align: center;
 }
 
 .purpose-heading p {
   color: #68615b;
-
   line-height: 1.8;
 }
 
 .purpose-grid {
   display: grid;
-
   grid-template-columns: repeat(3, 1fr);
-
   gap: 24px;
 }
 
 .purpose-card {
   position: relative;
-
   min-height: 300px;
-
   padding: 35px 28px;
-
-  background: #fffaf3;
-
-  border: 1px solid #e2d8cc;
-
-  border-radius: 22px;
-
   overflow: hidden;
-
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  background: #fffaf3;
+  border: 1px solid #e2d8cc;
+  border-radius: 22px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .purpose-card::after {
-  content: "";
-
   position: absolute;
-
   right: -35px;
   bottom: -40px;
-
   width: 120px;
   height: 120px;
-
-  border-radius: 50%;
-
   background: #e9eedf;
-
+  border-radius: 50%;
+  content: "";
   opacity: 0.6;
 }
 
 .purpose-card:hover {
   transform: translateY(-8px);
-
   box-shadow: 0 20px 40px rgba(65, 48, 35, 0.1);
 }
 
 .purpose-icon {
-  width: 60px;
-  height: 60px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
+  width: 60px;
+  height: 60px;
   margin-bottom: 25px;
-
-  border-radius: 18px;
-
-  background: #e9eedf;
-
   color: #66725d;
-
+  background: #e9eedf;
+  border-radius: 18px;
   font-size: 22px;
-
   animation: purposeIconFloat 3s ease-in-out infinite;
 }
 
@@ -625,8 +371,7 @@
 }
 
 @keyframes purposeIconFloat {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0);
   }
 
@@ -637,32 +382,202 @@
 
 .purpose-number {
   color: #cfc2b5;
-
   font-size: 11px;
   font-weight: 800;
-
   letter-spacing: 2px;
 }
 
 .purpose-card h3 {
   margin: 10px 0;
-
   color: #211e1b;
-
   font-family: Georgia, "Times New Roman", serif;
-
   font-size: 25px;
 }
 
 .purpose-card p {
   position: relative;
   z-index: 1;
-
   color: #68615b;
-
   font-size: 14px;
-
   line-height: 1.75;
+}
+
+/* =========================================
+   OUR MISSION
+========================================= */
+
+.about-mission {
+  position: relative;
+  padding: 100px 20px;
+  overflow: hidden;
+  background: #f4e9dc;
+}
+
+.about-mission::before,
+.about-mission::after {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border: 1px solid rgba(189, 104, 79, 0.12);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.about-mission::before {
+  top: -120px;
+  left: -100px;
+}
+
+.about-mission::after {
+  right: -100px;
+  bottom: -130px;
+}
+
+.mission-container {
+  position: relative;
+  z-index: 1;
+  max-width: 850px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mission-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 25px;
+  color: #bd684f;
+  background: #fffaf3;
+  border: 1px solid #ead9c9;
+  border-radius: 50%;
+  font-size: 23px;
+  box-shadow: 0 8px 22px rgba(80, 55, 40, 0.07);
+}
+
+.mission-container h2 {
+  max-width: 750px;
+  margin: 18px auto;
+}
+
+.mission-description {
+  max-width: 740px;
+  margin: 0 auto;
+  color: #68615b;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.mission-values {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 35px;
+}
+
+.mission-value {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 16px;
+  color: #59654f;
+  background: rgba(255, 250, 243, 0.8);
+  border: 1px solid #e7ddcf;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mission-value svg {
+  color: #bd684f;
+}
+
+/* =========================================
+   WHY SHOP WITH US
+========================================= */
+
+.about-why-shop {
+  padding: 105px 20px;
+  background: #fbf4e9;
+}
+
+.why-shop-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.why-shop-heading {
+  max-width: 700px;
+  margin: 0 auto 55px;
+  text-align: center;
+}
+
+.why-shop-heading p {
+  color: #68615b;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.why-shop-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.why-shop-card {
+  position: relative;
+  min-height: 285px;
+  padding: 28px 22px;
+  overflow: hidden;
+  background: #fffaf3;
+  border: 1px solid #e8ded2;
+  border-radius: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.why-shop-card:hover {
+  transform: translateY(-7px);
+  border-color: #d9b9a6;
+  box-shadow: 0 16px 35px rgba(65, 48, 35, 0.09);
+}
+
+.why-shop-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  margin-bottom: 23px;
+  color: #66725d;
+  background: #e9eedf;
+  border-radius: 17px;
+  font-size: 21px;
+}
+
+.why-shop-number {
+  color: #c9b9a9;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.why-shop-card h3 {
+  margin: 10px 0;
+  color: #493b34;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  line-height: 1.3;
+}
+
+.why-shop-card p {
+  margin: 0;
+  color: #756960;
+  font-size: 13px;
+  line-height: 1.8;
 }
 
 /* =========================================
@@ -671,66 +586,185 @@
 
 .about-handmade {
   position: relative;
-
-  min-height: 440px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
+  min-height: 440px;
   padding: 80px 20px;
-
   background-image: url("/images/about_image1.png");
-
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-
   text-align: center;
 }
 
 .handmade-overlay {
   position: absolute;
   inset: 0;
-
   background: rgba(45, 39, 33, 0.48);
 }
 
 .handmade-content {
   position: relative;
   z-index: 2;
-
   max-width: 700px;
-
   color: #fffaf3;
 }
 
 .handmade-symbol {
   margin-bottom: 15px;
-
   color: #f3c7a8;
-
   font-size: 35px;
 }
 
 .handmade-content h2 {
   margin: 0;
-
   font-family: Georgia, "Times New Roman", serif;
-
   font-size: clamp(34px, 5vw, 58px);
-
   line-height: 1.15;
 }
 
 .handmade-content p {
   margin-top: 25px;
-
   color: #f7e9dc;
-
   font-size: 15px;
-
   letter-spacing: 2px;
+  line-height: 1.7;
+}
+
+/* =========================================
+   JOIN OUR COMMUNITY
+========================================= */
+
+.about-community {
+  position: relative;
+  padding: 105px 20px;
+  overflow: hidden;
+  background: #e9eedf;
+}
+
+.community-content {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.community-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 22px;
+  color: #bd684f;
+  background: #fffaf3;
+  border-radius: 50%;
+  font-size: 22px;
+  box-shadow: 0 8px 20px rgba(60, 50, 40, 0.08);
+}
+
+.community-content h2 {
+  margin: 15px 0;
+}
+
+.community-content > p {
+  max-width: 650px;
+  margin: 0 auto;
+  color: #68615b;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.community-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 13px;
+  margin-top: 30px;
+}
+
+.community-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-height: 48px;
+  padding: 13px 23px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.community-actions a:hover {
+  transform: translateY(-3px);
+}
+
+.community-instagram-button {
+  color: #fffaf3;
+  background: #bd684f;
+  box-shadow: 0 7px 18px rgba(189, 104, 79, 0.18);
+}
+
+.community-instagram-button:hover {
+  color: #fff;
+  background: #a95742;
+  box-shadow: 0 10px 22px rgba(189, 104, 79, 0.25);
+}
+
+.community-contact-button {
+  color: #59654f;
+  background: #fffaf3;
+  border: 1px solid #d8dfce;
+}
+
+.community-contact-button:hover {
+  color: #435d3d;
+  background: #f7f9f3;
+}
+
+.community-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+  color: #718064;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.community-note svg {
+  color: #bd684f;
+  font-size: 10px;
+}
+
+.community-decoration {
+  position: absolute;
+  color: #bd684f;
+  font-size: 110px;
+  opacity: 0.1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.community-decoration-one {
+  top: 12%;
+  left: 5%;
+  transform: rotate(-15deg);
+}
+
+.community-decoration-two {
+  right: 6%;
+  bottom: 10%;
+  transform: rotate(15deg);
 }
 
 /* =========================================
@@ -739,34 +773,24 @@
 
 .about-thank-you {
   position: relative;
-
   padding: 120px 20px;
-
-  background: #f7eee2;
-
   overflow: hidden;
+  background: #f7eee2;
 }
 
 .thank-you-content {
   position: relative;
   z-index: 2;
-
   max-width: 700px;
-
   margin: 0 auto;
-
   text-align: center;
 }
 
 .thank-you-content p {
   max-width: 570px;
-
   margin: 0 auto 15px;
-
   color: #68615b;
-
   font-size: 14px;
-
   line-height: 1.8;
 }
 
@@ -778,66 +802,52 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 15px;
-
   margin: 35px auto;
 }
 
 .love-line span {
   width: 70px;
   height: 1px;
-
   background: #cfc2b5;
 }
 
 .love-line svg {
   color: #bd684f;
-
   font-size: 18px;
 }
 
 .with-love {
   margin-bottom: 5px !important;
-
   font-family: Georgia, "Times New Roman", serif;
-
   font-size: 18px !important;
-
   font-style: italic;
 }
 
 .thank-you-content h3 {
   margin: 0;
-
   color: #66725d;
-
   font-family: Georgia, "Times New Roman", serif;
-
   font-size: 34px;
 }
 
 .tiny-hearts {
   margin-top: 20px;
-
   color: #bd684f;
-
   font-size: 18px;
 }
 
 .thank-you-decoration {
   position: absolute;
-
   color: #bd684f;
-
-  opacity: 0.1;
-
   font-size: 140px;
+  opacity: 0.1;
+  pointer-events: none;
 }
 
 .thank-you-decoration.left {
-  left: 4%;
   top: 15%;
+  left: 4%;
 }
 
 .thank-you-decoration.right {
@@ -849,32 +859,42 @@
    TABLET
 ========================================= */
 
+@media (max-width: 1000px) {
+  .about-story-container {
+    gap: 55px;
+  }
+
+  .why-shop-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .why-shop-card {
+    min-height: 250px;
+  }
+}
+
 @media (max-width: 900px) {
   .about-story-container {
     grid-template-columns: 1fr;
-
     gap: 55px;
   }
 
   .about-story-image {
-    max-width: 520px;
-
-    margin: 0 auto;
-
     width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
   }
 
   .about-story-content {
     max-width: 700px;
-
     margin: 0 auto;
   }
 
   .purpose-grid {
     grid-template-columns: 1fr;
-
     max-width: 600px;
-
     margin: 0 auto;
   }
 
@@ -888,41 +908,19 @@
 ========================================= */
 
 @media (max-width: 700px) {
-  .about-hero {
-    min-height: 520px;
-
-    padding: 110px 20px 70px;
-  }
-
-  .about-hero h1 {
-    font-size: 45px;
-  }
-
-  .about-hero p {
-    font-size: 15px;
-  }
-
-  .about-leaf {
-    left: -10px;
-    top: 20%;
-
-    font-size: 55px;
-  }
-
-  .about-heart {
-    right: -15px;
-    bottom: 15%;
-
-    font-size: 70px;
+  .about-story {
+    padding: 85px 18px;
   }
 
   .about-journey,
-  .about-purpose {
+  .about-purpose,
+  .about-why-shop {
     padding: 75px 18px;
   }
 
-    .about-story{
-    padding: 85px 18px;
+  .about-mission,
+  .about-community {
+    padding: 75px 18px;
   }
 
   .story-image-badge {
@@ -933,6 +931,9 @@
   .about-story-content h2,
   .journey-heading h2,
   .purpose-heading h2,
+  .mission-container h2,
+  .why-shop-heading h2,
+  .community-content h2,
   .thank-you-content h2 {
     font-size: 36px;
   }
@@ -942,46 +943,35 @@
   .journey-timeline {
     display: flex;
     flex-direction: column;
-
     gap: 30px;
-
     padding-left: 25px;
   }
 
   .timeline-line {
     top: 20px;
     bottom: 20px;
-
     left: 28px;
-
+    right: auto;
     width: 2px;
     height: auto;
-
-    right: auto;
   }
 
   .timeline-item {
     display: grid;
-
-    grid-template-columns: 55px 1fr;
-
-    gap: 18px;
-
+    grid-template-columns: 55px minmax(0, 1fr);
     align-items: start;
-
+    gap: 18px;
     text-align: left;
   }
 
   .timeline-dot {
     width: 55px;
     height: 55px;
-
     font-size: 17px;
   }
 
   .timeline-card {
     margin-top: 0;
-
     padding: 22px 18px;
   }
 
@@ -989,15 +979,63 @@
     font-size: 20px;
   }
 
+  /* Handmade image section */
+
   .about-handmade {
     min-height: 380px;
-
     background-attachment: scroll;
   }
 
   .handmade-content h2 {
     font-size: 35px;
   }
+
+  .handmade-content p {
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  /* Mission */
+
+  .mission-description {
+    font-size: 14px;
+  }
+
+  .mission-values {
+    gap: 10px;
+  }
+
+  .mission-value {
+    padding: 10px 13px;
+    font-size: 11px;
+  }
+
+  /* Why shop */
+
+  .why-shop-grid {
+    gap: 14px;
+  }
+
+  .why-shop-card {
+    min-height: 240px;
+    padding: 23px 19px;
+  }
+
+  .why-shop-card h3 {
+    font-size: 20px;
+  }
+
+  /* Community */
+
+  .community-content > p {
+    font-size: 14px;
+  }
+
+  .community-decoration {
+    font-size: 75px;
+  }
+
+  /* Thank you */
 
   .about-thank-you {
     padding: 85px 18px;
@@ -1012,25 +1050,68 @@
    SMALL MOBILE
 ========================================= */
 
-@media (max-width: 420px) {
-  .about-hero h1 {
-    font-size: 38px;
-  }
-
+@media (max-width: 480px) {
   .about-story-content h2,
   .journey-heading h2,
   .purpose-heading h2,
+  .mission-container h2,
+  .why-shop-heading h2,
+  .community-content h2,
   .thank-you-content h2 {
     font-size: 31px;
   }
 
   .story-image-badge {
-    font-size: 10px;
-
     padding: 10px 13px;
+    font-size: 10px;
   }
 
   .purpose-card {
     padding: 28px 22px;
+  }
+
+  .why-shop-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .why-shop-card {
+    min-height: auto;
+    padding: 25px 22px;
+  }
+
+  .community-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .community-actions a {
+    width: 100%;
+  }
+
+  .community-note {
+    gap: 7px;
+    font-size: 11px;
+  }
+
+  .thank-you-content h3 {
+    font-size: 29px;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .story-image-badge,
+  .story-image-badge svg,
+  .purpose-icon {
+    animation: none;
+  }
+
+  .purpose-card,
+  .why-shop-card,
+  .community-actions a {
+    transition: none;
   }
 }

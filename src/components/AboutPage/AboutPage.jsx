@@ -1,3 +1,4 @@
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart,
@@ -5,7 +6,10 @@ import {
   faLightbulb,
   faPalette,
   faHandsHolding,
-//   faArrowDown,
+  faStar,
+  faGift,
+  faHandSparkles,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./AboutPage.css";
@@ -13,36 +17,6 @@ import "./AboutPage.css";
 const AboutPage = () => {
   return (
     <main className="about-page">
-      {/* =========================================
-          HERO
-      ========================================== */}
-
-      {/* <section className="about-hero">
-        <div className="about-hero-decoration about-leaf">✿</div>
-
-        <div className="about-hero-decoration about-heart">♡</div>
-
-        <div className="about-hero-content">
-          <span className="about-eyebrow">OUR LITTLE STORY</span>
-
-          <h1>
-            A Warm Welcome to
-            <span> Little Wonders</span>
-          </h1>
-
-          <p>
-            A little corner filled with handmade creations, friendship,
-            creativity, and lots of love.
-          </p>
-
-          <div className="about-scroll-indicator">
-            <span>Discover our story</span>
-
-            <FontAwesomeIcon icon={faArrowDown} />
-          </div>
-        </div>
-      </section> */}
-
       {/* =========================================
           OUR STORY
       ========================================== */}
@@ -74,14 +48,16 @@ const AboutPage = () => {
             <div className="story-line"></div>
 
             <p>
-              Hi everyone! I'm <strong>Hasini</strong> (Swetha's sister), and together
-              with <strong>Pravallika</strong> (Niharika's sister), we welcome you to our
-              cozy corner! We all live in the same apartment building.
+              Hi everyone! I'm <strong>Hasini</strong> (Swetha's sister), and
+              together with <strong>Pravallika</strong> (Niharika's sister), we
+              welcome you to our cozy corner! We all live in the same apartment
+              building.
             </p>
 
             <p>
               Although we moved here in 2021, our story really began on{" "}
-              <strong>February 28th</strong>, the day we met Pravallika and Niharika.
+              <strong>February 28th</strong>, the day we met Pravallika and
+              Niharika.
             </p>
 
             <p>
@@ -91,10 +67,9 @@ const AboutPage = () => {
 
             <div className="story-highlight">
               <FontAwesomeIcon icon={faHeart} />
-
               <p>
-                Sometimes the most beautiful friendships begin with something as
-                simple as being neighbors.
+                Sometimes the most beautiful friendships begin with something
+                as simple as being neighbors.
               </p>
             </div>
           </div>
@@ -124,8 +99,6 @@ const AboutPage = () => {
           <div className="journey-timeline">
             <div className="timeline-line"></div>
 
-            {/* 2021 */}
-
             <div className="timeline-item">
               <div className="timeline-dot">
                 <FontAwesomeIcon icon={faSeedling} />
@@ -133,9 +106,7 @@ const AboutPage = () => {
 
               <div className="timeline-card">
                 <span className="timeline-year">2021</span>
-
                 <h3>A New Beginning</h3>
-
                 <p>
                   We moved into the same apartment building and slowly became
                   part of the same little community.
@@ -143,18 +114,14 @@ const AboutPage = () => {
               </div>
             </div>
 
-            {/* February */}
-
             <div className="timeline-item">
               <div className="timeline-dot">
                 <FontAwesomeIcon icon={faHeart} />
               </div>
 
               <div className="timeline-card">
-                <span className="timeline-year">28th FEBRUARY</span>
-
+                <span className="timeline-year">28TH FEBRUARY</span>
                 <h3>The Day We Met</h3>
-
                 <p>
                   February 28th became a special day for us — the beginning of a
                   friendship that would grow into a sisterly bond.
@@ -162,18 +129,14 @@ const AboutPage = () => {
               </div>
             </div>
 
-            {/* April */}
-
             <div className="timeline-item">
               <div className="timeline-dot">
                 <FontAwesomeIcon icon={faLightbulb} />
               </div>
 
               <div className="timeline-card">
-                <span className="timeline-year">4th APRIL 2026</span>
-
+                <span className="timeline-year">4TH APRIL 2026</span>
                 <h3>Little Wonders Was Born</h3>
-
                 <p>
                   After countless afternoons crafting together, a spark of
                   inspiration turned our hobby into{" "}
@@ -206,15 +169,12 @@ const AboutPage = () => {
           </div>
 
           <div className="purpose-grid">
-            {/* Focus */}
-
             <div className="purpose-card">
               <div className="purpose-icon">
                 <FontAwesomeIcon icon={faHandsHolding} />
               </div>
 
               <span className="purpose-number">01</span>
-
               <h3>Focus & Patience</h3>
 
               <p>
@@ -223,15 +183,12 @@ const AboutPage = () => {
               </p>
             </div>
 
-            {/* Growth */}
-
             <div className="purpose-card">
               <div className="purpose-icon">
                 <FontAwesomeIcon icon={faSeedling} />
               </div>
 
               <span className="purpose-number">02</span>
-
               <h3>Growth & Learning</h3>
 
               <p>
@@ -240,15 +197,12 @@ const AboutPage = () => {
               </p>
             </div>
 
-            {/* Creativity */}
-
             <div className="purpose-card">
               <div className="purpose-icon">
                 <FontAwesomeIcon icon={faPalette} />
               </div>
 
               <span className="purpose-number">03</span>
-
               <h3>Creativity & Peace</h3>
 
               <p>
@@ -256,6 +210,134 @@ const AboutPage = () => {
                 ourselves, and de-stress.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================
+          OUR MISSION
+      ========================================== */}
+
+      <section className="about-mission">
+        <div className="mission-container">
+          <div className="mission-icon">
+            <FontAwesomeIcon icon={faHeart} />
+          </div>
+
+          <span className="section-label">A LITTLE DREAM WITH A BIG HEART</span>
+
+          <h2>
+            Our Mission Is to Make
+            <span> Everyday Moments Special</span>
+          </h2>
+
+          <p className="mission-description">
+            At LittleWonders, our mission is to bring a little more joy,
+            creativity, and warmth into everyday life through handmade
+            creations. We want every piece to feel personal, thoughtful, and
+            made with love — because the smallest details can create the
+            loveliest memories.
+          </p>
+
+          <div className="mission-values">
+            <div className="mission-value">
+              <FontAwesomeIcon icon={faHandSparkles} />
+              <span>Handmade with care</span>
+            </div>
+
+            <div className="mission-value">
+              <FontAwesomeIcon icon={faPalette} />
+              <span>Created with creativity</span>
+            </div>
+
+            <div className="mission-value">
+              <FontAwesomeIcon icon={faHeart} />
+              <span>Shared with love</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================
+          WHY SHOP WITH US
+      ========================================== */}
+
+      <section className="about-why-shop">
+        <div className="why-shop-container">
+          <div className="why-shop-heading">
+            <span className="section-label">THE LITTLEWONDERS EXPERIENCE</span>
+
+            <h2>
+              Why Shop
+              <span> With Us?</span>
+            </h2>
+
+            <p>
+              Every order means a lot to us. Here's what makes shopping with
+              LittleWonders special.
+            </p>
+          </div>
+
+          <div className="why-shop-grid">
+            <article className="why-shop-card">
+              <div className="why-shop-icon">
+                <FontAwesomeIcon icon={faHandSparkles} />
+              </div>
+
+              <span className="why-shop-number">01</span>
+
+              <h3>Made by Hand</h3>
+
+              <p>
+                Each creation is carefully handmade, giving every little piece
+                its own charm and personality.
+              </p>
+            </article>
+
+            <article className="why-shop-card">
+              <div className="why-shop-icon">
+                <FontAwesomeIcon icon={faPalette} />
+              </div>
+
+              <span className="why-shop-number">02</span>
+
+              <h3>Made with Creativity</h3>
+
+              <p>
+                We love exploring colors, designs, and little details to bring
+                our creative ideas to life.
+              </p>
+            </article>
+
+            <article className="why-shop-card">
+              <div className="why-shop-icon">
+                <FontAwesomeIcon icon={faHeart} />
+              </div>
+
+              <span className="why-shop-number">03</span>
+
+              <h3>Personal Touch</h3>
+
+              <p>
+                We put thought and care into our creations and appreciate every
+                person who supports our little dream.
+              </p>
+            </article>
+
+            <article className="why-shop-card">
+              <div className="why-shop-icon">
+                <FontAwesomeIcon icon={faGift} />
+              </div>
+
+              <span className="why-shop-number">04</span>
+
+              <h3>Lovely Little Gifts</h3>
+
+              <p>
+                Find thoughtful handmade pieces for yourself or someone who
+                deserves a little happiness.
+              </p>
+            </article>
           </div>
         </div>
       </section>
@@ -281,12 +363,66 @@ const AboutPage = () => {
       </section>
 
       {/* =========================================
+          JOIN OUR COMMUNITY
+      ========================================== */}
+
+      <section className="about-community">
+        <div className="community-decoration community-decoration-one">
+          ✿
+        </div>
+
+        <div className="community-decoration community-decoration-two">
+          ♡
+        </div>
+
+        <div className="community-content">
+          <div className="community-icon">
+            <FontAwesomeIcon icon={faHeart} />
+          </div>
+
+          <span className="section-label">LET'S STAY CONNECTED</span>
+
+          <h2>
+            Join Our
+            <span> Little Community</span>
+          </h2>
+
+          <p>
+            We invite you to follow us on social media and stay updated with
+            the latest products, promotions, and updates. Feel free to reach
+            out with any questions — we're always here to help!
+          </p>
+
+          <div className="community-actions">
+            <a
+              href="https://www.instagram.com/littlewonders_04/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="community-instagram-button"
+            >
+              Follow Us on Instagram
+              <FontAwesomeIcon icon={faArrowRight} />
+            </a>
+
+            <a href="/contact" className="community-contact-button">
+              Get in Touch
+            </a>
+          </div>
+
+          <div className="community-note">
+            <FontAwesomeIcon icon={faStar} />
+            <span>Thank you for being part of our little journey!</span>
+            <FontAwesomeIcon icon={faStar} />
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================
           THANK YOU
       ========================================== */}
 
       <section className="about-thank-you">
         <div className="thank-you-decoration left">♡</div>
-
         <div className="thank-you-decoration right">✿</div>
 
         <div className="thank-you-content">
@@ -309,9 +445,7 @@ const AboutPage = () => {
 
           <div className="love-line">
             <span></span>
-
             <FontAwesomeIcon icon={faHeart} />
-
             <span></span>
           </div>
 
