@@ -64,64 +64,64 @@ const products = [
       // },
     ],
   },
-  {
-    id: 2,
-    name: "Handmade Bunny Bag",
-    category: "Fashion Accessories",
-    tag: "Fashion Accessory",
-    description: "A soft and beautifully crafted handmade bag.",
-    price: 250,
-    image: "/myimages/bag.jpeg",
-    images: ["/myimages/bag.jpeg"],
-    options: [
-      {
-        id: "size",
-        label: "Bag size",
-        type: "select",
-        required: true,
-        choices: [
-          { label: "Small", value: "Small", price: 250 },
-          { label: "Medium", value: "Medium", price: 350 },
-          { label: "Large", value: "Large", price: 450 },
-        ],
-      },
-      {
-        id: "strap",
-        label: "Strap style",
-        type: "select",
-        required: true,
-        choices: [
-          { label: "Short strap", value: "Short strap", price: 0 },
-          {
-            label: "Long adjustable strap",
-            value: "Long adjustable strap",
-            price: 50,
-          },
-        ],
-      },
-      {
-        id: "color",
-        label: "Color",
-        type: "select",
-        required: true,
-        choices: [
-          { label: "Black", value: "black" },
-          { label: "Dark Cream", value: "dark cream" },
-          { label: "Light Cream", value: "light cream" },
-        ],
-      },
-      // {
-      //   id: "lining",
-      //   label: "Inner lining",
-      //   type: "select",
-      //   required: true,
-      //   choices: [
-      //     { label: "Without lining", value: "Without lining", price: 0 },
-      //     { label: "With inner lining", value: "With inner lining", price: 35 },
-      //   ],
-      // },
-    ],
-  },
+  // {
+  //   id: 2,
+  //   name: "Handmade Bunny Bag",
+  //   category: "Fashion Accessories",
+  //   tag: "Fashion Accessory",
+  //   description: "A soft and beautifully crafted handmade bag.",
+  //   price: 250,
+  //   image: "/myimages/bag.jpeg",
+  //   images: ["/myimages/bag.jpeg"],
+  //   options: [
+  //     {
+  //       id: "size",
+  //       label: "Bag size",
+  //       type: "select",
+  //       required: true,
+  //       choices: [
+  //         { label: "Small", value: "Small", price: 250 },
+  //         { label: "Medium", value: "Medium", price: 350 },
+  //         { label: "Large", value: "Large", price: 450 },
+  //       ],
+  //     },
+  //     {
+  //       id: "strap",
+  //       label: "Strap style",
+  //       type: "select",
+  //       required: true,
+  //       choices: [
+  //         { label: "Short strap", value: "Short strap", price: 0 },
+  //         {
+  //           label: "Long adjustable strap",
+  //           value: "Long adjustable strap",
+  //           price: 50,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       id: "color",
+  //       label: "Color",
+  //       type: "select",
+  //       required: true,
+  //       choices: [
+  //         { label: "Black", value: "black" },
+  //         { label: "Dark Cream", value: "dark cream" },
+  //         { label: "Light Cream", value: "light cream" },
+  //       ],
+  //     },
+  //     // {
+  //     //   id: "lining",
+  //     //   label: "Inner lining",
+  //     //   type: "select",
+  //     //   required: true,
+  //     //   choices: [
+  //     //     { label: "Without lining", value: "Without lining", price: 0 },
+  //     //     { label: "With inner lining", value: "With inner lining", price: 35 },
+  //     //   ],
+  //     // },
+  //   ],
+  // },
   {
     id: 3,
     name: "Morpankh Keychain",
