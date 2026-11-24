@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,16 +14,22 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { toast } from "react-toastify";
+
 import products from "../../data/products";
 
 import "./Cart.css";
 
+const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
 const CartPage = () => {
   const navigate = useNavigate();
+
   const getCartItemKey = (item) =>
     item.variantKey ||
     `${item.id ?? item.productId}-${JSON.stringify(item.selectedOptions || {})}`;
 
+  // Load cart from localStorage
   const loadCart = () => {
     try {
       const savedCart = localStorage.getItem("littleWondersCart");
@@ -32,8 +38,9 @@ const CartPage = () => {
 
       const cartData = JSON.parse(savedCart);
 
-      return cartData
+      if (!Array.isArray(cartData)) return [];
 
+      return cartData
         .map((item) => {
           const productId = Number(item.id ?? item.productId);
 
@@ -45,119 +52,195 @@ const CartPage = () => {
 
           return {
             ...product,
-
             ...item,
-
             id: product.id,
-
             productId: product.id,
-
             price: Number(item.price ?? product.price),
-
             quantity: Math.max(1, Number(item.quantity) || 1),
-
             selectedOptions: item.selectedOptions || {},
-
             variantLabel: item.variantLabel || "",
-
             optionSummary: item.optionSummary || "",
-
             variantKey:
               item.variantKey ||
               `${product.id}-${JSON.stringify(item.selectedOptions || {})}`,
           };
         })
-
         .filter(Boolean);
     } catch (error) {
       console.error("Failed to load cart:", error);
-
       return [];
     }
   };
 
+  // Load wishlist from localStorage
   const loadWishlist = () => {
     try {
       const savedWishlist = localStorage.getItem("littleWondersWishlist");
 
       const wishlistIds = savedWishlist ? JSON.parse(savedWishlist) : [];
 
+      if (!Array.isArray(wishlistIds)) return [];
+
       return products.filter((product) => wishlistIds.includes(product.id));
     } catch (error) {
       console.error("Failed to load wishlist:", error);
-
       return [];
     }
   };
 
   const [cartItems, setCartItems] = useState(loadCart);
-
   const [wishlist, setWishlist] = useState(loadWishlist);
 
   const [showCheckout, setShowCheckout] = useState(false);
-
   const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
+  const [isCheckingSession, setIsCheckingSession] = useState(false);
+
   const [countdown, setCountdown] = useState(30);
   const [submittedOrder, setSubmittedOrder] = useState(null);
 
   const [orderStatus, setOrderStatus] = useState({
     type: "",
-
     message: "",
   });
 
+  // Customer profile is cached for display only.
+  // Authentication is verified by the HTTP-only cookie.
   const [customerAccount, setCustomerAccount] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem("littleWondersCustomer") || "null");
+      return JSON.parse(
+        localStorage.getItem("littleWondersCustomer") || "null",
+      );
     } catch {
       return null;
     }
   });
 
-  const getCustomerToken = () => localStorage.getItem("littleWondersCustomerToken");
-
   const [checkoutForm, setCheckoutForm] = useState({
     name: "",
-
     phone: "",
-
     email: "",
-
     address: "",
-
     city: "",
-
     pincode: "",
-
     notes: "",
   });
 
+  // Sync customer profile cache
   useEffect(() => {
     const syncCustomer = () => {
       try {
-        setCustomerAccount(JSON.parse(localStorage.getItem("littleWondersCustomer") || "null"));
+        setCustomerAccount(
+          JSON.parse(
+            localStorage.getItem("littleWondersCustomer") || "null",
+          ),
+        );
       } catch {
         setCustomerAccount(null);
       }
     };
+
     window.addEventListener("storage", syncCustomer);
     window.addEventListener("customerAuthChanged", syncCustomer);
+
     return () => {
       window.removeEventListener("storage", syncCustomer);
       window.removeEventListener("customerAuthChanged", syncCustomer);
     };
   }, []);
 
+  // Verify customer session using the HTTP-only cookie
+  const verifyCustomerSession = async () => {
+    try {
+      if (!API_URL) {
+        throw new Error("Backend API URL is not configured.");
+      }
+
+      const response = await fetch(`${API_URL}/api/customer/me`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 401 || response.status === 403) {
+        setCustomerAccount(null);
+        localStorage.removeItem("littleWondersCustomer");
+
+        window.dispatchEvent(new Event("customerAuthChanged"));
+
+        return false;
+      }
+
+      if (!response.ok) {
+        throw new Error("Unable to verify your account. Please try again.");
+      }
+
+      const result = await response.json();
+      const customer = result.customer || result;
+
+      if (!customer || typeof customer !== "object") {
+        return false;
+      }
+
+      setCustomerAccount(customer);
+
+      localStorage.setItem(
+        "littleWondersCustomer",
+        JSON.stringify(customer),
+      );
+
+      return true;
+    } catch (error) {
+      console.error("Customer session verification failed:", error);
+
+      toast.error(
+        error.message || "Unable to verify your account. Please try again.",
+      );
+
+      return null;
+    }
+  };
+
+  // Handle checkout button click
+  const handleOpenCheckout = async () => {
+    if (!cartItems.length) {
+      setOrderStatus({
+        type: "error",
+        message: "Your cart is empty. Please add a product first.",
+      });
+
+      return;
+    }
+
+    setOrderStatus({ type: "", message: "" });
+    setIsCheckingSession(true);
+
+    const isAuthenticated = await verifyCustomerSession();
+
+    setIsCheckingSession(false);
+
+    if (isAuthenticated === null) {
+      return;
+    }
+
+    if (!isAuthenticated) {
+      toast.info("Please log in to continue with checkout.");
+
+      navigate(`/signup?redirect=${encodeURIComponent("/cart")}`);
+      return;
+    }
+
+    setShowCheckout(true);
+  };
+
   const handleCheckoutChange = (event) => {
     const { name, value } = event.target;
 
     setCheckoutForm((previous) => ({
       ...previous,
-
       [name]: value,
     }));
   };
 
+  // Submit checkout using the HTTP-only authentication cookie
   const handleCheckoutSubmit = async (event) => {
     event.preventDefault();
 
@@ -166,79 +249,79 @@ const CartPage = () => {
     if (!cartItems.length) {
       setOrderStatus({
         type: "error",
-
         message: "Your cart is empty. Please add a product first.",
       });
 
       return;
     }
 
-    const token = getCustomerToken();
-    if (!token) {
-      setShowCheckout(false);
-      navigate(`/signup?redirect=${encodeURIComponent("/cart")}`);
-      return;
-    }
-
     const { address, city, pincode, notes } = checkoutForm;
 
     if (!address.trim() || !city.trim() || !pincode.trim()) {
-      setOrderStatus({ type: "error", message: "Please complete all required delivery fields." });
+      setOrderStatus({
+        type: "error",
+        message: "Please complete all required delivery fields.",
+      });
+
       return;
     }
 
     if (!/^[0-9]{6}$/.test(pincode.trim())) {
-      setOrderStatus({ type: "error", message: "Please enter a valid 6-digit PIN code." });
+      setOrderStatus({
+        type: "error",
+        message: "Please enter a valid 6-digit PIN code.",
+      });
+
       return;
     }
 
     const orderItems = cartItems.map((item) => ({
       productId: item.id,
-
       name: item.name,
-
       quantity: item.quantity,
-
       price: Number(item.price) || 0,
-
       subtotal: (Number(item.price) || 0) * item.quantity,
-
       variantKey: getCartItemKey(item),
-
       variantLabel: item.variantLabel || "",
-
       optionSummary: item.optionSummary || "",
-
       selectedOptions: item.selectedOptions || {},
     }));
+
+    const totalAmount = cartItems.reduce(
+      (total, item) =>
+        total + (Number(item.price) || 0) * item.quantity,
+      0,
+    );
 
     setIsSubmittingOrder(true);
     setCountdown(30);
     setOrderStatus({ type: "", message: "" });
 
     const controller = new AbortController();
-    const requestTimeout = window.setTimeout(() => controller.abort(), 30000);
+
+    const requestTimeout = window.setTimeout(() => {
+      controller.abort();
+    }, 30000);
 
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_URL.replace(/\/$/, "");
+      if (!API_URL) {
+        throw new Error("Backend API URL is not configured.");
+      }
 
-      const response = await fetch(`${apiBaseUrl}/api/checkout`, {
+      const response = await fetch(`${API_URL}/api/checkout`, {
         method: "POST",
+        credentials: "include",
         signal: controller.signal,
 
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
 
         body: JSON.stringify({
           customer: {
             address: address.trim(),
-
             city: city.trim(),
-
             pincode: pincode.trim(),
-
             notes: notes.trim(),
           },
 
@@ -248,15 +331,32 @@ const CartPage = () => {
         }),
       });
 
-      const result = await response.json();
+      const result = await response.json().catch(() => ({}));
+
+      // Handle expired or invalid customer session
+      if (response.status === 401 || response.status === 403) {
+        setShowCheckout(false);
+        setCustomerAccount(null);
+
+        localStorage.removeItem("littleWondersCustomer");
+
+        window.dispatchEvent(new Event("customerAuthChanged"));
+
+        toast.info("Your session has expired. Please log in again.");
+
+        navigate(`/login?redirect=${encodeURIComponent("/cart")}`);
+
+        return;
+      }
 
       if (!response.ok || !result.success) {
         throw new Error(
-          result.message || "Unable to submit your request. Please try again.",
+          result.message ||
+            "Unable to submit your request. Please try again.",
         );
       }
 
-      // Keep a snapshot for the confirmation screen before clearing the cart/form.
+      // Save order details for confirmation screen
       setSubmittedOrder({
         customer: {
           name: customerAccount?.name || "Customer",
@@ -267,9 +367,16 @@ const CartPage = () => {
           pincode: pincode.trim(),
           notes: notes.trim(),
         },
+
         items: orderItems,
+
         total: totalAmount,
-        totalItems: orderItems.reduce((sum, item) => sum + item.quantity, 0),
+
+        totalItems: orderItems.reduce(
+          (sum, item) => sum + item.quantity,
+          0,
+        ),
+
         submittedAt: new Date(),
       });
 
@@ -279,8 +386,7 @@ const CartPage = () => {
           "Thank you for choosing LittleWonders! We've received your order request. Our team will contact you shortly to confirm availability, delivery details, and the final order amount.",
       });
 
-      // Clear the cart only after the server confirms the request was sent.
-
+      // Clear cart only after successful server response
       localStorage.removeItem("littleWondersCart");
 
       setCartItems([]);
@@ -289,17 +395,11 @@ const CartPage = () => {
 
       setCheckoutForm({
         name: "",
-
         phone: "",
-
         email: "",
-
         address: "",
-
         city: "",
-
         pincode: "",
-
         notes: "",
       });
     } catch (error) {
@@ -307,10 +407,12 @@ const CartPage = () => {
 
       setOrderStatus({
         type: "error",
+
         message:
           error.name === "AbortError"
             ? "We couldn’t complete your request within 30 seconds. Please check your connection and try again."
-            : error.message || "Something went wrong. Please try again in a moment.",
+            : error.message ||
+              "Something went wrong. Please try again in a moment.",
       });
     } finally {
       window.clearTimeout(requestTimeout);
@@ -318,6 +420,7 @@ const CartPage = () => {
     }
   };
 
+  // Checkout countdown
   useEffect(() => {
     if (!isSubmittingOrder) return;
 
@@ -328,44 +431,34 @@ const CartPage = () => {
     return () => window.clearInterval(intervalId);
   }, [isSubmittingOrder]);
 
+  // Sync cart and wishlist changes
   useEffect(() => {
     const syncCartAndWishlist = () => {
       setCartItems(loadCart());
-
       setWishlist(loadWishlist());
     };
 
     window.addEventListener("storage", syncCartAndWishlist);
-
     window.addEventListener("cartUpdated", syncCartAndWishlist);
-
     window.addEventListener("wishlistUpdated", syncCartAndWishlist);
 
     return () => {
       window.removeEventListener("storage", syncCartAndWishlist);
-
       window.removeEventListener("cartUpdated", syncCartAndWishlist);
-
       window.removeEventListener("wishlistUpdated", syncCartAndWishlist);
     };
   }, []);
 
+  // Save cart
   const saveCart = (items) => {
     const cartData = items.map((item) => ({
       ...item,
-
       productId: item.id,
-
       variantKey: getCartItemKey(item),
-
       quantity: item.quantity,
-
       price: Number(item.price) || 0,
-
       selectedOptions: item.selectedOptions || {},
-
       variantLabel: item.variantLabel || "",
-
       optionSummary: item.optionSummary || "",
     }));
 
@@ -374,6 +467,7 @@ const CartPage = () => {
     window.dispatchEvent(new Event("cartUpdated"));
   };
 
+  // Increase quantity
   const increaseQuantity = (variantKey) => {
     const updatedCart = cartItems.map((item) =>
       getCartItemKey(item) === variantKey
@@ -382,10 +476,10 @@ const CartPage = () => {
     );
 
     setCartItems(updatedCart);
-
     saveCart(updatedCart);
   };
 
+  // Decrease quantity
   const decreaseQuantity = (variantKey) => {
     const currentItem = cartItems.find(
       (item) => getCartItemKey(item) === variantKey,
@@ -408,20 +502,20 @@ const CartPage = () => {
     }
 
     setCartItems(updatedCart);
-
     saveCart(updatedCart);
   };
 
+  // Remove cart item
   const removeCartItem = (variantKey) => {
     const updatedCart = cartItems.filter(
       (item) => getCartItemKey(item) !== variantKey,
     );
 
     setCartItems(updatedCart);
-
     saveCart(updatedCart);
   };
 
+  // Remove wishlist item
   const removeFromWishlist = (productId) => {
     try {
       const savedWishlist = localStorage.getItem("littleWondersWishlist");
@@ -432,7 +526,6 @@ const CartPage = () => {
 
       localStorage.setItem(
         "littleWondersWishlist",
-
         JSON.stringify(updatedWishlist),
       );
 
@@ -448,18 +541,16 @@ const CartPage = () => {
 
   const totalItems = cartItems.reduce(
     (total, item) => total + item.quantity,
-
     0,
   );
 
   const totalAmount = cartItems.reduce(
-    (total, item) => total + (Number(item.price) || 0) * item.quantity,
-
+    (total, item) =>
+      total + (Number(item.price) || 0) * item.quantity,
     0,
   );
 
   const hasCartItems = cartItems.length > 0;
-
   const hasWishlistItems = wishlist.length > 0;
 
   const formatPrice = (price) =>
@@ -468,6 +559,7 @@ const CartPage = () => {
   const getItemTotal = (product) =>
     (Number(product.price) || 0) * product.quantity;
 
+  // Prevent background scrolling while checkout modal is open
   useEffect(() => {
     if (!showCheckout) return;
 
@@ -486,16 +578,15 @@ const CartPage = () => {
         <div className="cart-container">
           <header className="cart-page-header">
             <div className="cart-heading-left">
-              {/* <span className="cart-page-label">LITTLEWONDERS</span> */}
-
               <h1>My Shopping Cart</h1>
 
-              <p>Review your handmade favourites before checking out.</p>
+              <p>
+                Review your handmade favourites before checking out.
+              </p>
             </div>
 
             <Link to="/products" className="continue-shopping-link">
               <FontAwesomeIcon icon={faArrowLeft} />
-
               <span>Back to Shop</span>
             </Link>
           </header>
@@ -518,11 +609,8 @@ const CartPage = () => {
 
               <div className="cart-table-header">
                 <span className="cart-column-product">Product</span>
-
                 <span className="cart-column-quantity">Quantity</span>
-
                 <span className="cart-column-price">Price</span>
-
                 <span className="cart-column-remove" aria-hidden="true" />
               </div>
 
@@ -550,27 +638,15 @@ const CartPage = () => {
                           </Link>
 
                           <div className="cart-variant-details">
-                            {/* <span className="cart-variant-heading">
-
-                              Your selection
-
-                            </span> */}
-
                             <div className="cart-variant-chips">
                               {product.variantLabel
                                 ? product.variantLabel
-
                                     .split(" | ")
-
                                     .map((option, index) => {
                                       const value = option
-
                                         .split(":")
-
                                         .slice(1)
-
                                         .join(":")
-
                                         .trim();
 
                                       return (
@@ -583,9 +659,7 @@ const CartPage = () => {
                                       );
                                     })
                                 : product.optionSummary
-
                                     ?.split(" | ")
-
                                     .map((option, index) => (
                                       <span
                                         className="cart-variant-chip"
@@ -652,19 +726,15 @@ const CartPage = () => {
                 })}
               </div>
 
-              {/* Only the total summary remains */}
-
               <section className="cart-summary">
                 <div className="summary-card summary-total-card">
                   <div className="summary-row">
                     <span>Total Items</span>
-
                     <strong>{totalItems}</strong>
                   </div>
 
                   <div className="summary-total-row">
                     <span>Total Amount</span>
-
                     <strong>{formatPrice(totalAmount)}</strong>
                   </div>
                 </div>
@@ -673,23 +743,18 @@ const CartPage = () => {
               <div className="cart-actions">
                 <Link to="/products" className="cart-back-button">
                   <FontAwesomeIcon icon={faArrowLeft} />
-
                   <span>Back to Shop</span>
                 </Link>
 
                 <button
                   type="button"
                   className="checkout-button"
-                  onClick={() => {
-                    setOrderStatus({ type: "", message: "" });
-                    if (!getCustomerToken()) {
-                      navigate(`/signup?redirect=${encodeURIComponent("/cart")}`);
-                      return;
-                    }
-                    setShowCheckout(true);
-                  }}
+                  onClick={handleOpenCheckout}
+                  disabled={isCheckingSession}
                 >
-                  <span>Checkout</span>
+                  <span>
+                    {isCheckingSession ? "Checking..." : "Checkout"}
+                  </span>
 
                   <FontAwesomeIcon icon={faArrowRight} />
                 </button>
@@ -718,7 +783,6 @@ const CartPage = () => {
 
               <Link to="/products" className="shop-now-button">
                 <span>Shop Our Collection</span>
-
                 <FontAwesomeIcon icon={faArrowRight} />
               </Link>
             </section>
@@ -749,14 +813,6 @@ const CartPage = () => {
                   <article className="wishlist-card" key={product.id}>
                     <div className="wishlist-image">
                       <img src={product.image} alt={product.name} />
-
-                      {/* <span className="saved-badge">
-
-                        <FontAwesomeIcon icon={faHeart} />
-
-                        Saved
-
-                      </span> */}
 
                       <button
                         type="button"
@@ -796,11 +852,15 @@ const CartPage = () => {
         </div>
       </section>
 
+      {/* Checkout modal */}
       {showCheckout && (
         <div
           className="checkout-modal-backdrop"
           onMouseDown={(event) => {
-            if (event.target === event.currentTarget && !isSubmittingOrder) {
+            if (
+              event.target === event.currentTarget &&
+              !isSubmittingOrder
+            ) {
               setShowCheckout(false);
             }
           }}
@@ -833,30 +893,50 @@ const CartPage = () => {
                   <FontAwesomeIcon icon={faHeart} />
                 </div>
 
-                <span className="order-confirmation-eyebrow">LITTLEWONDERS</span>
-                <h3>Thank you, {submittedOrder?.customer.name || "for your order"}!</h3>
+                <span className="order-confirmation-eyebrow">
+                  LITTLEWONDERS
+                </span>
+
+                <h3>
+                  Thank you,{" "}
+                  {submittedOrder?.customer.name || "for your order"}!
+                </h3>
+
                 <p className="order-confirmation-message">
-                  Your order request has been received successfully. We’ll contact you shortly
-                  to confirm product availability, delivery details, and the final amount.
+                  Your order request has been received successfully. We’ll
+                  contact you shortly to confirm product availability,
+                  delivery details, and the final amount.
                 </p>
 
                 {submittedOrder && (
                   <div className="order-confirmation-details">
                     <div className="order-confirmation-heading">
                       <h4>Your order summary</h4>
-                      <span>{submittedOrder.totalItems} {submittedOrder.totalItems === 1 ? "item" : "items"}</span>
+
+                      <span>
+                        {submittedOrder.totalItems}{" "}
+                        {submittedOrder.totalItems === 1 ? "item" : "items"}
+                      </span>
                     </div>
 
                     <div className="order-confirmation-items">
                       {submittedOrder.items.map((item, index) => (
-                        <div className="order-confirmation-item" key={`${item.productId}-${item.variantKey}-${index}`}>
+                        <div
+                          className="order-confirmation-item"
+                          key={`${item.productId}-${item.variantKey}-${index}`}
+                        >
                           <div className="order-confirmation-item-info">
                             <strong>{item.name}</strong>
+
                             {(item.variantLabel || item.optionSummary) && (
-                              <span>{item.variantLabel || item.optionSummary}</span>
+                              <span>
+                                {item.variantLabel || item.optionSummary}
+                              </span>
                             )}
+
                             <small>Qty: {item.quantity}</small>
                           </div>
+
                           <strong>{formatPrice(item.subtotal)}</strong>
                         </div>
                       ))}
@@ -870,8 +950,9 @@ const CartPage = () => {
                 )}
 
                 <p className="order-confirmation-followup">
-                  <strong>What happens next?</strong> Our team will get in touch with you soon.
-                  Your order is not confirmed until we contact you.
+                  <strong>What happens next?</strong> Our team will get in
+                  touch with you soon. Your order is not confirmed until we
+                  contact you.
                 </p>
 
                 <button
@@ -888,7 +969,10 @@ const CartPage = () => {
                 </button>
               </div>
             ) : (
-              <form className="checkout-form" onSubmit={handleCheckoutSubmit}>
+              <form
+                className="checkout-form"
+                onSubmit={handleCheckoutSubmit}
+              >
                 <div className="checkout-form-section-title">
                   <span>01</span>
                   Your account details
@@ -897,15 +981,29 @@ const CartPage = () => {
                 <div className="checkout-form-grid">
                   <div className="checkout-field">
                     <label>Full name</label>
-                    <input value={customerAccount?.name || "Signed-in customer"} readOnly />
+
+                    <input
+                      value={customerAccount?.name || "Signed-in customer"}
+                      readOnly
+                    />
                   </div>
+
                   <div className="checkout-field">
                     <label>Phone number</label>
-                    <input value={customerAccount?.phone || ""} readOnly />
+
+                    <input
+                      value={customerAccount?.phone || ""}
+                      readOnly
+                    />
                   </div>
+
                   <div className="checkout-field checkout-field-full">
                     <label>Email address</label>
-                    <input value={customerAccount?.email || ""} readOnly />
+
+                    <input
+                      value={customerAccount?.email || ""}
+                      readOnly
+                    />
                   </div>
                 </div>
 
@@ -1024,7 +1122,6 @@ const CartPage = () => {
 
                   <div className="checkout-order-total">
                     <span>Total</span>
-
                     <strong>{formatPrice(totalAmount)}</strong>
                   </div>
 
@@ -1061,7 +1158,6 @@ const CartPage = () => {
                     disabled={isSubmittingOrder || cartItems.length === 0}
                   >
                     Submit order request
-
                     <FontAwesomeIcon icon={faArrowRight} />
                   </button>
                 </div>
@@ -1071,6 +1167,7 @@ const CartPage = () => {
         </div>
       )}
 
+      {/* Order processing popup */}
       {isSubmittingOrder && (
         <div className="checkout-processing-backdrop" role="presentation">
           <section
@@ -1080,18 +1177,35 @@ const CartPage = () => {
             aria-labelledby="checkout-processing-title"
             aria-live="polite"
           >
-            <div className="checkout-processing-spinner" aria-hidden="true" />
-            <span className="checkout-processing-eyebrow">LITTLEWONDERS</span>
-            <h2 id="checkout-processing-title">Please wait a moment...</h2>
-            <p>We're processing your order request. Please don't close this window.</p>
+            <div
+              className="checkout-processing-spinner"
+              aria-hidden="true"
+            />
+
+            <span className="checkout-processing-eyebrow">
+              LITTLEWONDERS
+            </span>
+
+            <h2 id="checkout-processing-title">
+              Please wait a moment...
+            </h2>
+
+            <p>
+              We're processing your order request. Please don't close this
+              window.
+            </p>
+
             <div className="checkout-processing-timer">
               <strong>{String(countdown).padStart(2, "0")}</strong>
               <span>SECONDS REMAINING</span>
             </div>
+
             <div className="checkout-processing-track">
               <div
                 className="checkout-processing-progress"
-                style={{ width: `${((30 - countdown) / 30) * 100}%` }}
+                style={{
+                  width: `${((30 - countdown) / 30) * 100}%`,
+                }}
               />
             </div>
           </section>

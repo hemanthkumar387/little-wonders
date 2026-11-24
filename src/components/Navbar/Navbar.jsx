@@ -10,13 +10,13 @@ import {
 import { toast } from "react-toastify";
 import "./Navbar.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
-
-  const [isCustomerLoggedIn, setIsCustomerLoggedIn] = useState(() =>
-    Boolean(localStorage.getItem("littleWondersCustomerToken")),
-  );
+  const [isCustomerLoggedIn, setIsCustomerLoggedIn] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
   const mobileMenuRef = useRef(null);
   const menuToggleRef = useRef(null);
@@ -47,20 +47,57 @@ const Navbar = () => {
 
   const [cartCount, setCartCount] = useState(getCartCount);
 
+  // Verify customer authentication using the HTTP-only cookie
+  const checkCustomerSession = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/customer/me`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        setIsCustomerLoggedIn(false);
+        localStorage.removeItem("littleWondersCustomer");
+        return false;
+      }
+
+      const data = await response.json();
+
+      const customer = data.customer || data;
+
+      setIsCustomerLoggedIn(true);
+
+      // Store customer details only as cached profile data.
+      // Authentication is verified by the backend cookie.
+      if (customer && typeof customer === "object") {
+        localStorage.setItem("littleWondersCustomer", JSON.stringify(customer));
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Failed to verify customer session:", error);
+      setIsCustomerLoggedIn(false);
+      return false;
+    } finally {
+      setAuthChecked(true);
+    }
+  };
+
+  // Check customer session when Navbar loads
+  useEffect(() => {
+    checkCustomerSession();
+  }, []);
+
   // Keep login status updated throughout the application
   useEffect(() => {
     const updateAuthStatus = () => {
-      setIsCustomerLoggedIn(
-        Boolean(localStorage.getItem("littleWondersCustomerToken")),
-      );
+      checkCustomerSession();
     };
 
     window.addEventListener("customerAuthChanged", updateAuthStatus);
-    window.addEventListener("storage", updateAuthStatus);
 
     return () => {
       window.removeEventListener("customerAuthChanged", updateAuthStatus);
-      window.removeEventListener("storage", updateAuthStatus);
     };
   }, []);
 
@@ -128,20 +165,35 @@ const Navbar = () => {
     menuToggleRef.current?.focus();
   };
 
-  // Logout customer
-  const handleLogout = () => {
-    localStorage.removeItem("littleWondersCustomerToken");
-    localStorage.removeItem("littleWondersCustomer");
+  // Logout customer using the HTTP-only cookie
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/customer/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
 
-    setIsCustomerLoggedIn(false);
-    setAccountOpen(false);
-    setMenuOpen(false);
+      if (!response.ok) {
+        throw new Error("Logout failed");
+      }
 
-    window.dispatchEvent(new Event("customerAuthChanged"));
+      setIsCustomerLoggedIn(false);
+      setAccountOpen(false);
+      setMenuOpen(false);
 
-    toast.success("You have been logged out successfully.");
+      // Remove cached profile information.
+      // The authentication cookie is cleared by the backend.
+      localStorage.removeItem("littleWondersCustomer");
+      localStorage.removeItem("littleWondersCustomerToken");
 
-    navigate("/");
+      window.dispatchEvent(new Event("customerAuthChanged"));
+
+      toast.success("You have been logged out successfully.");
+      navigate("/");
+    } catch (error) {
+      console.error("Customer logout error:", error);
+      toast.error("Unable to log out. Please try again.");
+    }
   };
 
   // Close account dropdown when clicking outside

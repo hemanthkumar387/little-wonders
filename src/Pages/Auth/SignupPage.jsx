@@ -9,6 +9,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 function getRedirectPath(searchParams) {
   const redirect = searchParams.get("redirect");
+
   return redirect && redirect.startsWith("/") && !redirect.startsWith("//")
     ? redirect
     : "/cart";
@@ -17,6 +18,7 @@ function getRedirectPath(searchParams) {
 export default function SignupPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -24,13 +26,18 @@ export default function SignupPage() {
     password: "",
     confirmPassword: "",
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setForm((current) => ({ ...current, [name]: value }));
+
+    setForm((current) => ({
+      ...current,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (event) => {
@@ -44,6 +51,7 @@ export default function SignupPage() {
       toast.error("Please fill in all required fields.");
       return;
     }
+
     if (!/^[6-9]\d{9}$/.test(phone)) {
       toast.error("Enter a valid 10-digit Indian mobile number.");
       return;
@@ -58,39 +66,52 @@ export default function SignupPage() {
       toast.error("Password must be at least 8 characters.");
       return;
     }
+
     if (form.password !== form.confirmPassword) {
       toast.error("Passwords do not match.");
       return;
     }
 
     setLoading(true);
+
     try {
       const response = await fetch(`${API_URL}/api/customer/signup`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, password: form.password }),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          password: form.password,
+        }),
       });
+
       const result = await response.json();
 
-      if (
-        !response.ok ||
-        !result.success ||
-        !result.token ||
-        !result.customer
-      ) {
+      if (!response.ok || !result.success || !result.customer) {
         throw new Error(
           result.message || "Unable to create your account. Please try again.",
         );
       }
 
-      localStorage.setItem("littleWondersCustomerToken", result.token);
-      localStorage.setItem(
-        "littleWondersCustomer",
-        JSON.stringify(result.customer),
-      );
+      // The authentication token is now stored in an HTTP-only cookie.
+      // JavaScript cannot access the cookie, and no token is stored in localStorage.
+
+      // localStorage.setItem(
+      //   "littleWondersCustomer",
+      //   JSON.stringify(result.customer),
+      // );
+
       window.dispatchEvent(new Event("customerAuthChanged"));
+
       toast.success("Your LittleWonders account is ready!");
-      navigate(getRedirectPath(searchParams), { replace: true });
+
+      navigate(getRedirectPath(searchParams), {
+        replace: true,
+      });
     } catch (error) {
       toast.error(error.message || "Something went wrong. Please try again.");
     } finally {
@@ -104,6 +125,7 @@ export default function SignupPage() {
         className="lw-auth-decoration lw-auth-decoration-one"
         aria-hidden="true"
       />
+
       <div
         className="lw-auth-decoration lw-auth-decoration-two"
         aria-hidden="true"
@@ -118,6 +140,7 @@ export default function SignupPage() {
         <form className="lw-auth-form" onSubmit={handleSubmit}>
           <label className="lw-auth-field">
             <span>Full name</span>
+
             <input
               type="text"
               name="name"
@@ -132,6 +155,7 @@ export default function SignupPage() {
 
           <label className="lw-auth-field">
             <span>Email address (Optional)</span>
+
             <input
               type="email"
               name="email"
@@ -145,6 +169,7 @@ export default function SignupPage() {
 
           <label className="lw-auth-field">
             <span>Mobile number</span>
+
             <input
               type="tel"
               name="phone"
@@ -160,6 +185,7 @@ export default function SignupPage() {
 
           <label className="lw-auth-field">
             <span>Password</span>
+
             <div className="lw-auth-password-wrap">
               <input
                 type={showPassword ? "text" : "password"}
@@ -171,6 +197,7 @@ export default function SignupPage() {
                 minLength={8}
                 required
               />
+
               <button
                 type="button"
                 className="lw-auth-show-password"
@@ -220,11 +247,18 @@ export default function SignupPage() {
         <p className="lw-auth-switch">
           Already part of LittleWonders?{" "}
           <Link
-            to={`/login${searchParams.get("redirect") ? `?redirect=${encodeURIComponent(searchParams.get("redirect"))}` : ""}`}
+            to={`/login${
+              searchParams.get("redirect")
+                ? `?redirect=${encodeURIComponent(
+                    searchParams.get("redirect"),
+                  )}`
+                : ""
+            }`}
           >
             Log in
           </Link>
         </p>
+
         <p className="lw-auth-note">
           Made with care, just like everything at LittleWonders.
         </p>

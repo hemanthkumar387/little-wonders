@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -56,6 +57,7 @@ const formatDate = (date) => {
 
 const formatMoney = (amount) => {
   const value = Number(amount);
+
   return `₹${(Number.isFinite(value) ? value : 0).toLocaleString("en-IN", {
     maximumFractionDigits: 2,
   })}`;
@@ -95,7 +97,6 @@ const getPaymentDetails = (order) => {
 
   let status = order.paymentStatus || "Unpaid";
 
-  // Keep older orders and inconsistent legacy data safe to display.
   if (paid <= 0) {
     status = "Unpaid";
   } else if (total > 0 && paid >= total) {
@@ -164,35 +165,44 @@ const ProfilePage = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [expandedOrder, setExpandedOrder] = useState(null);
 
-  const token = localStorage.getItem("littleWondersCustomerToken");
+  // Cookie-based logout
+  const logout = useCallback(async () => {
+    try {
+      await fetch(`${API_URL}/api/customer/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      localStorage.removeItem("littleWondersCustomerToken");
+      localStorage.removeItem("littleWondersCustomer");
 
-  const logout = useCallback(() => {
-    localStorage.removeItem("littleWondersCustomerToken");
-    localStorage.removeItem("littleWondersCustomer");
+      setCustomer(null);
+      setOrders([]);
 
-    window.dispatchEvent(new Event("customerAuthChanged"));
+      window.dispatchEvent(new Event("customerAuthChanged"));
 
-    toast.success("You have been logged out.");
-    navigate("/");
+      toast.info("Please log in to continue.");
+      navigate("/login?redirect=%2Fprofile", { replace: true });
+    }
   }, [navigate]);
 
+  // Fetch customer orders using the HTTP-only cookie
   const fetchOrders = useCallback(
     async (showLoader = false) => {
-      if (!token) return;
-
       if (showLoader) {
         setRefreshing(true);
       }
 
       try {
         const response = await fetch(`${API_URL}/api/customer/orders`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          method: "GET",
+          credentials: "include",
         });
 
         if (response.status === 401) {
-          logout();
+          await logout();
           return;
         }
 
@@ -209,6 +219,7 @@ const ProfilePage = () => {
         setOrders(Array.isArray(customerOrders) ? customerOrders : []);
       } catch (error) {
         console.error("Order refresh error:", error);
+
         if (showLoader) {
           toast.error(error.message || "Unable to refresh your orders.");
         }
@@ -216,26 +227,27 @@ const ProfilePage = () => {
         setRefreshing(false);
       }
     },
-    [token, logout],
+    [logout],
   );
 
+  // Restore the customer session using /api/customer/me
   const fetchProfileData = useCallback(async () => {
-    if (!token) {
-      navigate("/login?redirect=%2Fprofile", { replace: true });
-      return;
-    }
-
     setLoading(true);
 
     try {
       const response = await fetch(`${API_URL}/api/customer/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        method: "GET",
+        credentials: "include",
       });
 
       if (response.status === 401) {
-        logout();
+        localStorage.removeItem("littleWondersCustomer");
+        localStorage.removeItem("littleWondersCustomerToken");
+
+        setCustomer(null);
+        setOrders([]);
+
+        navigate("/login?redirect=%2Fprofile", { replace: true });
         return;
       }
 
@@ -249,6 +261,8 @@ const ProfilePage = () => {
 
       setCustomer(updatedCustomer);
 
+      // Keep this profile cache temporarily for other existing components.
+      // It does not contain the authentication token.
       localStorage.setItem(
         "littleWondersCustomer",
         JSON.stringify(updatedCustomer),
@@ -261,7 +275,7 @@ const ProfilePage = () => {
     } finally {
       setLoading(false);
     }
-  }, [token, navigate, logout, fetchOrders]);
+  }, [navigate, fetchOrders]);
 
   useEffect(() => {
     void fetchProfileData();
@@ -269,8 +283,6 @@ const ProfilePage = () => {
 
   // Refresh orders periodically and when the customer returns to the page.
   useEffect(() => {
-    if (!token) return undefined;
-
     const interval = window.setInterval(() => {
       void fetchOrders();
     }, 30000);
@@ -293,7 +305,7 @@ const ProfilePage = () => {
       window.removeEventListener("focus", handleFocus);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [token, fetchOrders]);
+  }, [fetchOrders]);
 
   const toggleOrder = (orderId) => {
     setExpandedOrder((current) => (current === orderId ? null : orderId));
@@ -311,7 +323,6 @@ const ProfilePage = () => {
   return (
     <section className="profile-page">
       <div className="profile-container">
-        {/* Page heading */}
         <div className="profile-heading">
           <div>
             <span className="profile-eyebrow">LITTLEWONDERS · YOUR SPACE</span>
@@ -325,7 +336,6 @@ const ProfilePage = () => {
         </div>
 
         <div className="profile-content">
-          {/* Personal details */}
           <div className="profile-details-card">
             <div className="profile-card-heading">
               <div className="profile-icon">
@@ -356,7 +366,6 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          {/* Order history */}
           <div className="profile-orders-section">
             <div className="profile-orders-heading">
               <div>
@@ -492,12 +501,10 @@ const ProfilePage = () => {
                                   <div>
                                     <strong>{getItemName(item)}</strong>
                                     <span>Qty: {getItemQuantity(item)}</span>
+
                                     {item.optionSummary && (
                                       <small>{item.optionSummary}</small>
                                     )}
-                                    {/* {item.variantLabel && (
-                                      <small>{item.variantLabel}</small>
-                                    )} */}
                                   </div>
 
                                   <strong>
@@ -512,7 +519,6 @@ const ProfilePage = () => {
                             )}
                           </div>
 
-                          {/* Payment breakdown */}
                           <div className="profile-payment-card">
                             <div className="profile-payment-heading">
                               <div className="profile-payment-icon">
@@ -539,6 +545,7 @@ const ProfilePage = () => {
                                   style={{ width: `${payment.percentage}%` }}
                                 />
                               </div>
+
                               <span>
                                 {Math.round(payment.percentage)}% paid
                               </span>
@@ -567,11 +574,6 @@ const ProfilePage = () => {
                               </div>
                             </div>
                           </div>
-
-                          {/* <div className="profile-order-total">
-                            <span>Total Amount</span>
-                            <strong>{formatMoney(getOrderTotal(order))}</strong>
-                          </div> */}
 
                           {orderCustomer.address && (
                             <div className="profile-delivery-address">

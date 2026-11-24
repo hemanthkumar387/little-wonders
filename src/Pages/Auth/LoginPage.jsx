@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -32,7 +31,9 @@ const getErrorMessage = (status, serverMessage) => {
     504: "The server took too long to respond. Please try again.",
   };
 
-  return messages[status] || serverMessage || "Unable to log in. Please try again.";
+  return (
+    messages[status] || serverMessage || "Unable to log in. Please try again."
+  );
 };
 
 const parseResponse = async (response) => {
@@ -44,7 +45,7 @@ const parseResponse = async (response) => {
     return JSON.parse(text);
   } catch {
     throw new Error(
-      "We couldn't process the server response. Please try again."
+      "We couldn't process the server response. Please try again.",
     );
   }
 };
@@ -98,6 +99,7 @@ export default function LoginPage() {
     try {
       const response = await fetch(`${API_URL}/api/customer/login`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -110,26 +112,24 @@ export default function LoginPage() {
       const result = await parseResponse(response);
 
       if (!response.ok) {
+        throw new Error(getErrorMessage(response.status, result.message));
+      }
+
+      // The backend now sets the authentication token as an HTTP-only cookie.
+      // The token is not returned in JSON or stored in localStorage.
+
+      if (!result.success || !result.customer) {
         throw new Error(
-          getErrorMessage(response.status, result.message)
+          result.message || "We couldn't log you in. Please try again.",
         );
       }
 
-      if (!result.success || !result.token || !result.customer) {
-        throw new Error(
-          result.message || "We couldn't log you in. Please try again."
-        );
-      }
-
-      localStorage.setItem(
-        "littleWondersCustomerToken",
-        result.token
-      );
-
-      localStorage.setItem(
-        "littleWondersCustomer",
-        JSON.stringify(result.customer)
-      );
+      // Keep customer profile information for the existing UI.
+      // This is not the authentication token.
+      // localStorage.setItem(
+      //   "littleWondersCustomer",
+      //   JSON.stringify(result.customer),
+      // );
 
       window.dispatchEvent(new Event("customerAuthChanged"));
 
@@ -143,12 +143,10 @@ export default function LoginPage() {
 
       if (error instanceof TypeError) {
         toast.error(
-          "Unable to connect to LittleWonders. Please check your internet connection and try again."
+          "Unable to connect to LittleWonders. Please check your internet connection and try again.",
         );
       } else {
-        toast.error(
-          error.message || "Something went wrong. Please try again."
-        );
+        toast.error(error.message || "Something went wrong. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -214,20 +212,13 @@ export default function LoginPage() {
             </div>
           </label>
 
-          <button
-            className="lw-auth-submit"
-            type="submit"
-            disabled={loading}
-          >
+          <button className="lw-auth-submit" type="submit" disabled={loading}>
             {loading ? (
               "Logging you in..."
             ) : (
               <>
                 Log in
-                <FontAwesomeIcon
-                  icon={faArrowRight}
-                  aria-hidden="true"
-                />
+                <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" />
               </>
             )}
           </button>
@@ -239,7 +230,7 @@ export default function LoginPage() {
             to={`/signup${
               searchParams.get("redirect")
                 ? `?redirect=${encodeURIComponent(
-                    searchParams.get("redirect")
+                    searchParams.get("redirect"),
                   )}`
                 : ""
             }`}

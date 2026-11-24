@@ -1,7 +1,13 @@
+
+/* =================================
+   FOOTER
+================================= */
+
 .footer {
   width: 100%;
   background: #fbf4e9;
   color: #514a44;
+  overflow: hidden;
 }
 
 .footer-container {
@@ -10,12 +16,18 @@
   margin: 0 auto;
   padding: 48px 0 38px;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 70px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 35px;
 }
 
+/* =================================
+   BRAND
+================================= */
+
 .footer-brand {
-  padding-right: 40px;
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding-right: 0;
 }
 
 .footer-logo {
@@ -42,82 +54,89 @@
 }
 
 .footer-logo-subtitle {
-  margin-top: 2px;
+  margin-top: 3px;
   font-family: Arial, sans-serif;
-  font-size: 6px;
+  font-size: 7px;
   letter-spacing: 1.3px;
   color: #9c7767;
 }
 
 .footer-description {
-  margin: 17px 0;
+  margin: 17px 0 0;
   color: #777069;
   font-family: Arial, sans-serif;
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
-.footer-socials {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.social-icon {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #cfc2b5;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #665e57;
-  text-decoration: none;
-  transition:
-    background 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease,
-    transform 0.3s ease;
-}
-
-.social-icon svg {
-  width: 17px;
-  height: 17px;
-}
-
-.social-icon:hover {
-  background: #c8755d;
-  border-color: #c8755d;
-  color: #ffffff;
-  transform: translateY(-2px);
-}
+/* =================================
+   FOOTER COLUMNS
+================================= */
 
 .footer-column {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
 .footer-column h3 {
-  margin: 0 0 18px;
+  position: relative;
+  margin: 0 0 22px;
   color: #3f3934;
   font-family: Arial, sans-serif;
   font-size: 14px;
   font-weight: 700;
 }
 
-.footer-column a {
-  margin-bottom: 11px;
-  color: #756e68;
-  text-decoration: none;
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  transition: color 0.3s ease;
+.footer-column h3::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 25px;
+  height: 2px;
+  background: #c8755d;
+  border-radius: 5px;
 }
 
-.footer-column a:hover {
-  color: #bd684f;
+.footer-column a,
+.footer-policy-link {
+  margin: 0 0 12px;
+  color: #756e68;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  text-decoration: none;
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
 }
+
+.footer-column a:hover,
+.footer-policy-link:hover {
+  color: #bd684f;
+  transform: translateX(3px);
+}
+
+/* =================================
+   POLICY LINKS
+================================= */
+
+.footer-policy-link {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* =================================
+   FOOTER BOTTOM
+================================= */
 
 .footer-bottom {
   width: 88%;
@@ -128,6 +147,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 15px;
 }
 
 .footer-bottom p {
@@ -135,6 +155,7 @@
   color: #817971;
   font-family: Arial, sans-serif;
   font-size: 10px;
+  line-height: 1.5;
 }
 
 .footer-bottom p span {
@@ -145,69 +166,348 @@
 .footer-bottom-icon {
   color: #c8755d;
   font-size: 20px;
+  flex-shrink: 0;
 }
 
-@media (max-width: 850px) {
+/* =================================
+   POLICY POPUP MODAL
+================================= */
+
+.footer-policy-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(40, 30, 25, 0.65);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.footer-policy-modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 950px;
+  height: min(850px, 90vh);
+  height: min(850px, 90dvh);
+  min-height: 0;
+  overflow: hidden;
+  background: #fbf7f1;
+  border: 1px solid #ead9ca;
+  border-radius: 16px;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.25);
+  animation: footerPolicyOpen 0.25s ease;
+}
+
+.footer-policy-modal-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  min-height: 62px;
+  padding: 12px 22px;
+  color: #754d40;
+  background: #fffaf5;
+  border-bottom: 1px solid #ead9ca;
+  font-size: 17px;
+  font-weight: 700;
+  gap: 15px;
+}
+
+.footer-policy-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  padding: 0;
+  color: #a96350;
+  background: #f7e9df;
+  border: 1px solid #efd6c7;
+  border-radius: 50%;
+  font-size: 27px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.footer-policy-close:hover {
+  color: #fff;
+  background: #bd765f;
+  transform: rotate(90deg);
+}
+
+.footer-policy-modal-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #d5a18e #f8eee5;
+}
+
+.footer-policy-modal-content::-webkit-scrollbar {
+  width: 7px;
+}
+
+.footer-policy-modal-content::-webkit-scrollbar-track {
+  background: #f8eee5;
+}
+
+.footer-policy-modal-content::-webkit-scrollbar-thumb {
+  background: #d5a18e;
+  border-radius: 10px;
+}
+
+.footer-policy-modal-content::-webkit-scrollbar-thumb:hover {
+  background: #bd765f;
+}
+
+/* Policy page adjustments inside modal */
+
+.footer-policy-modal-content .privacy-page,
+.footer-policy-modal-content .terms-page {
+  width: 100%;
+  min-height: auto;
+  padding-bottom: 35px;
+}
+
+.footer-policy-modal-content .privacy-header,
+.footer-policy-modal-content .terms-header {
+  padding-top: 40px;
+  padding-bottom: 35px;
+}
+
+/* =================================
+   MODAL ANIMATION
+================================= */
+
+@keyframes footerPolicyOpen {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =================================
+   TABLET
+   Two rows and two columns
+================================= */
+
+@media (max-width: 900px) {
   .footer-container {
-    grid-template-columns: 1fr 1fr;
-    gap: 45px;
+    width: 90%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 35px 30px;
+    padding: 42px 0 32px;
   }
 
   .footer-brand {
-    grid-column: span 2;
+    grid-column: 1 / -1;
+  }
+
+  .footer-column {
+    grid-column: auto;
+  }
+
+  .footer-column h3 {
+    font-size: 13px;
+  }
+
+  .footer-bottom {
+    width: 90%;
+  }
+
+  .footer-policy-overlay {
+    padding: 15px;
+  }
+
+  .footer-policy-modal {
+    height: 92vh;
+    height: 92dvh;
+    max-height: none;
+    border-radius: 13px;
+  }
+
+  .footer-policy-modal-header {
+    min-height: 56px;
+    padding: 10px 16px;
+    font-size: 15px;
+  }
+
+  .footer-policy-modal-content .privacy-header,
+  .footer-policy-modal-content .terms-header {
+    padding-top: 35px;
+    padding-bottom: 30px;
   }
 }
 
-@media (max-width: 550px) {
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 480px) {
   .footer-container {
     width: 88%;
-    grid-template-columns: 1fr 1fr;
-    gap: 35px 25px;
-    padding: 40px 0 30px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px 20px;
+    padding: 35px 0 28px;
   }
 
   .footer-brand {
-    grid-column: span 2;
-    padding-right: 0;
+    grid-column: 1 / -1;
+  }
+
+  .footer-logo-image {
+    width: 54px;
+    height: 54px;
+  }
+
+  .footer-logo-title {
+    font-size: 20px;
+  }
+
+  .footer-logo-subtitle {
+    font-size: 6px;
+  }
+
+  .footer-description {
+    font-size: 12px;
+  }
+
+  .footer-column h3 {
+    font-size: 12px;
+    margin-bottom: 18px;
+  }
+
+  .footer-column a,
+  .footer-policy-link {
+    font-size: 11px;
+    margin-bottom: 10px;
+    overflow-wrap: anywhere;
   }
 
   .footer-bottom {
     width: 88%;
     flex-direction: column;
-    gap: 12px;
+    justify-content: center;
+    gap: 9px;
+    padding: 16px 0;
     text-align: center;
   }
 
   .footer-bottom-icon {
     order: -1;
   }
+
+  /* Modal */
+
+  .footer-policy-overlay {
+    padding: 8px;
+  }
+
+  .footer-policy-modal {
+    width: 100%;
+    height: 94vh;
+    height: 94dvh;
+    border-radius: 12px;
+  }
+
+  .footer-policy-modal-header {
+    min-height: 52px;
+    padding: 8px 13px;
+    font-size: 14px;
+  }
+
+  .footer-policy-close {
+    width: 34px;
+    height: 34px;
+    font-size: 24px;
+  }
+
+  .footer-policy-modal-content .privacy-container,
+  .footer-policy-modal-content .terms-container {
+    width: calc(100% - 24px);
+  }
+
+  .footer-policy-modal-content .privacy-header,
+  .footer-policy-modal-content .terms-header {
+    padding: 28px 15px 24px;
+  }
+
+  .footer-policy-modal-content .privacy-page,
+  .footer-policy-modal-content .terms-page {
+    padding-bottom: 25px;
+  }
 }
 
-/* About and Connect wrapper */
-.footer-about-connect {
-  display: contents;
-}
+/* =================================
+   VERY SMALL MOBILE
+================================= */
 
-/* Tablet and mobile layout */
-@media (max-width: 850px) {
+@media (max-width: 360px) {
   .footer-container {
-    grid-template-columns: 1fr 1fr;
+    gap: 26px 14px;
   }
 
-  .footer-brand {
-    grid-column: span 2;
+  .footer-logo-image {
+    width: 48px;
+    height: 48px;
   }
 
-  .footer-about-connect {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
+  .footer-logo-title {
+    font-size: 18px;
+  }
+
+  .footer-column h3 {
+    font-size: 11px;
+  }
+
+  .footer-column a,
+  .footer-policy-link {
+    font-size: 10px;
+  }
+
+  .footer-policy-modal-header {
+    font-size: 13px;
   }
 }
 
-@media (max-width: 550px) {
-  .footer-about-connect {
-    gap: 20px;
+/* =================================
+   ACCESSIBILITY
+================================= */
+
+.footer-policy-link:focus-visible,
+.footer-policy-close:focus-visible {
+  outline: 2px solid #bd765f;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-policy-modal {
+    animation: none;
+  }
+
+  .footer-policy-close,
+  .footer-policy-link,
+  .footer-column a {
+    transition: none;
   }
 }

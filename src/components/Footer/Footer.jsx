@@ -1,106 +1,114 @@
+
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Footer.css";
 
+import PrivacyPolicyPage from "../../Pages/Policy/PrivacyPolicyPage";
+import TermsConditionsPage from "../../Pages/Policy/TermsConditionsPage";
+
 const Footer = () => {
+  const [activePolicy, setActivePolicy] = useState(null);
+
+  const closePolicy = () => setActivePolicy(null);
+
+  useEffect(() => {
+    if (!activePolicy) return;
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        closePolicy();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [activePolicy]);
+
   return (
-    <footer className="footer">
-      <div className="footer-container">
-        {/* Brand */}
-        <div className="footer-brand">
-          <div className="footer-logo">
-            <img
-              src="/images/logo.png"
-              alt="LittleWonders"
-              className="footer-logo-image"
-            />
+    <>
+      <footer className="footer">
+        <div className="footer-container">
 
-            <div>
-              <div className="footer-logo-title">LittleWonders</div>
+          {/* Brand */}
+          <div className="footer-brand">
+            <div className="footer-logo">
+              <img
+                src="/images/logo.png"
+                alt="LittleWonders"
+                className="footer-logo-image"
+              />
 
-              <div className="footer-logo-subtitle">
-                NURTURE. GROW. INSPIRE.
+              <div>
+                <div className="footer-logo-title">LittleWonders</div>
+                <div className="footer-logo-subtitle">
+                  NURTURE. GROW. INSPIRE.
+                </div>
               </div>
             </div>
+
+            <p className="footer-description">
+              Handmade pieces made with care
+              <br />
+              for a warmer, kinder world.
+            </p>
           </div>
 
-          <p className="footer-description">
-            Handmade pieces made with care
-            <br />
-            for a warmer, kinder world.
-          </p>
+          {/* Explore */}
+          <div className="footer-column footer-explore">
+            <h3>Explore</h3>
 
-          {/* <div className="footer-socials">
-            <Link to="https://www.instagram.com/littlewonders_04?stkn=djBpeXgxOG1qYXht" aria-label="Instagram" className="social-icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-              >
-                <rect x="3" y="3" width="18" height="18" rx="5" />
-
-                <circle cx="12" cy="12" r="4" />
-
-                <circle
-                  cx="17.5"
-                  cy="6.5"
-                  r="1"
-                  fill="currentColor"
-                  stroke="none"
-                />
-              </svg>
+            <Link to="/products">All Products</Link>
+            <Link to="/products?category=Flower%20Bouquets">
+              Flower Bouquets
             </Link>
-
-            <Link to="#" aria-label="WhatsApp" className="social-icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-              >
-                <path d="M20.5 11.5a8.5 8.5 0 0 1-12.7 7.4L4 20l1.2-3.6A8.5 8.5 0 1 1 20.5 11.5Z" />
-
-                <path d="M8.5 8.5c.2-.4.5-.5.8-.5h.5c.2 0 .4.1.5.4l.7 1.6c.1.3.1.5-.1.7l-.5.6c.6 1.1 1.5 2 2.6 2.6l.6-.5c.2-.2.4-.2.7-.1l1.6.7c.3.1.4.3.4.5v.5c0 .3-.1.6-.5.8-.4.2-1 .3-1.5.1-2.8-.8-5-3-5.8-5.8-.2-.5-.1-1.1.1-1.5Z" />
-              </svg>
+            <Link to="/products?category=Fashion%20Accessories">
+              Fashion Accessories
             </Link>
-
-            <Link to="https://www.youtube.com/@Hasini29-s9" aria-label="YouTube" className="social-icon">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8Z" />
-
-                <path d="M9.7 15.8 15.8 12 9.7 8.2v7.6Z" fill="#fbf4e9" />
-              </svg>
+            <Link to="/products?category=Keychains">Keychains</Link>
+            <Link to="/products?category=Wrist%20Bracelets">
+              Bracelets
             </Link>
-          </div> */}
-        </div>
+            <Link to="/products?category=Hair%20Accessories">
+              Hair Accessories
+            </Link>
+          </div>
 
-        {/* Explore */}
-        <div className="footer-column footer-explore">
-          <h3>Explore</h3>
+          {/* About Us */}
+          <div className="footer-column footer-about">
+            <h3>About Us</h3>
 
-          <Link to="/products">All Products</Link>
-          <Link to="/products?category=Flower%20Bouquets">Flower Bouquets</Link>
-          <Link to="/products?category=Fashion%20Accessories">
-            Fashion Accessories
-          </Link>
-          <Link to="/products?category=Keychains">Keychains</Link>
-          <Link to="/products?category=Wrist%20Bracelets">Bracelets</Link>
-          <Link to="/products?category=Hair%20Accessories">
-            Hair Accessories
-          </Link>
-        </div>
-
-        {/* About and Connect */}
-        <div className="footer-about-connect">
-          <div className="footer-column">
-            <h3>About</h3>
             <Link to="/about">Our Story</Link>
+            <Link to="/about#why-us">Why Us</Link>
+            <Link to="/about#our-mission">Our Mission</Link>
           </div>
 
-          <div className="footer-column">
+          {/* Connect */}
+          <div className="footer-column footer-connect">
             <h3>Connect</h3>
-            <a href="https://ig.me/m/littlewonders_04">Instagram</a>
-            <a href="https://wa.me/+919398723651?text=Hi">WhatsApp</a>
+
+            <a
+              href="https://ig.me/m/littlewonders_04"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Instagram
+            </a>
+
+            <a
+              href="https://wa.me/919398723651?text=Hi"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp
+            </a>
+
             <a
               href="https://mail.google.com/mail/?view=cm&fs=1&to=littlewonders0426@gmail.com"
               target="_blank"
@@ -109,21 +117,90 @@ const Footer = () => {
               Email
             </a>
           </div>
+
+          {/* Customer Support */}
+          <div className="footer-column footer-support">
+            <h3>Customer Support</h3>
+
+            <Link to="/reviews">Customer Reviews</Link>
+
+            <button
+              type="button"
+              className="footer-policy-link"
+              onClick={() => setActivePolicy("privacy")}
+            >
+              Privacy Policy
+            </button>
+
+            <button
+              type="button"
+              className="footer-policy-link"
+              onClick={() => setActivePolicy("terms")}
+            >
+              Terms & Conditions
+            </button>
+          </div>
+
         </div>
-      </div>
 
-      {/* Footer Bottom */}
+        {/* Footer Bottom */}
+        <div className="footer-bottom">
+          <p>© 2026 LittleWonders. All rights reserved.</p>
 
-      <div className="footer-bottom">
-        <p>© 2026 LittleWonders. All rights reserved.</p>
+          <div className="footer-bottom-icon">♡</div>
 
-        <div className="footer-bottom-icon">♡</div>
+          <p>
+            Made with <span>♡</span> for craft lovers
+          </p>
+        </div>
+      </footer>
 
-        <p>
-          Made with <span>♡</span> for craft lovers
-        </p>
-      </div>
-    </footer>
+      {/* Policy Popup */}
+      {activePolicy && (
+        <div
+          className="footer-policy-overlay"
+          onClick={closePolicy}
+          role="presentation"
+        >
+          <div
+            className="footer-policy-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label={
+              activePolicy === "privacy"
+                ? "Privacy Policy"
+                : "Terms and Conditions"
+            }
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="footer-policy-modal-header">
+              <span>
+                {activePolicy === "privacy"
+                  ? "Privacy Policy"
+                  : "Terms & Conditions"}
+              </span>
+
+              <button
+                type="button"
+                className="footer-policy-close"
+                onClick={closePolicy}
+                aria-label="Close policy"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="footer-policy-modal-content">
+              {activePolicy === "privacy" ? (
+                <PrivacyPolicyPage />
+              ) : (
+                <TermsConditionsPage />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
